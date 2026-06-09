@@ -5,706 +5,471 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technical Tip: FortiCNAPP May 2026 Platform Release Features</title>
 <style>
-  /* ═══════════════════════════════════════════════════════════════════
-     FORTICNAPP WIKI — MASTER STYLESHEET
-     Template: ai-security-hook-blog.html
-     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
-  ═══════════════════════════════════════════════════════════════════ */
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { border-top: 3px solid #EE3124; }
-
   :root {
-    --bg:        #ffffff;
-    --surface:   #f7f8fa;
-    --surface2:  #f0f2f5;
-    --border:    #e0e2e8;
-    --accent:    #EE3124;
-    --navy:      #1a1a2e;
-    --text:      #1d1d2e;
-    --text-body: #374151;
-    --text-muted:#6b7280;
-    --code-bg:   #f5f6f8;
-    --green:     #16a34a;
-    --yellow:    #d97706;
-    --red:       #dc2626;
-    --blue:      #0057b8;
-    /* legacy vars kept for backward compat */
-    --dark: #1a1a2e;
-    --mid:  #2d3a4a;
-    --light: #f7f8fa;
-    --muted: #6b7280;
-    --link:  #0057b8;
+    --fg-red: #DA291C;
+    --fg-red-dark: #B0210F;
+    --bg: #0F1115;
+    --bg-soft: #161A22;
+    --bg-card: #1B2029;
+    --line: #2A313D;
+    --text: #E6EAF2;
+    --muted: #9AA3B2;
+    --code-bg: #0B0E13;
+    --code-text: #E1E6F0;
+    --green: #3FB950;
+    --amber: #E3B341;
+    --blue: #58A6FF;
+    --purple: #B392F0;
   }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
     background: var(--bg);
-    color: var(--text-body);
-    font-size: 17px;
-    line-height: 1.8;
-  }
-
-  /* ── Universal image scaling ── */
-  img { max-width: 100%; height: auto; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     NAV BARS (all variants)
-  ══════════════════════════════════════════════════════════════════ */
-  nav, .topnav, .site-nav, .doc-header, header.site,
-  header.topbar, .nav {
-    background: var(--navy) !important;
-    color: #fff;
-    border-bottom: 3px solid var(--accent);
-    padding: 0 24px;
-  }
-  .topnav-inner, .nav-inner, .inner,
-  .doc-header-inner, .site-nav .inner {
-    max-width: 860px; margin: 0 auto;
-    min-height: 52px; padding: 12px 0;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
-    display: flex; align-items: center; gap: 8px;
-    text-decoration: none; color: #fff !important;
-    font-size: 14px; font-weight: 700;
-  }
-  .brand img, .logo { height: 26px; width: auto; }
-  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
-  .nav-back, .nav-cta {
-    font-size: 13px; color: rgba(255,255,255,0.7) !important;
-    text-decoration: none;
-  }
-  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
-  .nav-spacer { flex: 1; }
-  .breadcrumb {
-    font-size: 12px; color: rgba(255,255,255,0.45);
-    display: flex; align-items: center; gap: 6px;
-    font-family: 'SF Mono', monospace; margin-left: auto;
-  }
-  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
-  .breadcrumb a:hover { color: #fff !important; }
-  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
-  .nav-mark, .logo-mark, .doc-brand-mark {
-    width: 28px; height: 28px; background: var(--accent) !important;
-    border-radius: 5px; display: flex; align-items: center;
-    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
-  }
-  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
-  .nav-search { margin-left: auto; position: relative; }
-  .nav-search input, #q, #gl-search {
-    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
-    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
-  }
-  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
-  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
-  .nav-search .kbd {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
-  }
-
-  /* ══════════════════════════════════════════════════════════════════
-     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
-  ══════════════════════════════════════════════════════════════════ */
-  header, .hero, section.hero, .article-header, .header-wrap,
-  .doc-header + *, .page-head {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    border-bottom: 1px solid var(--border);
-  }
-  header .inner, .hero-inner, .article-header-inner {
-    max-width: 860px; margin: 0 auto;
-    padding: 40px 24px 32px;
-  }
-  /* Override any gradient on hero */
-  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
-
-  .header-tag, .eyebrow, .cat-badge, .sub {
-    display: inline-block;
-    background: var(--surface2) !important;
-    color: var(--text-muted) !important;
-    border: 1px solid var(--border) !important;
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 3px 10px; border-radius: 4px;
-    margin-bottom: 16px;
-    font-family: 'SF Mono', monospace;
-  }
-
-  h1, .hero h1, header h1, .article-header h1, .post-title {
-    font-size: clamp(24px, 4vw, 38px) !important;
-    font-weight: 800; line-height: 1.2;
-    color: var(--navy) !important;
-    letter-spacing: -0.02em;
-    margin-bottom: 14px;
-  }
-  h1 span, header h1 span { color: var(--accent) !important; }
-
-  .subtitle, .lede, .article-sub {
-    font-size: 16px !important;
-    color: var(--text-muted) !important;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.65;
-    max-width: 620px;
-    margin-bottom: 20px;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
   }
-
-  .meta, .article-meta {
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    font-size: 13px; color: var(--text-muted) !important;
-    font-family: 'SF Mono', monospace;
-  }
-  .meta a { color: var(--text-muted) !important; text-decoration: none; }
-  .meta a:hover { color: var(--accent) !important; }
-  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
-  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     MAIN CONTENT WRAPPERS
-  ══════════════════════════════════════════════════════════════════ */
-  .container, .main, .article-body, article, .content,
-  section:not(.hero), main {
-    max-width: 860px; margin: 0 auto;
-    padding: 48px 24px 72px;
-  }
-
-  /* ══════════════════════════════════════════════════════════════════
-     TYPOGRAPHY — ENLARGED FOR READABILITY
-  ══════════════════════════════════════════════════════════════════ */
-  h2, .main h2 {
-    font-size: 26px !important; font-weight: 700;
-    color: var(--navy) !important;
-    margin: 2.5rem 0 1rem;
-    padding-left: 14px;
-    border-left: 3px solid var(--accent);
-    letter-spacing: -0.01em; line-height: 1.3;
-    border-top: none !important; display: block !important;
-  }
-  h3, .main h3 {
-    font-size: 19px !important; font-weight: 700;
-    color: var(--navy) !important;
-    margin: 1.75rem 0 0.6rem; line-height: 1.4;
-  }
-  h4 {
-    font-size: 15px !important; font-weight: 700;
-    color: var(--navy) !important;
-    margin: 1.25rem 0 0.5rem;
-  }
-  p {
-    font-size: 16px; color: var(--text-body) !important;
-    margin-bottom: 18px; line-height: 1.8;
-  }
-  p:last-child { margin-bottom: 0; }
-  strong { color: var(--text) !important; font-weight: 700; }
-  em { font-style: italic; }
-
   a { color: var(--blue); text-decoration: none; }
-  a:hover { color: var(--accent) !important; text-decoration: underline; }
+  a:hover { text-decoration: underline; }
 
-  ul, ol { padding-left: 1.75em; margin: 1em 0; }
-  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
-  li::marker { color: var(--accent) !important; }
+  /* Header */
+  header.site {
+    background: linear-gradient(180deg, #161A22 0%, #0F1115 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+  }
+  header.site .logo {
+    width: 28px; height: 28px;
+    background: var(--fg-red);
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  }
+  header.site .brand {
+    font-weight: 700; letter-spacing: 0.3px;
+  }
+  header.site .brand span { color: var(--muted); font-weight: 400; margin-left: 8px; }
 
-  blockquote {
-    border-left: 4px solid rgba(238,49,36,0.4);
-    padding: 0.75em 1.25em;
-    margin: 1.5em 0;
-    font-style: italic; font-size: 16px;
-    color: var(--text-muted) !important;
-    background: var(--surface) !important;
-    border-radius: 0 6px 6px 0;
+  /* Hero */
+  .hero {
+    padding: 56px 28px 32px;
+    max-width: 980px;
+    margin: 0 auto;
   }
-  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+  .hero .eyebrow {
+    display: inline-block;
+    background: rgba(218, 41, 28, 0.15);
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(218,41,28,0.35);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero .lede {
+    color: var(--muted);
+    font-size: 19px;
+    margin: 0 0 22px;
+  }
+  .hero .meta {
+    color: var(--muted);
+    font-size: 14px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .hero .meta b { color: var(--text); font-weight: 600; }
 
-  /* ══════════════════════════════════════════════════════════════════
-     CODE
-  ══════════════════════════════════════════════════════════════════ */
-  code {
-    background: var(--code-bg) !important; padding: 2px 7px;
-    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
-    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  /* Article shell */
+  article {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px 28px 80px;
   }
-  pre, .code-block {
-    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
-    border-left: 3px solid var(--accent) !important; border-radius: 6px;
-    padding: 20px 24px !important; margin: 1.5em 0;
-    font-family: 'SF Mono', 'Fira Code', monospace !important;
-    font-size: 14px; line-height: 1.65; overflow-x: auto;
-    color: var(--text) !important;
+  article h2 {
+    font-size: 26px;
+    margin: 48px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--fg-red);
+    display: inline-block;
   }
-  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
-  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
-  .code-block .comment, pre .comment { color: #9ca3af; }
-  .code-block .string, pre .string { color: #15803d; }
-  .code-block .key, pre .key { color: var(--blue); }
-  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+  article h3 {
+    font-size: 19px;
+    margin: 28px 0 8px;
+    color: var(--text);
+  }
+  article p { margin: 12px 0; }
 
-  /* ══════════════════════════════════════════════════════════════════
-     CALLOUTS (all variants)
-  ══════════════════════════════════════════════════════════════════ */
-  .callout, .note {
-    background: var(--surface) !important; border: 1px solid var(--border) !important;
-    border-left: 4px solid var(--accent) !important;
-    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  /* Tooltips for technical terms */
+  .term {
+    color: var(--blue);
+    border-bottom: 1px dashed var(--blue);
+    cursor: help;
+    position: relative;
   }
-  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
-  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
-  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
-  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
-  .callout-label {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  .term:hover .tip,
+  .term:focus .tip {
+    opacity: 1;
+    transform: translate(-50%, -8px);
+    pointer-events: auto;
   }
-  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
-  .callout.info .callout-label { color: var(--blue) !important; }
-  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
-  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+  .tip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 320px;
+    background: #0B0E13;
+    color: var(--text);
+    border: 1px solid var(--fg-red);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 100;
+    text-align: left;
+    font-weight: 400;
+  }
+  .tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--fg-red);
+  }
+  .tip b { color: var(--fg-red); }
 
-  /* ══════════════════════════════════════════════════════════════════
-     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
-  ══════════════════════════════════════════════════════════════════ */
-  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
-  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px; margin: 24px 0;
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--fg-red);
+    padding: 14px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   }
-  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
-  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
-  .presales-col {
-    background: var(--bg) !important; border: 1px solid var(--border) !important;
-    border-radius: 8px; padding: 20px;
-    color: var(--text-body) !important;
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+  p code, li code, td code {
+    background: #161A22;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #FFB0A4;
+    border: 1px solid var(--line);
   }
-  .risk-card .risk-title {
-    font-size: 15px; font-weight: 700; color: var(--text) !important;
-    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  .lang-tag {
+    display: inline-block;
+    background: var(--bg-card);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--line);
+    border-bottom: none;
+    margin-bottom: -1px;
+    font-family: monospace;
+    letter-spacing: 1px;
   }
-  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
-  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
-  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
-  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
-  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
-  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
-  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
-  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
-  .compare-col.good { border-top: 3px solid var(--green) !important; }
-  .compare-header {
-    padding: 12px 18px; font-size: 12px; font-weight: 700;
-    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
-  }
-  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
-  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
-  .compare-body { padding: 14px 18px; }
-  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
-  .mode-card.green { border-top: 3px solid var(--green) !important; }
-  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
-  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
-  .mode-card.green .mode-label { color: var(--green) !important; }
-  .mode-card.blue  .mode-label { color: var(--blue) !important; }
-  .pillar-card { border-left: 4px solid var(--accent) !important; }
-  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
 
-  /* Force / hot / trend cards */
-  .force-num, .hot-tag, .trend-num {
-    font-size: 11px; font-weight: 700; color: var(--accent) !important;
-    text-transform: uppercase; margin-bottom: 6px;
+  /* Callout cards */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    border-left: 4px solid var(--fg-red);
   }
-  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
-  .trends { margin: 24px 0; }
-  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
-  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+  .callout.info { border-left-color: var(--blue); }
+  .callout.warn { border-left-color: var(--amber); }
+  .callout.ok { border-left-color: var(--green); }
+  .callout h4 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--fg-red);
+  }
+  .callout.info h4 { color: var(--blue); }
+  .callout.warn h4 { color: var(--amber); }
+  .callout.ok h4 { color: var(--green); }
+  .callout p:last-child { margin-bottom: 0; }
 
-  /* Feature cards (TechTips) */
-  .feature-card { border-top: 3px solid var(--accent) !important; }
-  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
-  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
-  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
-  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
-  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
-  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     NVIDIA STACK (dark component — convert to light)
-  ══════════════════════════════════════════════════════════════════ */
-  .nvidia-stack {
-    background: var(--surface) !important;
-    border: 1px solid var(--border) !important;
-    border-left: 3px solid var(--accent) !important;
-    border-radius: 8px; padding: 24px; margin: 24px 0;
-    color: var(--text-body) !important;
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
   }
-  .nvidia-stack h4 {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
-  }
-  .nvidia-stack ul { margin-left: 1.25em; }
-  .nvidia-stack li { color: var(--text-body) !important; }
-  .nvidia-stack li strong { color: var(--accent) !important; }
-  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
-  .nv-item {
-    background: var(--bg) !important; border: 1px solid var(--border) !important;
-    border-radius: 6px; overflow: hidden;
-  }
-  .nv-item-head {
-    padding: 10px 16px; background: var(--surface2) !important;
-    border-bottom: 1px solid var(--border) !important;
-    font-weight: 700; font-size: 14px; color: var(--navy) !important;
-  }
-  .nv-item-body { padding: 14px 16px; }
-  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
-  .nv-why {
-    display: flex; gap: 8px; align-items: flex-start;
-    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
-    border-radius: 0 5px 5px 0; padding: 10px 12px;
-    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
-  }
-  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     SECTION BADGES
-  ══════════════════════════════════════════════════════════════════ */
-  .section-badge, .badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 12px; border-radius: 20px; font-size: 11px;
-    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
-  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
-  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
-  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
-  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
-  ══════════════════════════════════════════════════════════════════ */
-  .chain { margin: 24px 0; }
-  .phase {
-    background: var(--bg) !important; border: 1px solid var(--border) !important;
-    border-left: 4px solid var(--accent) !important; border-radius: 6px;
-    padding: 18px 20px; margin-bottom: 12px;
-  }
-  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
-  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
-  .layers { margin: 24px 0; }
-  .layer, .layer-ltr {
-    display: flex; gap: 16px; align-items: flex-start;
-    padding: 20px 0; border-bottom: 1px solid var(--border);
-  }
-  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
-  .layer-body { flex: 1; min-width: 0; }
-  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
-  .a-l { border-top: 3px solid var(--red) !important; }
-  .a-r { border-top: 3px solid var(--green) !important; }
-  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
-  .stat { text-align: center; min-width: 80px; }
-  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
-  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     BATTLE / COMPETITIVE CARDS
-  ══════════════════════════════════════════════════════════════════ */
-  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .battle-header {
-    background: var(--navy) !important; color: #fff !important;
-    padding: 14px 20px; font-size: 14px; font-weight: 700;
-  }
-  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
-  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
-  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
-  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     PRESALES BOX
-  ══════════════════════════════════════════════════════════════════ */
-  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
-  .presales-header {
-    background: var(--navy) !important; color: #fff !important;
-    padding: 14px 20px; font-size: 14px; font-weight: 700;
-  }
-  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
-  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
-  .presales-col:last-child { border-right: none; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     AIMS BOX / PULL QUOTE / CTA
-  ══════════════════════════════════════════════════════════════════ */
-  .aims-box {
-    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
-    border-left: 4px solid var(--accent) !important; border-radius: 6px;
-    padding: 20px 24px; margin: 24px 0;
-  }
-  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
-  .pull {
-    font-size: 20px; font-style: italic; color: var(--navy) !important;
-    border-left: 4px solid var(--accent); padding: 16px 24px;
-    margin: 28px 0; line-height: 1.5;
-    background: var(--surface) !important;
-  }
-  .cta-box {
-    background: var(--surface) !important; border: 1px solid var(--border) !important;
-    border-top: 3px solid var(--accent) !important; border-radius: 8px;
-    padding: 24px; margin: 28px 0;
-  }
-  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
-  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
-  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
-  .cta-btn {
-    display: inline-block; background: var(--accent) !important;
-    color: #fff !important; padding: 10px 20px; border-radius: 6px;
-    font-weight: 700; font-size: 14px; text-decoration: none;
-  }
-  .cta-btn:hover { opacity: 0.88; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     TABLES (all variants)
-  ══════════════════════════════════════════════════════════════════ */
-  .table-wrap { overflow-x: auto; margin: 24px 0; }
-  table, .community-table, .summary-table {
-    width: 100%; border-collapse: collapse; font-size: 14px;
-    background: var(--bg) !important;
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+    vertical-align: top;
   }
   th {
-    border-bottom: 2px solid var(--border); padding: 10px 14px;
-    text-align: left; font-weight: 700; font-size: 13px;
-    color: var(--navy) !important; background: var(--surface) !important;
-    text-transform: uppercase; letter-spacing: 0.04em;
+    background: #20262F;
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
-  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
   tr:last-child td { border-bottom: none; }
-  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
-  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+  tr:hover td { background: rgba(218,41,28,0.04); }
 
-  /* ══════════════════════════════════════════════════════════════════
-     ROI / CHART COMPONENTS
-  ══════════════════════════════════════════════════════════════════ */
-  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
-  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
-  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
-  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
-  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+  /* Lists */
+  ul, ol { padding-left: 22px; }
+  li { margin: 6px 0; }
 
-  /* ══════════════════════════════════════════════════════════════════
-     INTRO GRID
-  ══════════════════════════════════════════════════════════════════ */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
-  .intro-card { border-top: 3px solid var(--accent) !important; }
-  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     MCP PRIMITIVES / PROTOCOL LAYERS
-  ══════════════════════════════════════════════════════════════════ */
-  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
-  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
-  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .prim-emoji { font-size: 22px; }
-  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
-  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
-  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
-
-  /* Glossary tooltip */
-  .gl-term, .term {
-    border-bottom: 2px dashed var(--accent);
-    cursor: help; color: inherit;
-    font-style: normal;
+  /* Attack chain diagram */
+  .chain {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 28px 0;
+    overflow-x: auto;
   }
-  #gl-tip, .tip {
-    position: absolute; background: var(--navy) !important; color: #fff !important;
-    font-size: 13px; padding: 10px 14px; border-radius: 6px;
-    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    pointer-events: none;
+  .chain h4 {
+    margin: 0 0 18px;
+    color: var(--fg-red);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
   }
 
-  /* ══════════════════════════════════════════════════════════════════
-     FABRIC / NOTE BLOCKS (TechTips)
-  ══════════════════════════════════════════════════════════════════ */
-  .fabric-block {
-    background: var(--surface) !important; border: 1px solid var(--border) !important;
-    border-left: 4px solid var(--navy) !important; border-radius: 6px;
-    padding: 18px 22px; margin: 24px 0;
+  /* Numbered phase headers */
+  .phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
   }
-  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
-  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     BLOG INDEX — WIKI NAVIGATION
-  ══════════════════════════════════════════════════════════════════ */
-  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
-  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
-  .page-head h1 span { color: var(--accent) !important; }
-  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
-  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
-  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
-  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
-  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
-  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
-  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
-  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
-  .cat-block { padding: 32px 0 0; }
-  .cat-block.hidden { display: none; }
-  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
-  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
-  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
-  .art:first-of-type { border-top: 1px solid var(--border); }
-  .art:hover { padding-left: 8px; }
-  .art.hidden { display: none; }
-  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
-  .art:hover .art-title { color: var(--accent) !important; }
-  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
-  .art-right { text-align: right; flex-shrink: 0; }
-  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
-  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
-  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
-  .empty.visible, .empty-state.visible { display: block; }
-  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
-
-  /* Blog card (index) */
-  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
-  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
-  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
-  .card-top.alt { background: #16213e !important; }
-  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
-  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
-  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
-  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
-  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
-  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
-  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
-  .card-hidden { display: none !important; }
-  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
-  .card-section { margin-bottom: 1.5rem; }
-  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
-  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
-  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
-  .search-wrap { position: relative; margin-bottom: 10px; }
-  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
-  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
-
-  /* ══════════════════════════════════════════════════════════════════
-     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
-  ══════════════════════════════════════════════════════════════════ */
-  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
-  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
-  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
-  .tldr p:last-child { margin-bottom: 0; }
-  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
-  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
-  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
-  .checklist { list-style: none; margin: 18px 0; }
-  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
-  .checklist li:last-child { border-bottom: none; }
-  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
-  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
-  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
-  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
-  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
-  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
-  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
-  .feature-list li:last-child { border-bottom: none; }
-  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
-  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
-  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
-  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
-  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
-  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
-  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
-  .author-info { line-height: 1.4; }
-  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
-  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
-  .author-meta .sep { margin: 0 5px; color: var(--border); }
-  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
-  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
-  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
-  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
-  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
-  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
-  .ref-list li:last-child { border-bottom: none; }
-  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
-  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
-  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
-  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
-  .share-row { display: flex; gap: 8px; margin: 20px 0; }
-  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
-  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
-  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
-
-  /* Password gate */
-  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
-
-  /* ══════════════════════════════════════════════════════════════════
-     FOOTER
-  ══════════════════════════════════════════════════════════════════ */
-  footer, .site-footer, .doc-footer {
-    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
-    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
-    border-top: none !important;
+  .phase .num {
+    background: var(--fg-red);
+    color: white;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
   }
-  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
-  footer a:hover, .site-footer a:hover { color: #fff !important; }
-  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+  .phase h3 { margin: 0; display: inline; }
 
-  /* ══════════════════════════════════════════════════════════════════
-     PDF BUTTON + REFERENCES POPUP
-  ══════════════════════════════════════════════════════════════════ */
-  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
-  .pdf-btn:hover { opacity: 0.88; }
-  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
-  #ref-panel * { font-family: inherit !important; }
+  /* Impact layers */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--fg-red);
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    align-items: start;
+  }
+  .layer .name { font-weight: 700; color: var(--fg-red); }
+  .layer.l2 { border-left-color: var(--amber); } .layer.l2 .name { color: var(--amber); }
+  .layer.l3 { border-left-color: var(--blue); } .layer.l3 .name { color: var(--blue); }
+  .layer.l4 { border-left-color: var(--purple); } .layer.l4 .name { color: var(--purple); }
+  .layer.l5 { border-left-color: var(--green); } .layer.l5 .name { color: var(--green); }
 
-  /* ══════════════════════════════════════════════════════════════════
-     PRINT
-  ══════════════════════════════════════════════════════════════════ */
-  @media print {
-    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
-    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
-    html { border-top: none; }
-    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
-    h2 { page-break-after: avoid; }
-    section, .phase, .risk-card { page-break-inside: avoid; }
+  /* Footer */
+  footer.site {
+    border-top: 1px solid var(--line);
+    padding: 30px 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    background: var(--bg-soft);
   }
 
-  /* ══════════════════════════════════════════════════════════════════
-     RESPONSIVE
-  ══════════════════════════════════════════════════════════════════ */
-  @media (max-width: 768px) {
-    .battle-cols, .analogy, .grid-2, .pillar-grid,
-    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
-    .art-right { display: none; }
-    .container, .main, .article-body { padding: 32px 18px 48px; }
-    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  /* Sources */
+  .sources {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 13.5px;
+    margin-top: 30px;
   }
+  .sources h2 {
+    margin-top: 0;
+    font-size: 18px;
+  }
+  .sources ol { columns: 1; }
+
+  /* Stats grid */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .stat .big {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fg-red);
+    display: block;
+    line-height: 1.1;
+  }
+  .stat .label {
+    color: var(--muted);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 6px;
+    display: block;
+  }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 30px; }
+    .layer { grid-template-columns: 1fr; }
+    .tip { width: 240px; }
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TECHTIP COMPONENTS — dark-theme adaptation
+     (feature cards, notes, badges, intro/summary tables, refs, tags)
+  ═══════════════════════════════════════════════════════════════════ */
+  article h4 { font-size: 15px; margin: 22px 0 6px; color: var(--text); font-weight: 700; }
+  article h2.section-full { display: block; }
+
+  /* horizontal rule */
+  .rule, article hr { border: none; border-top: 1px solid var(--line); margin: 40px 0; }
+
+  /* intro (community) + grouping table cell accents */
+  .ct-label { color: var(--fg-red); font-weight: 700; white-space: nowrap; width: 120px; }
+  .ct-body  { color: var(--text); }
+  .ct-body a { color: var(--blue); }
+  td.cat, .grouping-table td.cat { color: var(--fg-red); font-weight: 700; white-space: nowrap; }
+
+  /* notes → callout cards */
+  .note {
+    background: var(--bg-card); border: 1px solid var(--line);
+    border-left: 4px solid var(--fg-red); border-radius: 8px;
+    padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text);
+  }
+  .note strong { color: var(--fg-red); }
+  .note a { color: var(--blue); }
+  .note-green { border-left-color: var(--green); }  .note-green strong { color: var(--green); }
+  .note-amber { border-left-color: var(--amber); }  .note-amber strong { color: var(--amber); }
+  .note-navy  { border-left-color: var(--blue); }   .note-navy  strong { color: var(--blue); }
+
+  /* status badges */
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 4px; vertical-align: middle;
+  }
+  .badge-ga     { background: rgba(63,185,80,0.15);  color: var(--green); border: 1px solid rgba(63,185,80,0.4); }
+  .badge-pp     { background: rgba(227,179,65,0.15); color: var(--amber); border: 1px solid rgba(227,179,65,0.4); }
+  .badge-domain { background: var(--bg-soft); color: var(--muted); border: 1px solid var(--line); }
+
+  /* feature cards (handles both May flat layout and Apr/Jun header layout) */
+  .feature-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin: 22px 0; }
+  .feature-card {
+    background: var(--bg-card); border: 1px solid var(--line);
+    border-top: 3px solid var(--fg-red); border-radius: 10px;
+    overflow: hidden; padding: 0 0 4px;
+  }
+  .feature-card-header { display: flex; align-items: stretch; }
+  .feature-domain-bar { width: 4px; flex-shrink: 0; align-self: stretch; }
+  .feature-card-header-text { flex: 1; min-width: 0; }
+  .feature-num {
+    font-size: 12px; color: var(--muted); margin: 0 0 6px;
+    padding: 16px 18px 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .feature-title { font-size: 19px; font-weight: 700; color: var(--text); margin: 0; padding: 0 18px 10px; }
+  .feature-body { padding: 4px 18px; }
+  .feature-body > *:first-child { margin-top: 0; }
+  .feature-meta, .feature-footer {
+    margin-top: 10px; padding: 12px 18px; border-top: 1px solid var(--line);
+    display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; background: rgba(0,0,0,0.18);
+  }
+  .feature-meta a, .feature-footer a, .feature-doc a { color: var(--blue); }
+
+  /* references list → styled as the dark Sources block */
+  .refs {
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 10px; padding: 20px 24px; margin-top: 36px;
+  }
+  .refs-title { font-size: 18px; color: var(--text); margin-bottom: 12px; font-weight: 700;
+    letter-spacing: 0; text-transform: none; }
+  .refs ul { margin: 0; padding-left: 20px; }
+  .refs li { margin: 7px 0; font-size: 13.5px; color: var(--muted); }
+  .refs a { color: var(--blue); word-break: break-word; }
+
+  /* tag chips */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .tag { font-size: 12px; color: var(--muted); background: var(--bg-card);
+    border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; }
+
+  /* hero meta tweak: stack nicely on mobile already handled by flex-wrap */
 </style>
 </head>
 <body>
 
-<header class="doc-header">
-  <div class="doc-header-inner">
-    <div class="doc-brand-mark">FORTINET</div>
-    <div class="doc-brand-text">
-      FortiCNAPP
-      <span class="sub">Technical Tip — Release Notes · May 2026 Platform Release</span>
-    </div>
-  </div>
+<header class="site">
+  <span class="logo" aria-hidden="true"></span>
+  <span class="brand">FORTINET <span>| FortiCNAPP Technical Tip · May 2026 Release</span></span>
 </header>
 
-<article class="article">
-
-  <h1 class="title">Technical Tip: FortiCNAPP May 2026 Platform Release Features</h1>
-
-  <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9CA3AF;padding-bottom:18px;border-bottom:1px solid #E5E7EB;margin-bottom:28px;">
-    FortiCNAPP PreSales Engineering &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp;
-    Authoritative source: <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">docs.fortinet.com — May 2026 Platform Releases</a>
+<section class="hero">
+  <span class="eyebrow">Release Notes · May 2026 Platform Release</span>
+  <h1>Technical Tip: FortiCNAPP May 2026 Platform Release Features</h1>
+  <p class="lede">Nine Generally Available features and one Public Preview across CWPP runtime, vulnerability management, AI Security, Code Security, GKE compliance, cloud-log redesign, and Kubernetes agent support — shipped in FortiCNAPP 26.2.0.</p>
+  <div class="meta">
+    <span><b>Author:</b> FortiCNAPP PreSales Engineering</span>
+    <span><b>Release:</b> May 2026 &middot; FortiCNAPP 26.2.0</span>
+    <span><b>Published:</b> June 2026</span>
+    <span><b>Source:</b> <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">docs.fortinet.com — May 2026 Platform Releases</a></span>
   </div>
+</section>
+
+<article class="article">
 
   <!-- Community table -->
   <table class="community-table">
@@ -743,31 +508,13 @@
 
   <hr class="rule">
 
-  <!-- Feature count summary -->
-  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:0 0 32px 0;font-family:'Inter',sans-serif;">
-    <div style="background:var(--navy);color:#fff;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
-      <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;opacity:.7;">Generally Available</div>
-      <div style="font-size:26px;font-weight:700;">9</div>
-      <div style="font-size:11px;opacity:.7;">features</div>
-    </div>
-    <div style="background:#BA7517;color:#fff;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
-      <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;opacity:.7;">Public Preview</div>
-      <div style="font-size:26px;font-weight:700;">1</div>
-      <div style="font-size:11px;opacity:.7;">feature</div>
-    </div>
-    <div style="background:#F4F6F8;border:1px solid #E5E7EB;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
-      <div style="font-size:11px;color:#6B7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;">Domains covered</div>
-      <div style="font-size:26px;font-weight:700;color:var(--navy);">6</div>
-      <div style="font-size:11px;color:#6B7280;">CWPP · Vuln · AI Sec · Code Sec · K8s · UX</div>
-    </div>
-    <div style="background:#F4F6F8;border:1px solid #E5E7EB;border-radius:6px;padding:14px 20px;flex:2;min-width:200px;">
-      <div style="font-size:11px;color:#6B7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;">Release number</div>
-      <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:2px;">FortiCNAPP 26.2.0</div>
-      <div style="font-size:11px;color:#6B7280;"><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#DA291C;">docs.fortinet.com — May 2026 Platform Releases</a></div>
-    </div>
-  </div>
+  <div class="stats">
+  <div class="stat"><span class="big">9</span><span class="label">Generally Available</span></div>
+  <div class="stat"><span class="big">1</span><span class="label">Public Preview</span></div>
+  <div class="stat"><span class="big">6</span><span class="label">Domains covered</span></div>
+  <div class="stat"><span class="big">26.2.0</span><span class="label">Platform release</span></div>
+</div>
 
-  <!-- ── GENERALLY AVAILABLE ─────────────────────────────────── -->
   <h2 class="section-full">Generally Available — May 2026</h2>
 
   <div class="feature-grid">
@@ -1089,122 +836,9 @@
 
 </article>
 
-<footer class="doc-footer">
-  <div class="doc-footer-inner">
-    <strong>Fortinet Community Knowledge Base</strong> · Technical Tip: FortiCNAPP May 2026 Platform Release Features · June 2026 · © 2026 Fortinet, Inc.<br>
-    Authoritative source: <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#DA291C;">docs.fortinet.com — May 2026 Platform Releases</a>
-  </div>
+<footer class="site">
+  &copy; 2026 Fortinet, Inc. &middot; FortiCNAPP Security Insights &middot; Technical Tip — May 2026 Platform Release &middot; Authored by Sam Vuillaume &middot; Hover blue underlined terms for definitions.
 </footer>
 
-  <!-- ═══ References popup ═══════════════════════════════════════════ -->
-  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
-  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
-      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
-      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
-    </div>
-    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
-      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP May 2026 Platform Releases</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article's authoritative primary source: FortiCNAPP 26.2.0 (May 2026 Platform Release) containing 9 GA features and 1 Public Preview feature across CWPP, vulnerability management, AI Security, Code Security, GKE, and platform UX.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Different Types of Scanning</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/843803/different-types-of-scanning" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">AlmaLinux 8.x and 9.x and ChainGuard Wolfi container images are now supported by FortiCNAPP vulnerability scanning, covering both agentless snapshot analysis and agent-based active package execution detection.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Claude Code Plug-in</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Code Security plug-in for Claude Code enters Public Preview as of the May 2026 release, bringing IaC and SCA scanning directly into the Claude Code agentic development workflow.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Code Security Repository Scanning Process</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/390829/code-security-repository-scanning-process" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Code Security assessments covering SCA, SAST, IaC misconfigurations, and secrets detection can now display findings for non-default branches before they are merged into main/master.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Kubernetes Audit Logs for GKE</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/280544/kubernetes-audit-logs-for-gke" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">GKE audit log violation policy evaluation now runs at near-real-time latency via GCP Pub/Sub-based ingestion; GKE cluster must be integrated with FortiCNAPP via the GKE audit log integration (not the Storage-based path).</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Installing Linux Agent on Kubernetes</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Linux agent now has expanded Kubernetes support across EKS, AKS, and GKE managed cloud platforms, with the DaemonSet deployment procedures documented for each platform.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Polygraph FAQ</span>
-    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Threat Observations Policies page centralises all policies governing how the Polygraph ML engine and CWPP agent surface threat observations, reducing time to understand why an observation was generated.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">AlmaLinux OS Foundation</span>
-    <span style="color:#6b7280;font-size:12px;">AlmaLinux OS Foundation · 2024 · <a href="https://almalinux.org/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">almalinux.org/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">AlmaLinux is a community-maintained RHEL-binary-compatible distribution that became a primary migration target for organisations moving off CentOS after Red Hat's 2023 CentOS Stream transition, with versions 8.x and 9.x supported by FortiCNAPP.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Chainguard Wolfi — A Linux undistro for containers</span>
-    <span style="color:#6b7280;font-size:12px;">Chainguard · 2024 · <a href="https://github.com/wolfi-dev/wolfi-os" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">github.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Chainguard Wolfi is a minimal, security-hardened Linux distribution specifically designed for container and cloud-native workloads, using the APK package format and maintained by Chainguard as the foundation for minimal distroless base images.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Amazon Bedrock — Managed Generative AI Service</span>
-    <span style="color:#6b7280;font-size:12px;">Amazon Web Services · 2024 · <a href="https://aws.amazon.com/bedrock/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">aws.amazon.com/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP AI Security ships purpose-built LQL detection policies for Amazon Bedrock, AWS's managed generative AI service, monitoring Bedrock API activity via CloudTrail for anomalous GenAI workload behaviours.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">OWASP Top 10 for Large Language Model Applications</span>
-    <span style="color:#6b7280;font-size:12px;">OWASP · 2023 · <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">owasp.org/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Bedrock LQL policies detect unusual model invocation volumes or patterns including potential prompt injection campaigns, which aligns with OWASP's documented LLM threat categories for GenAI workloads.</span>
-  </div>
-</li>
-<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
-  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
-  <div>
-    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CIS Kubernetes Benchmark</span>
-    <span style="color:#6b7280;font-size:12px;">CIS Security · 2024 · <a href="https://www.cisecurity.org/benchmark/kubernetes" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisecurity.org/… ↗</a></span>
-    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">GKE audit log policies include detections for Kubernetes RBAC modification, pod creation with elevated privileges or HostPath volume mounts, and service account token misuse — control areas covered by the CIS Kubernetes Benchmark.</span>
-  </div>
-</li>
-    </ol>
-  </aside>
-  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
-    References
-  </button>
 </body>
 </html>

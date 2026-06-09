@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Technical guide: protecting LLM services from DDoS attacks using FortiWeb WAF and API protection." />
+<meta name="author" content="Fortinet DevSecOps" />
+<title>LLM models Application DDOS Attack</title>
+<style>
+  :root {
+    --fg-red: #DA291C;
+    --fg-red-dark: #B0210F;
+    --bg: #F6F8FB;
+    --bg-soft: #EDF1F7;
+    --bg-card: #FFFFFF;
+    --line: #D7DEE8;
+    --text: #1A1F2B;
+    --muted: #5B6471;
+    --code-bg: #0B0E13;
+    --code-text: #E1E6F0;
+    --green: #1A7F37;
+    --amber: #9A6700;
+    --blue: #0A66C2;
+    --purple: #6F42C1;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  header.site {
+    background: linear-gradient(180deg, #161A22 0%, #0F1115 100%);
+    color: #E6EAF2;
+    border-bottom: 1px solid #0B0E13;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+  }
+  header.site .logo {
+    width: 28px; height: 28px;
+    background: var(--fg-red);
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  }
+  header.site .brand {
+    font-weight: 700; letter-spacing: 0.3px;
+  }
+  header.site .brand span { color: #9AA3B2; font-weight: 400; margin-left: 8px; }
+
+  /* Hero */
+  .hero {
+    padding: 56px 28px 32px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .hero .eyebrow {
+    display: inline-block;
+    background: rgba(218, 41, 28, 0.15);
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(218,41,28,0.35);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero .lede {
+    color: var(--muted);
+    font-size: 19px;
+    margin: 0 0 22px;
+  }
+  .hero .meta {
+    color: var(--muted);
+    font-size: 14px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .hero .meta b { color: var(--text); font-weight: 600; }
+
+  /* Article shell */
+  article {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px 28px 80px;
+  }
+  article h2 {
+    font-size: 26px;
+    margin: 48px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--fg-red);
+    display: inline-block;
+  }
+  article h3 {
+    font-size: 19px;
+    margin: 28px 0 8px;
+    color: var(--text);
+  }
+  article p { margin: 12px 0; }
+
+  /* Tooltips for technical terms */
+  .term {
+    color: var(--blue);
+    border-bottom: 1px dashed var(--blue);
+    cursor: help;
+    position: relative;
+  }
+  .term:hover .tip,
+  .term:focus .tip {
+    opacity: 1;
+    transform: translate(-50%, -8px);
+    pointer-events: auto;
+  }
+  .tip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 320px;
+    background: #0B0E13;
+    color: #E6EAF2;
+    border: 1px solid var(--fg-red);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 100;
+    text-align: left;
+    font-weight: 400;
+  }
+  .tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--fg-red);
+  }
+  .tip b { color: var(--fg-red); }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--fg-red);
+    padding: 14px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+  p code, li code, td code {
+    background: #FBE9E7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #B0210F;
+    border: 1px solid #F3C9C2;
+  }
+  .lang-tag {
+    display: inline-block;
+    background: var(--bg-card);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--line);
+    border-bottom: none;
+    margin-bottom: -1px;
+    font-family: monospace;
+    letter-spacing: 1px;
+  }
+
+  /* Callout cards */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    border-left: 4px solid var(--fg-red);
+  }
+  .callout.info { border-left-color: var(--blue); }
+  .callout.warn { border-left-color: var(--amber); }
+  .callout.ok { border-left-color: var(--green); }
+  .callout h4 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--fg-red);
+  }
+  .callout.info h4 { color: var(--blue); }
+  .callout.warn h4 { color: var(--amber); }
+  .callout.ok h4 { color: var(--green); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  th {
+    background: #F1F4F9;
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(218,41,28,0.04); }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--fg-red); font-weight: 700; }
+  .warnmark { color: var(--amber); font-weight: 700; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; }
+  li { margin: 6px 0; }
+
+  /* Attack chain diagram */
+  .chain {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .chain h4 {
+    margin: 0 0 18px;
+    color: var(--fg-red);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+
+  /* Numbered phase headers */
+  .phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .phase .num {
+    background: var(--fg-red);
+    color: white;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .phase h3 { margin: 0; display: inline; }
+
+  /* Impact layers */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--fg-red);
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    align-items: start;
+  }
+  .layer .name { font-weight: 700; color: var(--fg-red); }
+  .layer.l2 { border-left-color: var(--amber); } .layer.l2 .name { color: var(--amber); }
+  .layer.l3 { border-left-color: var(--blue); } .layer.l3 .name { color: var(--blue); }
+  .layer.l4 { border-left-color: var(--purple); } .layer.l4 .name { color: var(--purple); }
+  .layer.l5 { border-left-color: var(--green); } .layer.l5 .name { color: var(--green); }
+
+  /* Feature cards */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 22px 0;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--green);
+    border-radius: 10px;
+    padding: 18px;
+    transition: transform 0.2s ease;
+  }
+  .feature-card:hover { transform: translateY(-3px); }
+  .feature-card h4 { margin: 0 0 8px; color: var(--green); font-size: 15px; }
+  .feature-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* Footer */
+  footer.site {
+    border-top: 1px solid var(--line);
+    padding: 30px 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    background: var(--bg-soft);
+  }
+
+  /* Sources */
+  .sources {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 13.5px;
+    margin-top: 30px;
+  }
+  .sources h2 {
+    margin-top: 0;
+    font-size: 18px;
+  }
+  .sources ol { columns: 1; }
+
+  /* Stats grid */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .stat .big {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fg-red);
+    display: block;
+    line-height: 1.1;
+  }
+  .stat .label {
+    color: var(--muted);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 6px;
+    display: block;
+  }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 30px; }
+    .layer { grid-template-columns: 1fr; }
+    .tip { width: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <span class="logo" aria-hidden="true"></span>
+  <span class="brand">FORTINET <span>| FortiWeb Security Insights</span></span>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Threat Research · AI Application Protection</span>
+  <h1>LLM models Application DDOS Attack</h1>
+  <p class="lede">A single crafted prompt can burn hundreds of milliseconds of GPU time — so a <i>modest</i> flood becomes both an outage and a runaway cloud bill. FortiWeb shields the model at the API layer, dropping junk traffic before it reaches the backend:</p>
+
+  <svg viewBox="0 0 940 250" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:940px; margin:6px 0 4px;" role="img" aria-label="FortiWeb shields the LLM backend: cheap crafted prompts flood the API, FortiWeb blocks most at the edge, only clean traffic reaches the expensive GPU model.">
+    <defs>
+      <marker id="hredarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#DA291C"/></marker>
+      <marker id="hgrnarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1A7F37"/></marker>
+    </defs>
+    <g font-family="-apple-system, Segoe UI, sans-serif">
+      <!-- Attacker -->
+      <rect x="14" y="64" width="196" height="104" rx="12" fill="#FFFFFF" stroke="#DA291C" stroke-width="1.5"/>
+      <text x="112" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#DA291C">Bot fleet</text>
+      <text x="112" y="116" text-anchor="middle" font-size="12.5" fill="#1A1F2B">Crafted prompts</text>
+      <text x="112" y="135" text-anchor="middle" font-size="12.5" fill="#1A1F2B">8K-token contexts</text>
+      <text x="112" y="156" text-anchor="middle" font-size="11" fill="#5B6471" font-style="italic">cheap to send</text>
+
+      <!-- flood arrows attacker -> shield -->
+      <line x1="214" y1="92"  x2="372" y2="104" stroke="#DA291C" stroke-width="2" marker-end="url(#hredarr)"/>
+      <line x1="214" y1="116" x2="372" y2="116" stroke="#DA291C" stroke-width="2.5" marker-end="url(#hredarr)"/>
+      <line x1="214" y1="140" x2="372" y2="128" stroke="#DA291C" stroke-width="2" marker-end="url(#hredarr)"/>
+      <text x="293" y="80" text-anchor="middle" font-size="11" fill="#DA291C" font-weight="700">flood ⚡</text>
+
+      <!-- FortiWeb shield -->
+      <path d="M388 58 L500 58 L500 116 Q500 168 444 190 Q388 168 388 116 Z" fill="rgba(218,41,28,0.10)" stroke="#DA291C" stroke-width="2"/>
+      <path d="M428 112 l11 12 l22 -26" fill="none" stroke="#DA291C" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="444" y="84" text-anchor="middle" font-size="12.5" font-weight="800" fill="#DA291C">FortiWeb</text>
+      <text x="444" y="212" text-anchor="middle" font-size="11" fill="#5B6471" font-style="italic">blocks at the API edge</text>
+
+      <!-- clean trickle shield -> backend -->
+      <line x1="500" y1="116" x2="732" y2="116" stroke="#1A7F37" stroke-width="2.5" marker-end="url(#hgrnarr)"/>
+      <text x="616" y="106" text-anchor="middle" font-size="11" fill="#1A7F37" font-weight="700">clean traffic only</text>
+
+      <!-- Backend -->
+      <rect x="736" y="64" width="190" height="104" rx="12" fill="#FFFFFF" stroke="#1A7F37" stroke-width="1.5"/>
+      <text x="831" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1A7F37">Model + GPU</text>
+      <text x="831" y="116" text-anchor="middle" font-size="12.5" fill="#1A1F2B">100s ms / request</text>
+      <text x="831" y="135" text-anchor="middle" font-size="12.5" fill="#1A1F2B">$$$ per inference</text>
+      <text x="831" y="156" text-anchor="middle" font-size="11" fill="#1A7F37" font-style="italic">✓ protected</text>
+
+      <!-- capability chips -->
+      <g font-size="11.5" font-weight="600" text-anchor="middle">
+        <rect x="120" y="226" width="158" height="24" rx="12" fill="#F1F4F9" stroke="#D7DEE8"/><text x="199" y="242" fill="#1A1F2B">Rate limiting</text>
+        <rect x="288" y="226" width="178" height="24" rx="12" fill="#F1F4F9" stroke="#D7DEE8"/><text x="377" y="242" fill="#1A1F2B">ML anomaly detection</text>
+        <rect x="476" y="226" width="168" height="24" rx="12" fill="#F1F4F9" stroke="#D7DEE8"/><text x="560" y="242" fill="#1A1F2B">Schema validation</text>
+        <rect x="654" y="226" width="150" height="24" rx="12" fill="#F1F4F9" stroke="#D7DEE8"/><text x="729" y="242" fill="#1A1F2B">Bot detection</text>
+      </g>
+    </g>
+  </svg>
+  <div class="meta">
+    <span><b>Author:</b> Sam V · Fortinet PreSales Cloud</span>
+    <span><b>Published:</b> June 2026</span>
+    <span><b>Reading time:</b> ~10 min</span>
+    <span><b>Products:</b> FortiWeb, FortiGuard Labs</span>
+  </div>
+</section>
+
+<article>
+
+<h2>Overview</h2>
+
+<p>Large language model services are uniquely fragile under coordinated load because <b>every request is computationally expensive</b>. A traditional web API call costs microseconds; an <span class="term">LLM inference<span class="tip"><b>LLM inference</b> — the process of running a trained model to produce output for a given prompt. Each inference consumes GPU compute and memory proportional to the input and output token count, which is why one expensive request can cost thousands of times more than a normal web request.</span></span> request can take hundreds of milliseconds and consume significant <span class="term">GPU memory<span class="tip"><b>GPU memory (VRAM)</b> — the high-speed memory on a graphics processor where the model weights and the in-flight request context (the KV cache) live. Long-context prompts hold more of this memory for longer, so a flood of large prompts can exhaust VRAM and stall every concurrent request.</span></span>. That asymmetry — cheap to request, expensive to serve — is exactly what a <span class="term">DDoS<span class="tip"><b>DDoS (Distributed Denial of Service)</b> — an attack that overwhelms a service with traffic from many sources until legitimate users can no longer be served. Against LLMs the goal is often not raw bandwidth but <i>resource exhaustion</i>: burning GPU time and memory, and the cloud budget that pays for them.</span></span> actor exploits.</p>
+
+<div class="stats">
+  <div class="stat"><span class="big">100s ms</span><span class="label">GPU cost per inference</span></div>
+  <div class="stat"><span class="big">$300+</span><span class="label">Compute burned in a 10-min flood</span></div>
+  <div class="stat"><span class="big">Token-aware</span><span class="label">Rate limiting per auth token, not raw req/sec</span></div>
+  <div class="stat"><span class="big">API · Bot · Anomaly</span><span class="label">FortiWeb coverage layers</span></div>
+</div>
+
+<h2>What are LLM DDoS attacks?</h2>
+
+<p>Unlike a classic volumetric flood, an LLM DDoS targets the <i>per-request cost</i> rather than the network pipe. A few hundred carefully shaped requests per second can degrade or topple a model endpoint that happily serves thousands of cheap requests. The attacker's economics are favorable: each malicious request is trivial to send and very expensive to serve.<sup>[1][3]</sup></p>
+
+<h3>Attack Vectors</h3>
+<ul>
+  <li><b><span class="term">Token flooding<span class="tip"><b>Token flooding</b> — sending requests packed with very long contexts (for example 8K tokens each) at high frequency. Because GPU memory and compute scale with token count, a stream of maximal-length prompts exhausts VRAM far faster than the same number of short requests.</span></span>:</b> thousands of long-context prompts per second to exhaust GPU memory.</li>
+  <li><b>Expensive computation loops:</b> prompts that force costly model operations — e.g. forcing chain-of-thought reasoning on every request.</li>
+  <li><b>Concurrent session attacks:</b> bots open many connections and never close them, exhausting connection pools.</li>
+  <li><b><span class="term">Prompt injection<span class="tip"><b>Prompt injection</b> — crafting input that manipulates the model into ignoring its instructions or producing attacker-chosen behavior. Combined with volume, an injected prompt can be tuned to maximize output length and therefore cost on every single request.</span></span> + volume:</b> prompts designed to generate maximally expensive responses, combined with request flooding.</li>
+</ul>
+
+<div class="callout warn">
+  <h4>The economics of the attack</h4>
+  <p>A chatbot using a frontier model costs roughly <b>$0.03 per 1K tokens</b>. A 10-minute flood pushing 1M malicious tokens burns about <b>$300 in compute alone</b> — before counting downtime, SLA penalties, and lost customer trust. The attacker spends almost nothing to inflict it.<sup>[3]</sup></p>
+</div>
+
+<p>Typical impacts include:</p>
+<ul>
+  <li>Service slowdowns and increased latency (response-time degradation).</li>
+  <li>API failures and complete outages during peak attacks.</li>
+  <li>Thousands of dollars in wasted cloud compute (GPU hours consumed by junk traffic).</li>
+  <li>Compliance violations (SLA breaches, regulatory uptime mandates).</li>
+  <li>Reputational damage and lost customer confidence.</li>
+</ul>
+
+<h2>The attack chain at a glance</h2>
+
+<div class="chain">
+  <h4>LLM DDoS — From Crafted Prompt to Cloud Bill</h4>
+  <svg viewBox="0 0 920 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:920px;">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#DA291C"/>
+      </marker>
+      <linearGradient id="boxg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1B2029"/>
+        <stop offset="100%" stop-color="#10141C"/>
+      </linearGradient>
+    </defs>
+
+    <g font-family="-apple-system, Segoe UI, sans-serif" font-size="12" fill="#E6EAF2" text-anchor="middle">
+      <rect x="10" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#DA291C" stroke-width="1.5"/>
+      <text x="85" y="85" font-weight="700" fill="#DA291C">1 · Bot Fleet</text>
+      <text x="85" y="108">Automated clients</text>
+      <text x="85" y="124">mimic real users</text>
+      <text x="85" y="144" fill="#9AA3B2" font-size="11">distributed sources</text>
+
+      <rect x="190" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#E3B341" stroke-width="1.5"/>
+      <text x="265" y="85" font-weight="700" fill="#E3B341">2 · Crafted Prompts</text>
+      <text x="265" y="108">8K-token contexts</text>
+      <text x="265" y="124">expensive reasoning</text>
+      <text x="265" y="144" fill="#9AA3B2" font-size="11">max cost per call</text>
+
+      <rect x="370" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#58A6FF" stroke-width="1.5"/>
+      <text x="445" y="85" font-weight="700" fill="#58A6FF">3 · Volume Flood</text>
+      <text x="445" y="108">100K req/min</text>
+      <text x="445" y="124">connection pool drain</text>
+      <text x="445" y="144" fill="#9AA3B2" font-size="11">concurrency abuse</text>
+
+      <rect x="550" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#B392F0" stroke-width="1.5"/>
+      <text x="625" y="85" font-weight="700" fill="#B392F0">4 · GPU Exhaustion</text>
+      <text x="625" y="108">VRAM saturated</text>
+      <text x="625" y="124">queue backs up</text>
+      <text x="625" y="144" fill="#9AA3B2" font-size="11">latency spikes</text>
+
+      <rect x="730" y="60" width="180" height="100" rx="10" fill="url(#boxg)" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="820" y="85" font-weight="700" fill="#3FB950">5 · Outage + Bill</text>
+      <text x="820" y="108">service degraded</text>
+      <text x="820" y="124">runaway cloud cost</text>
+      <text x="820" y="144" fill="#9AA3B2" font-size="11">SLA breach</text>
+
+      <line x1="162" y1="110" x2="186" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="342" y1="110" x2="366" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="522" y1="110" x2="546" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="702" y1="110" x2="726" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+
+      <text x="460" y="200" fill="#9AA3B2" font-size="11" font-style="italic">FortiWeb intercepts at stages 1–3 — before any traffic reaches the GPU.</text>
+    </g>
+  </svg>
+</div>
+
+<div class="callout info">
+  <h4>The honest division of labor</h4>
+  <p>FortiWeb stops the <b>structural and volumetric</b> dimension of an LLM DDoS at the API edge — request-size limits, request-rate limits, ML bot detection, OpenAPI schema validation, concurrency caps, and anomaly detection — and adds <span class="term">MCP security<span class="tip"><b>MCP security</b> — protection for Model Context Protocol endpoints: the tool-calling interface agents use to reach external systems. FortiWeb's AI-specific capability today focuses here, securing and rate-limiting MCP/API traffic rather than parsing model prompts.</span></span> for agentic / tool-calling traffic. True <b>LLM-token cost metering and prompt-semantic</b> inspection is the role of <span class="term">FortiAIGate<span class="tip"><b>FortiAIGate</b> — Fortinet's AI runtime security gateway. Deployed between the application and the LLM, it applies guardrails on model input and output, defending against prompt injection, model poisoning, excessive/abusive consumption, and data leakage. It owns the model-layer (prompt-semantic, token-aware) controls a WAF does not.</span></span><sup>[9]</sup> in the Fortinet AI portfolio. Together they cover both layers; neither alone is "LLM-aware" on its own.<sup>[1][2]</sup></p>
+</div>
+
+<h2>FortiWeb protection strategy</h2>
+
+<h3>Best-Practice Architecture for Protecting AI Workloads</h3>
+<p>FortiWeb sits as a <span class="term">reverse proxy<span class="tip"><b>Reverse proxy</b> — a server that sits in front of one or more backend services and handles incoming requests on their behalf. Because all traffic passes through it, it is the natural place to inspect, validate, rate-limit, and block requests before they reach the protected LLM backend.</span></span> between users and your LLM service, inspecting every request and blocking attacks before they consume GPU resources:</p>
+
+<img src="fortinet_k8s_ai_workload_with_forticnapp.svg" alt="Fortinet AI Security multi-cloud architecture: external clients pass through FortiWeb WAF (Kubernetes ingress — routing, WAF policies, TLS/mTLS, rate limiting, authentication, bot detection, token rate limiting), into the Kubernetes cluster where FortiAIGate guards AI traffic (prompt guard, response filter, model control, cost & quota, audit) in front of local LLM services, alongside external cloud LLMs and FortiCNAPP cloud-native protection." style="display:block; width:100%; max-width:1100px; height:auto; margin:18px auto; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:20px;" />
+
+<h3>FortiWeb Core protection mechanisms</h3>
+<table>
+  <thead>
+    <tr><th>Feature</th><th>How it protects against LLM DDoS</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>API Protection</b></td><td>Secures LLM API endpoints by analyzing request content and enforcing WAF policies to block malicious traffic before it reaches the model.</td></tr>
+    <tr><td><b>Bot Mitigation</b></td><td>Detects and blocks automated bot traffic using ML-based fingerprinting and behavior analysis — no CAPTCHAs needed.</td></tr>
+    <tr><td><b>ML-Based Anomaly Detection</b></td><td>Learns a per-endpoint, per-parameter behavioral baseline and uses a two-layer ML model to flag deviations — request-rate spikes, abnormally large prompt fields, unexpected client behavior — with low false positives.<sup>[8]</sup></td></tr>
+    <tr><td><b>Rate Limiting</b></td><td>Enforces granular quotas per API key, per user, and globally to prevent resource exhaustion.</td></tr>
+    <tr><td><b>API Discovery</b></td><td>Discovers LLM API endpoints and builds positive security models using OpenAPI / JSON schema validation.</td></tr>
+    <tr><td><b>Request Validation</b></td><td>Blocks malformed, oversized, or suspicious prompts before they reach the LLM backend.</td></tr>
+  </tbody>
+</table>
+
+<h2>FortiWeb Strategies</h2>
+
+<p><b>FortiWeb defends an LLM application DDoS in layers.</b> The strongest place to start is <i>prevention</i> — stopping the automated traffic that powers a flood before it ever reaches a rate counter or the model.</p>
+
+<p style="margin:26px 0 4px;"><span style="display:inline-block;background:rgba(218,41,28,0.12);color:#B0210F;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;padding:5px 11px;border-radius:4px;border:1px solid rgba(218,41,28,0.3);font-weight:700;">Preventative measure</span></p>
+
+<div class="phase"><span class="num">1</span><h3>Bot &amp; ML-based bot detection</h3></div>
+<p>An LLM application DDoS is, at scale, an <b>automated</b> attack — a fleet of clients hammering the API. So the highest-leverage preventative control is to separate <b>bot from human at the door</b> and drop the bots before any rate budget is spent. FortiWeb does this with three complementary engines:</p>
+<ul>
+  <li><b>Known-bot signatures &amp; FortiGuard feeds</b> — block recognized bad bots, scrapers, and tools by signature and reputation.</li>
+  <li><b><span class="term">ML-based bot detection<span class="tip"><b>ML-Based Bot Detection</b> — a FortiWeb engine that builds a behavioral model of how real clients interact with the application (request cadence, sequence, headers, fingerprint) and scores each client human-vs-bot in real time — catching novel automation that no static signature covers, with no CAPTCHA shown to real users.</span></span></b> — a behavioral model scores each client human-vs-bot in real time, catching automation that mimics legitimate traffic and has no known signature.</li>
+  <li><b>Threshold &amp; crawler heuristics</b> — rapid-request and crawl-pattern detection flags clients behaving like a flood source.</li>
+</ul>
+<span class="lang-tag">fortiweb · bot mitigation (illustrative)</span>
+<pre><code># Web Protection &gt; Bot Mitigation
+set known-bots enable            # signature + FortiGuard bot reputation
+set ml-based-detection enable    # behavioral model: human vs bot
+set threshold-detection enable   # rapid-request / crawler heuristics
+set action block                 # ML-flagged bots dropped — no CAPTCHA</code></pre>
+<p><span class="check">✔</span> Removes the <b>automated volume</b> that powers a flood before rate counters even engage, and stays <b>user-transparent</b> (no CAPTCHA). &nbsp; <span class="cross">✘</span> A determined attacker can rotate fingerprints — pair it with the ML anomaly engine below so rotated bots still surface as a traffic-shape anomaly.</p>
+
+<div class="phase"><span class="num">2</span><h3>WAF ML to detect suspicious activity</h3></div>
+<p>Bot detection separates bot from human; <b>ML-based anomaly detection</b> catches the attack even when individual clients look legitimate. FortiWeb's WAF ML learns a <span class="term">behavioral baseline<span class="tip"><b>ML-Based Anomaly Detection</b> — FortiWeb learns the normal behavior of each URL and parameter and flags statistical deviations with a two-layer model that keeps false positives low. No signatures, no hand-written rules.</span></span> for every endpoint and parameter, then flags the <b>volume, parameter, and behavioral</b> deviations a flood produces — with no signature or hand-written rule:</p>
+<span class="lang-tag">fortiweb · ML anomaly detection (illustrative)</span>
+<pre><code># Web Protection &gt; ML Based Anomaly Detection
+set anomaly-detection enable     # learn per-URL / per-parameter baseline
+set learning-mode auto           # build the behavioral model from live traffic
+set action alert-then-block      # verify (2nd ML layer) before blocking</code></pre>
+<p><span class="check">✔</span> Catches novel floods and rotated bots; the two-layer model keeps the false-positive rate low enough to leave in <code>block</code>. <i>(Full treatment in <b>FortiWeb's real edge</b> below.)</i></p>
+
+<p style="margin:30px 0 4px;"><span style="display:inline-block;background:rgba(10,102,194,0.12);color:#0A52A0;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;padding:5px 11px;border-radius:4px;border:1px solid rgba(10,102,194,0.3);font-weight:700;">Cost-limiting strategies</span></p>
+
+<p>Beyond prevention, these patterns address the <i>other</i> token — the LLM <b>text</b> token that drives GPU cost (not the auth token). Until native LLM-token metering ships, three practical patterns approximate per-prompt cost limiting on FortiWeb <i>today</i> — listed from roughest to most accurate. They are not mutually exclusive; the strongest posture combines all three. <i>(CLI below is illustrative — the actual FortiWeb stanzas live under HTTP Protocol Constraints / API Protection and Custom Rules, not a single <code>rate-limit</code> block.)</i></p>
+
+<div class="phase"><span class="num">1</span><h3>Payload size as a proxy (rough)</h3></div>
+<p>Cap the request body size — payload bytes correlate loosely with token count. In FortiWeb this is an <b>HTTP protocol constraint / API-protection body-size limit</b>, not a rate-limit knob:</p>
+<span class="lang-tag">fortiweb · body-size constraint (illustrative)</span>
+<pre><code># Web Protection > Protocol Constraints (or API Protection body limit)
+set max-body-length 32768       # ~32 KB ≈ ~8K tokens (GPT-3 tokenizer)
+set action block
+# Adjust the byte-to-token multiplier to match your model's tokenizer</code></pre>
+<p><span class="check">✔</span> <b>Simple</b>, no external dependency. &nbsp; <span class="cross">✘</span> <b>Inaccurate</b> — compression, padding, and encoding differences skew the byte↔token ratio.</p>
+
+<div class="phase"><span class="num">2</span><h3>Header-based enforcement via the app's token decision (accurate)</h3></div>
+<p>FortiWeb can match a custom HTTP header in a Custom Rule and block on it — but it can't <i>sum</i> a numeric <code>X-Token-Count</code> into a per-minute budget; that aggregation isn't a FortiWeb primitive. So the app or API gateway owns the token math and keeps the running total, then sets a <b>flag header</b> once a user exceeds budget. FortiWeb consumes the <i>decision</i>, not the count:</p>
+<span class="lang-tag">fortiweb · custom rule (illustrative)</span>
+<pre><code># App/gateway counts tokens, sets a flag when the user is over budget:
+#   X-Token-Budget-Exceeded: true
+
+# FortiWeb Custom Rule — match the flag header, block:
+match:  HTTP header  X-Token-Budget-Exceeded  ==  "true"
+action: deny (or redirect / challenge)</code></pre>
+<p><span class="check">✔</span> <b>Accurate</b> — trusts the application's own token accounting. &nbsp; <span class="cross">✘</span> <b>Requires app-side instrumentation</b> to count tokens and set the flag; FortiWeb enforces the verdict, it doesn't meter tokens itself.</p>
+
+<div class="phase"><span class="num">3</span><h3>Endpoint-level rate limits (practical)</h3></div>
+<p>Different LLM operations have predictable cost profiles — limit each endpoint to match its weight, no token awareness needed:</p>
+<span class="lang-tag">fortiweb · per-endpoint limits</span>
+<pre><code>/api/embeddings     -&gt; 10 req/sec    # small payloads, fast
+/api/completions    -&gt;  2 req/sec    # large payloads, slow
+/api/fine-tune      -&gt;  1 req/hour   # resource-heavy</code></pre>
+<p><span class="check">✔</span> <b>Practical</b>, no token awareness needed. &nbsp; <span class="cross">✘</span> <b>Doesn't account for prompt-size variance</b> within an endpoint.</p>
+
+<div class="callout info">
+  <h4>Combine, don't choose</h4>
+  <p>Endpoint limits (3) set sane per-operation ceilings, payload-size limits (1) catch oversized prompts cheaply, and a trusted <code>X-Token-Budget-Exceeded</code> flag (2) adds true token accuracy where you control the app. Layer all three under <span class="term">ML-based anomaly detection<span class="tip"><b>ML-Based Anomaly Detection</b> — FortiWeb's behavioral baseline engine. It backs up every static workaround on this page by catching deviations the fixed thresholds miss.</span></span> and the static thresholds stop being your only line of defense.</p>
+</div>
+
+<h2>Per-auth-token rate limiting &amp; credential-abuse defense</h2>
+
+<p><i>Continuing the strategies above:</i> the cost-limiting patterns addressed the LLM <b>text</b> token; this section addresses the <b><span class="term">auth token<span class="tip"><b>Auth token</b> — the API credential in the <code>Authorization: Bearer &lt;token&gt;</code> header (e.g. <code>sk-ant-…</code>), or the API key in <code>x-api-key</code>. FortiWeb can match and rate-limit on it; it is <b>not</b> the LLM text token the model bills compute for. So "token-aware rate limiting" means rate-limiting <b>per credential</b> — a real FortiWeb capability.</span></span></b> — the credential carried in each request.</p>
+
+<p>The single most useful thing FortiWeb can do in front of an external LLM API (Anthropic, OpenAI, Gemini, or your own) is to treat the <b>auth token / API key as the rate-limit key</b>. Instead of throttling by source IP — which collapses every user behind a NAT or a shared egress into one bucket — FortiWeb scopes the limit to each unique credential. That single design choice gives you per-key quotas, instant revocation, and blast-radius isolation when a key leaks.</p>
+
+<p>Be precise about the boundary, though: FortiWeb rate-limits and blocks by the auth token's <i>value, pattern, and behavior</i> — it does <b>not</b> validate whether that token is legitimate. The authentication decision stays with the application or model provider. FortiWeb is the cheap, fast filter that strips malformed, brute-forced, and revoked credentials before they ever reach the backend.</p>
+
+<div class="phase"><span class="num">1</span><h3>Rate-limit per auth token</h3></div>
+<p>Extract the auth token from <code>Authorization: Bearer &lt;token&gt;</code> and scope the quota to each unique value — so one noisy or compromised key can't starve everyone else:</p>
+<span class="lang-tag">fortiweb · per-token rate limit (illustrative)</span>
+<pre><code>config waf http-request-rate-limit
+    edit llm-per-token-quota
+        set action block
+        set uri-match-type prefix
+        set uri "/v1/"                     # OpenAI / Anthropic API paths
+        set limit-to-request 1000          # per token, per period
+        set request-period 3600            # 1 hour
+        # Scope the limit to the credential, not the source IP
+        set limit-by-key enable
+        set key-type http-header
+        set key-name "Authorization"
+        set key-pattern "Bearer (.*)"      # capture the token value
+    next
+end</code></pre>
+<p><span class="check">✔</span> Caps spend and abuse <b>per credential</b>. &nbsp; <span class="cross">✘</span> Only as granular as the keys you issue — give each app/team its own.</p>
+
+<div class="callout warn">
+  <h4>Worked example: rate-limiting Claude Code — match the <i>right</i> header</h4>
+  <p>A coding agent like <b>Claude Code</b> makes direct calls to the model API, so it carries a credential on every request to <code>/v1/messages</code> — a natural per-credential rate-limit target. But the header depends on how it authenticates, and this is where most rules go wrong:</p>
+  <ul>
+    <li><b>API-key auth</b> (<code>ANTHROPIC_API_KEY=sk-ant-api03-…</code>) → the key travels in the <code>x-api-key</code> header. There is <b>no</b> <code>Authorization</code> header. <span class="term">The Anthropic API uses <code>x-api-key</code><span class="tip"><b>Anthropic API authentication</b> — API keys are sent in the <code>x-api-key</code> header, not <code>Authorization: Bearer</code>. A rule that only matches <code>Authorization</code> will completely miss API-key traffic.</span></span>, not bearer auth.</li>
+    <li><b>OAuth / subscription login</b> (<code>claude /login</code> or an OAuth proxy) → the token travels in <code>Authorization: Bearer &lt;token&gt;</code> (plus an <code>anthropic-beta: oauth-2025-04-20</code> header). OAuth tokens are a different format (e.g. <code>sk-ant-oat01-…</code>), not <code>sk-ant-api03-…</code>.</li>
+  </ul>
+  <p>So <code>match "Authorization: Bearer sk-ant-*"</code> alone catches only the OAuth path. To cover both, scope the limit on whichever header is present:</p>
+  <span class="lang-tag">fortiweb · per-credential limit, both auth modes (illustrative)</span>
+<pre><code>config waf http-request-rate-limit
+    edit claude-code-rate-limit
+        set action block
+        set limit-to-request 50
+        set request-period 60
+        set uri "/v1/messages"
+        set limit-by-key enable
+        # OAuth-auth Claude Code (subscription / proxy):
+        set key-type http-header
+        set key-name "Authorization"
+        set key-pattern "Bearer (.*)"
+    next
+end
+
+# API-key-auth Claude Code puts the secret here instead — add a
+# second rule keyed on x-api-key so it isn't silently missed:
+#   set key-name "x-api-key"
+#   set key-pattern "(sk-ant-.*)"</code></pre>
+</div>
+
+<div class="phase"><span class="num">2</span><h3>Enforce token format (regex)</h3></div>
+<p>Reject malformed or missing tokens up front. Anthropic keys begin with <code>sk-ant-</code>, OpenAI project keys with <code>sk-proj-</code> — FortiWeb can require that shape on the header before anything else runs:</p>
+<span class="lang-tag">fortiweb · token-format match (illustrative)</span>
+<pre><code>set header-match "Authorization: Bearer sk-ant-*"   # require valid prefix
+set action block                                    # else drop at the edge</code></pre>
+<p><span class="check">✔</span> Cheaply rejects junk. &nbsp; <span class="cross">✘</span> Confirms the token <i>looks</i> valid, not that it <i>is</i> valid.</p>
+
+<div class="phase"><span class="num">3</span><h3>Detect credential abuse &amp; revoke fast</h3></div>
+<ul>
+  <li>Rate-limit sources sending repeated requests with <b>different or missing tokens</b> — the signature of <span class="term">credential brute-forcing<span class="tip"><b>Credential brute-forcing</b> — an attacker cycling through many candidate keys against an API to find one that works. A rapid stream of requests with varying or absent <code>Authorization</code> values is a strong behavioral tell, independent of whether any single token is valid.</span></span>.</li>
+  <li><b>Block leaked or revoked keys instantly</b> with a Custom Rule that matches the token value — the moment a key shows up in a paste or alert, deny <code>sk-ant-&lt;leaked&gt;</code> at the edge without waiting on a backend redeploy.</li>
+  <li>Track failed-auth patterns over time to feed rate-limit and anomaly thresholds.</li>
+</ul>
+
+<table>
+  <thead><tr><th>Capability</th><th>Operational benefit</th></tr></thead>
+  <tbody>
+    <tr><td><b>Per-token rate limits</b></td><td>One compromised key can't take down traffic for everyone else.</td></tr>
+    <tr><td><b>Instant revocation</b></td><td>Block a leaked <code>sk-…</code> key at the edge immediately — no app deploy.</td></tr>
+    <tr><td><b>Per-key cost control</b></td><td>Cap LLM API spend per app or team, each on its own credential.</td></tr>
+    <tr><td><b>Usage visibility</b></td><td>See which keys are most active; spot a token that suddenly spikes.</td></tr>
+    <tr><td><b>Blast-radius isolation</b></td><td>Compromise is contained to a single token, not the whole service.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">
+  <h4>Token-handling hygiene</h4>
+  <p><b>Never log full Bearer tokens</b> — record only the last 4 characters or a hash, in FortiWeb logs and FortiAnalyzer alike. Rotate keys on a schedule, rate-limit aggressively on auth failures to blunt brute force, and when a key is confirmed compromised, revoke it through the provider's API <i>and</i> blocklist its shape on FortiWeb so the dead key never reaches them. FortiWeb screens the credential's value, shape, and behavior; the app still verifies its validity.</p>
+</div>
+
+<h2>FortiWeb's real edge: ML-based anomaly detection</h2>
+
+<p>Here is the key point that rescues the WAF layer from the "no token semantics" limitation: <b>you don't need to understand a prompt to recognize that traffic stopped looking normal.</b> FortiWeb's <span class="term">ML-based anomaly detection<span class="tip"><b>ML-Based Anomaly Detection</b> — a FortiWeb 8.0 feature that automatically learns the normal behavioral baseline of each protected URL and parameter (request rate, value length, character distribution, structure) and flags statistical deviations — no signatures, no hand-written rules. It is one of three FortiWeb ML engines, alongside ML-Based Bot Detection and ML-Based API Protection.</span></span> learns a behavioral baseline for every API endpoint and parameter, then flags deviations from it — automatically, without signatures and without anyone writing a rule.<sup>[8]</sup></p>
+
+<p>An LLM DDoS, no matter how it is crafted, has to change the <i>shape</i> of your traffic to do damage. That shape change is exactly what the model is built to catch:</p>
+
+<ul>
+  <li><b>Volume deviation:</b> a sudden request-rate spike against a learned baseline — the signature of a flood — registers as anomalous within minutes.</li>
+  <li><b>Parameter deviation:</b> abnormally long prompt fields or oversized payloads diverge from the learned normal value length and distribution for that endpoint, surfacing token-flooding behavior <i>structurally</i> even though the WAF never tokenizes the text.</li>
+  <li><b>Behavioral deviation:</b> unusual cadence, concurrency, or per-client patterns that don't match how real users have historically called the API.</li>
+</ul>
+
+<div class="callout ok">
+  <h4>Why the two-layer model matters here</h4>
+  <p>FortiWeb's ML uses a <b>two-layer design</b>: the first layer builds the behavioral baseline and flags anomalies; the second layer validates whether a flagged anomaly is a genuine threat before acting. That second pass is what keeps the <i>false-positive rate</i> low — critical when the "block" decision could otherwise turn away paying customers during a traffic surge. Behavioral detection that you can't trust gets switched off; a two-layer model is what makes it safe to leave in <code>block</code> mode.<sup>[8]</sup></p>
+</div>
+
+<p>Paired with <b>ML-Based Bot Detection</b> (separating automated fleets from humans) and <b>ML-Based API Protection</b> (per-parameter abnormal-value analysis), this gives FortiWeb a genuine, shipping answer to LLM DDoS at the volumetric, structural, and behavioral layers — while <span class="term">FortiAIGate<span class="tip"><b>FortiAIGate</b> — Fortinet's AI runtime security gateway, deployed between the app and the model to apply guardrails on input and output (prompt injection, model poisoning, excessive consumption, data leakage). It owns the model-layer controls the WAF deliberately does not.<sup>[9]</sup></span></span> owns the prompt-semantic layer above it.</p>
+
+<h2>Monitoring &amp; detection</h2>
+
+<h3>Key metrics to track</h3>
+
+<p>Each metric exists to answer one question: <b>is someone turning my GPU budget into their weapon, and is my mitigation costing real users anything?</b> The table below pairs every metric with <i>why</i> it matters and the signal that should make you act.</p>
+
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Why it matters</th><th>Healthy</th><th>Attack signal</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Request volume</b></td>
+      <td>The first and bluntest indicator — a flood almost always shows up here before anywhere else. Without a baseline you can't tell a launch-day surge from an attack.</td>
+      <td>Flat or diurnal, near baseline</td>
+      <td><span class="cross">✘</span> &gt; 200% of baseline in &lt; 5 min</td>
+    </tr>
+    <tr>
+      <td><b>Average tokens/request</b></td>
+      <td>This is the <i>cost</i> dimension volume alone can't see. A small number of 8K-token prompts can burn more GPU than a huge number of short ones — token flooding hides under normal request counts.</td>
+      <td>Stable, matches typical prompt size</td>
+      <td><span class="cross">✘</span> Sharp climb toward max context</td>
+    </tr>
+    <tr>
+      <td><b>Bot vs. human ratio</b></td>
+      <td>DDoS at scale is automated. A rising bot share means a campaign is spinning up, even if total volume still looks normal.</td>
+      <td>Mostly human, known good bots</td>
+      <td><span class="cross">✘</span> Bot confidence &gt; 90% at high rate</td>
+    </tr>
+    <tr>
+      <td><b>API error rates (4xx/5xx)</b></td>
+      <td>Tells you whether the backend is starting to buckle (5xx) or whether FortiWeb is actively shedding malicious load (4xx). The split tells you who's winning.</td>
+      <td>Low 4xx, near-zero 5xx</td>
+      <td><span class="warnmark">⚠</span> 5xx climbing = GPU saturating</td>
+    </tr>
+    <tr>
+      <td><b>Latency</b></td>
+      <td>The user-facing symptom. It proves the GPU queue is backing up — and proves inspection overhead stays negligible when traffic is clean.</td>
+      <td>&lt; 100ms inspection overhead</td>
+      <td><span class="cross">✘</span> p95 spikes as queue grows</td>
+    </tr>
+    <tr>
+      <td><b>False-positive rate</b></td>
+      <td>Your mitigation's blast radius. A defense that blocks paying customers is its own outage — this is the metric that keeps thresholds honest.</td>
+      <td>Near zero; legit users unblocked</td>
+      <td><span class="warnmark">⚠</span> Rising = thresholds too tight</td>
+    </tr>
+    <tr>
+      <td><b>Cost savings</b></td>
+      <td>Turns security into a dollar figure leadership understands: GPU spend you <i>avoided</i> by blocking junk traffic. This is the ROI line for the whole deployment.</td>
+      <td>Steady blocked-compute value</td>
+      <td><span class="check">✔</span> Spikes during an attack = wins</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="chain">
+  <h4>What the metrics look like during an attack — with vs. without FortiWeb</h4>
+  <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:900px;">
+    <defs>
+      <linearGradient id="atkfill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#DA291C" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#DA291C" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <g font-family="-apple-system, Segoe UI, sans-serif" font-size="12">
+      <!-- axes -->
+      <line x1="70" y1="40" x2="70" y2="270" stroke="#2A313D" stroke-width="1.5"/>
+      <line x1="70" y1="270" x2="850" y2="270" stroke="#2A313D" stroke-width="1.5"/>
+      <text x="70" y="295" fill="#9AA3B2" text-anchor="middle">attack starts</text>
+      <text x="455" y="295" fill="#9AA3B2" text-anchor="middle">time →</text>
+      <text x="40" y="55" fill="#9AA3B2" text-anchor="middle" transform="rotate(-90 40 155)">GPU load / cost</text>
+
+      <!-- baseline -->
+      <line x1="70" y1="235" x2="850" y2="235" stroke="#9AA3B2" stroke-width="1" stroke-dasharray="5 5"/>
+      <text x="845" y="228" fill="#9AA3B2" text-anchor="end" font-size="11">normal baseline</text>
+
+      <!-- WITHOUT FortiWeb: spike to top -->
+      <path d="M70,235 L150,235 L210,210 C260,150 300,70 360,55 L850,50 L850,270 L70,270 Z" fill="url(#atkfill)"/>
+      <path d="M70,235 L150,235 L210,210 C260,150 300,70 360,55 L850,50" fill="none" stroke="#DA291C" stroke-width="2.5"/>
+      <text x="620" y="40" fill="#DA291C" font-weight="700" text-anchor="middle">Without FortiWeb — GPU saturates, cost runs away</text>
+
+      <!-- WITH FortiWeb: clamped near baseline -->
+      <path d="M70,235 L150,235 L210,228 C250,222 290,224 360,226 L850,226" fill="none" stroke="#3FB950" stroke-width="2.5"/>
+      <text x="620" y="248" fill="#3FB950" font-weight="700" text-anchor="middle">With FortiWeb — flood blocked at the edge, load held flat</text>
+
+      <!-- attack marker -->
+      <line x1="210" y1="40" x2="210" y2="270" stroke="#E3B341" stroke-width="1" stroke-dasharray="3 4"/>
+      <text x="210" y="55" fill="#E3B341" text-anchor="middle" font-size="11">⚡ flood</text>
+
+      <!-- legend / caption -->
+      <text x="455" y="325" fill="#9AA3B2" text-anchor="middle" font-style="italic" font-size="11">The gap between the red and green curves is the GPU spend FortiWeb saved — your "cost savings" metric, visualized.</text>
+    </g>
+  </svg>
+</div>
+
+<h3>Recommended alerts</h3>
+<ul>
+  <li>Request-rate spike &gt; 200% of baseline in &lt; 5 minutes.</li>
+  <li>Average tokens/request spike &gt; 50% of baseline.</li>
+  <li>Bot detection confidence &gt; 90% for &gt; 1M requests/hour.</li>
+  <li>API error rate &gt; 5% (potential attack or misconfiguration).</li>
+  <li>Concurrent sessions &gt; 95% of limit.</li>
+</ul>
+
+<h2>Defense in depth — layered view</h2>
+
+<p>No single control stops an LLM DDoS. Effective protection layers detection from the edge inward, so traffic is filtered, profiled, and rate-limited before a single token reaches the GPU.</p>
+
+<div class="layers">
+  <div class="layer">
+    <div class="name">Edge / API</div>
+    <div>API protection + schema validation</div>
+    <div>Rejects malformed and oversized prompts at the door.</div>
+  </div>
+  <div class="layer l2">
+    <div class="name">Bot layer</div>
+    <div>ML fingerprinting + behavior analysis</div>
+    <div>Separates automated fleets from real users — no CAPTCHA.</div>
+  </div>
+  <div class="layer l3">
+    <div class="name">Rate / token</div>
+    <div>Per-auth-token request budgets</div>
+    <div>Caps the load any one credential can inflict.</div>
+  </div>
+  <div class="layer l4">
+    <div class="name">Anomaly</div>
+    <div>Dual-layer ML on volume and tokens</div>
+    <div>Catches novel patterns that fixed rules miss.</div>
+  </div>
+  <div class="layer l5">
+    <div class="name">Backend</div>
+    <div>Protected LLM + GPU capacity</div>
+    <div>Only clean, budgeted traffic ever arrives.</div>
+  </div>
+</div>
+
+<h2>Competitive comparison</h2>
+<table>
+  <thead>
+    <tr><th>Capability</th><th>FortiWeb</th><th>AWS WAF + API GW</th><th>Azure WAF + APIM</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>ML-based bot detection</b></td><td><span class="check">✔</span> Native, no CAPTCHA</td><td><span class="warnmark">⚠</span> Limited (managed rules)</td><td><span class="warnmark">⚠</span> Limited (rules-based)</td></tr>
+    <tr><td><b>ML-based anomaly detection</b></td><td><span class="check">✔</span> Two-layer behavioral baseline, low FP</td><td><span class="cross">✘</span> Static / managed rules</td><td><span class="cross">✘</span> Static / managed rules</td></tr>
+    <tr><td><b>API schema validation</b></td><td><span class="check">✔</span> OpenAPI / JSON schema</td><td><span class="warnmark">⚠</span> Basic in API Gateway</td><td><span class="warnmark">⚠</span> Basic in APIM</td></tr>
+    <tr><td><b>Cross-cloud consistency</b></td><td><span class="check">✔</span> Same policies AWS/Azure/GCP/on-prem</td><td><span class="cross">✘</span> AWS-specific</td><td><span class="cross">✘</span> Azure-specific</td></tr>
+    <tr><td><b>Centralized management</b></td><td><span class="check">✔</span> FortiManager</td><td><span class="cross">✘</span> Per-service console</td><td><span class="cross">✘</span> Per-service console</td></tr>
+    <tr><td><b>No CAPTCHA burden</b></td><td><span class="check">✔</span> ML-based, user-transparent</td><td><span class="warnmark">⚠</span> CAPTCHA for bots</td><td><span class="warnmark">⚠</span> CAPTCHA for bots</td></tr>
+  </tbody>
+</table>
+
+<div class="callout info">
+  <h4>PreSales angle</h4>
+  <p>"FortiWeb brings ML-based bot and anomaly detection plus per-auth-token rate limiting across your multi-cloud infrastructure, while AWS and Azure WAF are single-cloud and lean on static rules."</p>
+</div>
+
+<h2>Real-world risk scenarios</h2>
+
+<div class="phase"><span class="num">1</span><h3>SaaS LLM chatbot (customer support)</h3></div>
+<p><b>Problem:</b> a competitor attacks your support chatbot with 100K requests/min of expensive prompts. Cost impact: $5K/hour.</p>
+<p><b>FortiWeb solution:</b></p>
+<ul>
+  <li>Per-auth-token rate limit: 100 req/min per credential (blocks the attacker's volume).</li>
+  <li>Bot detection: ML flags automated traffic at 95%+ confidence.</li>
+  <li>ML anomaly detection: the request-rate spike registers against baseline within minutes.</li>
+</ul>
+<div class="callout ok">
+  <h4>Outcome</h4>
+  <p>Attack blocked in &lt; 5 minutes; cost saved: $5K/hour × 5 min ≈ <b>$400</b> — and the service stays up for real customers.</p>
+</div>
+
+<div class="phase"><span class="num">2</span><h3>Enterprise LLM RAG system (internal API)</h3></div>
+<p><b>Problem:</b> a rogue employee writes a loop sending 10K max-length prompts. Resource exhaustion causes an outage.</p>
+<p><b>FortiWeb solution:</b></p>
+<ul>
+  <li>Request body-size limit: caps oversized prompts at the edge (≈8K-token payload ceiling).</li>
+  <li>Per-auth-token request quota: throttles the looping credential before it exhausts the backend.</li>
+  <li>ML anomaly detection: flags the unusual request pattern from the employee's client.</li>
+  <li>Audit trail: FortiAnalyzer logs every request for forensics.</li>
+</ul>
+<div class="callout ok">
+  <h4>Outcome</h4>
+  <p>Attack mitigated before service degradation; the audit trail provides evidence of the rogue behavior.</p>
+</div>
+
+<h2>Fortinet AI security portfolio integration</h2>
+<p>For comprehensive LLM protection, combine FortiWeb with the broader Fortinet portfolio so infrastructure-layer and model-layer attacks are both covered:</p>
+<table>
+  <thead>
+    <tr><th>Component</th><th>Role</th><th>Threat coverage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>FortiWeb</b> (WAF)</td><td>API / web-layer DDoS and bot mitigation</td><td>Request floods, resource exhaustion, bot &amp; credential abuse</td></tr>
+    <tr><td><b>FortiAIGate</b> (AI GW)</td><td>LLM-native runtime security between app and model</td><td>Prompt injection, jailbreaks, model poisoning, response/data leakage</td></tr>
+    <tr><td><b>FortiManager</b> (Centralized mgmt)</td><td>Centralized policy management</td><td>Consistent enforcement across all LLM endpoints</td></tr>
+    <tr><td><b>FortiAnalyzer</b> (Centralized logging)</td><td>Logging, analytics &amp; forensics</td><td>Attack correlation, incident response, compliance audits</td></tr>
+    <tr><td><b>FortiAI Assist</b></td><td>GenAI security assistant for SecOps</td><td>Guided investigation, remediation, and automation across the portfolio</td></tr>
+  </tbody>
+</table>
+
+<div class="callout info">
+  <h4>Separation of concerns</h4>
+  <p>FortiWeb handles infrastructure-layer DDoS and bots; <span class="term">FortiAIGate<span class="tip"><b>FortiAIGate</b> — Fortinet's AI runtime security gateway. Deployed between the app and the model, it applies input/output guardrails against prompt injection, model poisoning, excessive consumption, and data leakage. FortiWeb defends the transport and request layer; FortiAIGate defends the model's semantics.<sup>[9]</sup></span></span> handles model-level attacks. Together they provide defense in depth.</p>
+</div>
+
+<h2>Best practices &amp; tuning</h2>
+
+<h3>1. Baseline establishment (week 1–2)</h3>
+<ul>
+  <li>Enable anomaly detection in "monitor" mode (log-only, no blocking).</li>
+  <li>Collect 7–14 days of traffic to establish baselines.</li>
+  <li>Review bot detection confidence scores to tune sensitivity.</li>
+  <li>Analyze legitimate user behavior to set appropriate rate limits.</li>
+</ul>
+
+<h3>2. Gradual enforcement (week 3–4)</h3>
+<ul>
+  <li>Enable rate limiting for the top 10% of heavy users (those near the limit).</li>
+  <li>Switch anomaly detection to "block" mode with high thresholds.</li>
+  <li>Monitor for false positives; whitelist legitimate traffic as needed.</li>
+  <li>Adjust token limits based on user feedback.</li>
+</ul>
+
+<h3>3. Ongoing tuning</h3>
+<ul>
+  <li>Review weekly metrics: false-positive rate, attack volume, cost savings.</li>
+  <li>Adjust bot detection sensitivity as attacker tactics evolve.</li>
+  <li>Update API schemas when the LLM API changes.</li>
+  <li>Collaborate with the security team to refine threat patterns.</li>
+</ul>
+
+<h3>4. Testing &amp; validation</h3>
+<ul>
+  <li>Run an internal DDoS simulation to verify FortiWeb blocking.</li>
+  <li>Test with legitimate heavy users to ensure no blocking.</li>
+  <li>Validate that metrics are accurate before sharing with stakeholders.</li>
+  <li>Document tuning decisions for future reference.</li>
+</ul>
+
+<h2>Why this matters</h2>
+
+<ul>
+  <li>LLM DDoS is a <b>cost attack</b>, not just an availability attack — defenders must budget against blast radius, not just downtime.<sup>[3]</sup></li>
+  <li>Generic HTTP rate limits key on source IP and miss the credential; token-aware (per-auth-token) rate limiting is now a baseline requirement.<sup>[1]</sup></li>
+  <li>Bot fleets increasingly mimic legitimate users, so ML detection beats static rules and avoids the CAPTCHA tax on real customers.<sup>[2]</sup></li>
+  <li>Multi-cloud LLM estates need consistent policy — single-cloud WAFs fragment enforcement.<sup>[2]</sup></li>
+</ul>
+
+<h2>Summary &amp; next steps</h2>
+
+<div class="callout">
+  <p><b>LLM DDoS attacks</b> exploit expensive inference to cause outages and cost spikes. <b>FortiWeb protects</b> with API protection, ML-based bot detection, ML-based anomaly detection, and per-auth-token rate limiting — blocking attacks before they ever reach the GPU. To deploy: position FortiWeb as a reverse proxy, enable API schema validation, configure bot defense, scope rate limits per credential, and integrate with FortiAnalyzer for threat detection.</p>
+</div>
+
+<div class="callout ok">
+  <h4>Recommended next steps</h4>
+  <ol>
+    <li><b>Architecture review:</b> map your LLM service topology and identify where FortiWeb sits.</li>
+    <li><b>Baseline establishment:</b> deploy FortiWeb in monitor mode for 7–14 days.</li>
+    <li><b>Policy configuration:</b> create API protection and rate-limiting policies from the baselines.</li>
+    <li><b>Testing &amp; validation:</b> run DDoS simulations to verify blocking without false positives.</li>
+    <li><b>Production rollout:</b> deploy in active mode and monitor metrics.</li>
+    <li><b>Continuous improvement:</b> tune policies against real-world attack patterns.</li>
+  </ol>
+</div>
+
+<div class="sources">
+<h2>Sources — Fortinet &amp; references</h2>
+<ol>
+  <li><a href="https://docs.fortinet.com/product/fortiweb/" target="_blank">Fortinet FortiWeb Documentation</a></li>
+  <li><a href="https://www.fortinet.com/products/web-application-firewall" target="_blank">FortiWeb Product Overview</a></li>
+  <li><a href="https://owasp.org/API-Security/" target="_blank">OWASP API Security Top 10</a></li>
+  <li><a href="https://genai.owasp.org/llm-top-10/" target="_blank">OWASP Top 10 for LLM Applications</a></li>
+  <li><a href="https://www.nist.gov/publications/cybersecurity-framework" target="_blank">NIST Cybersecurity Framework</a></li>
+  <li><a href="https://attack.mitre.org/" target="_blank">MITRE ATT&amp;CK Framework</a></li>
+  <li>Fortinet AI Security Portfolio Overview — contact your account team.</li>
+  <li><a href="https://docs.fortinet.com/document/fortiweb/8.0.5/administration-guide/94907/ml-based-anomaly-detection" target="_blank">FortiWeb 8.0.5 Administration Guide — ML-Based Anomaly Detection</a></li>
+  <li><a href="https://www.fortinet.com/products/fortiaigate" target="_blank">Fortinet — FortiAIGate (AI runtime security gateway for LLMs)</a></li>
+</ol>
+</div>
+
+</article>
+
+<footer class="site">
+  © 2026 Fortinet, Inc. · FortiWeb Security Insights · Authored by Sam Vuillaume · Hover blue underlined terms for definitions.
+</footer>
+
+</body>
+</html>
