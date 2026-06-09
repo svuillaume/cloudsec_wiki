@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FortiCNAPP - AI-Driven Data</title>
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+  .ct-body p { font-size: 14px; line-height: 1.7; margin: 0 0 12px; }
+  .ct-body p:last-child { margin-bottom: 0; }
+  .ct-body .callout p { font-size: 14px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* Password gate */
+  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
+
+  /* ── Q&A FAQ ── */
+  .qa-block { margin-bottom: 44px; }
+  .qa-q {
+    font-size: 19px; font-weight: 700; color: var(--navy) !important;
+    padding: 14px 20px; background: var(--surface) !important;
+    border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+    margin-bottom: 18px; line-height: 1.4;
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .qa-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 36px; height: 26px;
+    background: var(--accent) !important; color: #fff !important;
+    font-size: 12px; font-weight: 800; font-family: 'SF Mono', monospace;
+    border-radius: 4px; flex-shrink: 0; padding: 0 6px; margin-right: 4px;
+  }
+  .qa-a { padding: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-brand-mark">FORTINET</div>
+    <div class="doc-brand-text">
+      FortiCNAPP
+      <span class="sub">Technical Tip — Polygraph ML</span>
+    </div>
+  </div>
+</header>
+
+<article class="article">
+
+  <h1 class="title">FortiCNAPP - AI-Driven Data</h1>
+  <p style="font-size:17px;line-height:1.6;color:#4B5563;margin:0 0 8px;">Using Artificial Intelligence to continuously turn cloud log activity into relevant and actionable security insights.</p>
+
+  <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9CA3AF;padding-bottom:18px;border-bottom:1px solid #E5E7EB;margin-bottom:28px;">
+    FortiCNAPP PreSales Engineering &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp;
+    Based on <a href="https://www.securityscientist.net/blog/12-questions-and-answers-about-lacework-polygraph-lacework/" target="_blank" rel="noopener">Security Scientist — Lacework Polygraph Explained</a> &nbsp;·&nbsp;
+    Authoritative reference: <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ</a>
+  </div>
+
+  <!-- WOW hero stats -->
+  <div style="background:linear-gradient(135deg,#0B2545 0%,#13315C 100%);border-radius:12px;padding:28px 28px 24px;margin:0 0 32px;font-family:'Inter',sans-serif;box-shadow:0 8px 28px rgba(11,37,69,0.25);">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#FF6B5E;margin-bottom:14px;">Why FortiCNAPP?</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;">
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#fff;line-height:1;">86<span style="font-size:22px;">%</span></div>
+        <div style="font-size:12px;color:#AEC0D8;margin-top:8px;line-height:1.4;">Alert volume reduction<br><span style="color:#7E94B4;">(up to)</span></div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#fff;line-height:1;">~1.4</div>
+        <div style="font-size:12px;color:#AEC0D8;margin-top:8px;line-height:1.4;">Critical alerts per day<br><span style="color:#7E94B4;">(steady state)</span></div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#fff;line-height:1;">~95<span style="font-size:22px;">%</span></div>
+        <div style="font-size:12px;color:#AEC0D8;margin-top:8px;line-height:1.4;">False positive elimination</div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#fff;line-height:1;">80<span style="font-size:22px;">%</span></div>
+        <div style="font-size:12px;color:#AEC0D8;margin-top:8px;line-height:1.4;">Faster triage<br><span style="color:#7E94B4;">(investigation time)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#FFF5F5;border-left:4px solid #EE3124;border-radius:8px;padding:18px 22px;margin:0 0 28px;font-size:16px;line-height:1.75;color:#1a1a2e;">
+    <strong>FortiCNAPP delivers end-to-end visibility</strong> into your cloud environment — detecting threats, vulnerabilities, misconfigurations, and unusual activity — so you can innovate with speed and safety. The <strong>Polygraph Data Platform</strong> automatically learns how your environment is supposed to run, and tells you when it deviates.
+  </div>
+
+  <!-- Community table -->
+  <table class="community-table">
+    <tbody>
+      <tr>
+        <td class="ct-label">Description</td>
+        <td class="ct-body">
+          This article answers 13 common questions about the <strong>FortiCNAPP Polygraph</strong> — the patented behavioral ML engine that powers threat detection in Fortinet's FortiCNAPP platform. The Polygraph detects unknown cloud threats through deviation from baseline, not signatures or rules. It requires no tuning, no policies, and no predefined detection logic.
+        </td>
+      </tr>
+      <tr>
+        <td class="ct-label">Scope</td>
+        <td class="ct-body">
+          <strong>Applies to:</strong> FortiCNAPP (all cloud deployments — AWS, Azure, GCP, OCI)<br>
+          <strong>Relevant roles:</strong> PreSales SE, Security Architect, SOC Analyst, DevSecOps<br>
+          <strong>Coverage:</strong> Polygraph architecture, 13 analysis groups, baseline mechanics, composite alerts, Kubernetes, container security, Security Fabric integration, and competitive positioning<br>
+          <strong>Authoritative source:</strong> <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="ct-label">Solution</td>
+        <td class="ct-body">
+          <p>The FortiCNAPP Polygraph is a patented behavioral analysis engine at the core of Fortinet&rsquo;s FortiCNAPP cloud security platform. It does not rely on signatures, predefined rules, or policies.</p>
+          <p>The name is deliberate. Just as a polygraph measures physiological deviations from baseline, this system measures behavioral deviations from established cloud baselines to detect threats that no signature has ever described.</p>
+          <p>Fortinet describes it as &ldquo;the first and only zero-touch cloud workload protection platform, which requires no rules, no policies, and no logs for breach detection.&rdquo; The architecture backs that up.</p>
+          <p>Instead, it observes every entity in your cloud environment and builds a dynamic, graph-based map of normal behavior over time.</p>
+          <p>Polygraph starts learning the moment it deploys. And it does this much faster than traditional security tooling.</p>
+          <div class="callout success">
+            <div class="callout-label">FortiCNAPP Differentiator</div>
+            <p>A Forrester Total Economic Impact study found that while conventional tools typically require <strong>six to twelve months</strong> of tuning, Polygraph establishes a working behavioral baseline in approximately <strong>one to two weeks</strong>.</p>
+          </div>
+          <p>See the full Q&amp;A below for architecture details, analysis groups table, and Security Fabric integration context.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="rule">
+
+  <!-- Polygraph screenshot -->
+  <figure style="margin:0 0 40px;text-align:center;">
+    <img src="Polygraph.png"
+         alt="FortiCNAPP Polygraph — behavioral graph showing entity relationships and anomaly detection"
+         style="max-width:100%;border-radius:8px;border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+    <figcaption style="margin-top:10px;font-size:13px;color:var(--text-muted);font-style:italic;">
+      FortiCNAPP Polygraph — behavioral graph mapping entity relationships across your cloud environment. Anomalies surface as deviations from peer-group baselines, not static rules.
+    </figcaption>
+  </figure>
+
+  <!-- Q1 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q1</span> What Is the FortiCNAPP Exposure Polygraph?</div>
+    <div class="qa-a">
+      <p>The <strong>Exposure Polygraph</strong> provides an additional layer of risk context to help with investigation. Each instance or container image can have an Exposure Polygraph to provide visual context that shows the path from the internet to the asset. The Exposure Polygraph also illustrates risks such as known vulnerabilities, compliance violations, internet exposure, and discovered secrets. FortiCNAPP bundles all information in a single view to ensure responders can respond quickly and with full context.</p>
+      <figure style="margin:20px 0 8px;text-align:center;">
+        <img src="figure-4-forticnapp-exposure-polygraph-fg-osp1.png"
+             alt="FortiCNAPP Exposure Polygraph — attack path and exposure view"
+             style="max-width:100%;border-radius:6px;border:1px solid var(--border);">
+        <figcaption style="margin-top:8px;font-size:12px;color:var(--text-muted);font-style:italic;">
+          Exposure Polygraph view — showing how misconfiguration, identity exposure, and vulnerability data combine into a single prioritised risk path.
+        </figcaption>
+      </figure>
+      <div class="note note-green"><strong>PreSales anchor:</strong> Lead with this in competitive discussions against signature-based or rule-based tools — the Polygraph detects threats that haven't been named yet.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q2</span> How Does the Graph-Based Machine Learning Work?</div>
+    <div class="qa-a">
+      <p>The Polygraph represents your cloud environment as a <strong>behavioral graph</strong>. Every entity becomes a node; every interaction becomes an edge — API calls, network flows, process spawns, file accesses. The system applies <strong>unsupervised ML continuously</strong> — no labeled training data required. It learns your specific environment and flags statistical deviations.</p>
+      <p>What makes this powerful is <strong>automatic entity grouping</strong>. The Polygraph clusters similarly-behaving entities and builds group-level baselines. If one web server starts connecting to cryptomining pools that none of its peers contact, it stands out immediately — not against a generic rule, but against its own peer group's baseline.</p>
+      <p>A <strong>time series analysis layer</strong> adds another dimension by tracking how metrics shift over time — CPU spikes, data transfer surges, process spawning frequency. Cryptomining attacks are a prime example of where time series catches what graph analysis alone misses.</p>
+    </div>
+  </div>
+
+  <!-- Q3 — THE 13 GROUPS -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q3</span> What Are the 13 Analysis Groups?</div>
+    <div class="qa-a">
+      <p>The FortiCNAPP Polygraph organises behavioral monitoring into <strong>13 analysis groups</strong>, each responsible for monitoring a specific set of behaviors and communication activities. Each group builds its own temporal baseline; together they provide layered, overlapping coverage across the full cloud workload stack. A representative sample is shown below — spanning application, machine, identity, cloud, and host categories.</p>
+
+      <table class="groups-table">
+        <thead>
+          <tr>
+            <th style="width:5%">#</th>
+            <th style="width:20%">Group</th>
+            <th style="width:15%">Category</th>
+            <th>What It Monitors</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>—</td>
+            <td class="g-label">Application Launch</td>
+            <td><span class="g-cat">Application</span></td>
+            <td>Which executables spawn which child processes. Detects unusual execution chains — e.g. a web container spawning a shell it has never spawned before.</td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td class="g-label">Machine Communication</td>
+            <td><span class="g-cat">Machine</span></td>
+            <td>Network patterns between hosts. Lateral movement appears as new machine-to-machine connections between hosts that have never previously communicated.</td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td class="g-label">Privilege Changes</td>
+            <td><span class="g-cat">Identity</span></td>
+            <td>Escalation events, IAM role assumptions, <code>sudo</code> executions, and Kubernetes RBAC modifications. Any privilege change that deviates from established patterns is flagged.</td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td class="g-label">API Behavior</td>
+            <td><span class="g-cat">Cloud</span></td>
+            <td>Cloud control plane API call patterns ingested from AWS CloudTrail, GCP Audit Logs, and Azure Activity Logs. Anomalous API call sequences — new services accessed, unusual call volumes, credential use from unexpected locations — are detected against the identity's historical baseline.</td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td class="g-label">File Integrity</td>
+            <td><span class="g-cat">Host</span></td>
+            <td>File change detection across host filesystems. Tracks exactly how files change, investigates anomalous activities related to FIM signals, and provides cloud-wide search and file type summaries. New files in unexpected directories are flagged.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note"><strong>Source:</strong> <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ</a> — "There are currently 13 FortiCNAPP Polygraph analysis groups."</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q4</span> What Telemetry Sources Does the Polygraph Ingest?</div>
+    <div class="qa-a">
+      <p>The Polygraph ingests from both <strong>cloud control planes and workload-level sensors</strong> simultaneously — this dual-layer coverage is the core architectural differentiator.</p>
+      <p><strong>Cloud control plane (agentless):</strong> AWS CloudTrail, Azure Activity Logs, GCP Audit Logs, and Kubernetes Audit Logs. These capture who called what API, from where, and when — critical for detecting compromised credentials and IAM anomalies. Around 25% of data traffic never leaves the VM — so network-only tools miss it; this is why the agent layer exists.</p>
+      <p><strong>Workload level (agent):</strong> The FortiCNAPP Linux host agent uses <strong>eBPF</strong> (extended Berkeley Packet Filter) to capture process-level telemetry — process spawning, system calls, network connections, privilege escalation events — without kernel modifications. The agent also captures file integrity monitoring (FIM) signals.</p>
+      <p>The platform also ingests cloud resource inventory, IAM policy data, and security group configurations through agentless API connections. Control plane plus workload — complete visibility without stitching together separate tools.</p>
+      <div class="note"><strong>Console navigation:</strong> <em>Cloud logs &gt; AWS CloudTrail / Azure Activity Log / GCP Audit Log</em> · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/199085/gcp-audit-log-page" target="_blank" rel="noopener">docs: GCP Audit Log Page</a></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q5</span> How Does the Polygraph Establish and Maintain Baselines?</div>
+    <div class="qa-a">
+      <p>The Polygraph starts learning the moment it deploys. A Forrester Total Economic Impact study found that while conventional security tools typically require six to twelve months of tuning, the FortiCNAPP Polygraph establishes a <strong>working behavioral baseline in approximately one to two weeks</strong>.</p>
+      <p>What keeps baselines accurate over time is update frequency. The Polygraph <strong>refreshes baselines hourly for every entity</strong> in the environment. That granularity matters in cloud environments where auto-scaling and continuous deployment mean the environment changes constantly. New deployments and auto-scaling events are incorporated automatically — no human tuning required.</p>
+      <div class="note note-green"><strong>Key differentiator vs. legacy Signature and Rule based Detection Systems:</strong> No rule updates. No whitelist maintenance. No false positive tuning. The baseline adapts as your environment evolves.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q6</span> What Does "Zero-Touch Detection" Actually Mean?</div>
+    <div class="qa-a">
+      <p>Zero-touch means <strong>no rules, no policies, no signatures, and no manual tuning</strong>. Most security tools require someone to write detection logic: "alert if this process does X." That works for known threats. But cloud environments change too fast for hand-crafted rules to stay current, and novel attacks have no signature to match.</p>
+      <p>The Polygraph sidesteps that problem entirely. It models what normal looks like for your specific environment and detects novel threats by behavioral deviation — no detection rule required.</p>
+      <p>The Log4j vulnerability is the canonical example. FortiCNAPP detected anomalous behavior in customer environments related to Log4j <strong>before public disclosure of the vulnerability</strong>. No signature existed yet. But the unusual process spawning and network communications created a behavioral signal that the Polygraph caught anyway.</p>
+      <div class="note"><strong>Day Zero relevance:</strong> This is exactly why the Polygraph is the primary FortiCNAPP control for novel supply chain attacks like Miasma — where no CVE exists at time of attack. See Technical Tip: Miasma Supply Chain Attack for the specific detection mapping.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q7</span> What Are Composite Alerts and Why Do They Matter?</div>
+    <div class="qa-a">
+      <p>Composite Alerts are the Polygraph's answer to alert fatigue. They correlate multiple low-confidence signals from disparate sources into a <strong>single, high-confidence alert with full attack context</strong>. Instead of firing fifty individual events that an analyst has to manually connect, FortiCNAPP presents one composite alert describing the suspected exploit chain — complete with an Observation Timeline and Intrusion Graph.</p>
+      <p>The architecture is deliberately opinionated: FortiCNAPP tells you precisely what threat you face and provides all evidence needed to underpin the verdict. Alert volume numbers from documented customer deployments:</p>
+      <ul>
+        <li>Alert volume reduction: up to <strong>86%</strong></li>
+        <li>Steady-state critical alerts: approximately <strong>1.4 per day</strong></li>
+        <li>False positive elimination: approximately <strong>95%</strong></li>
+        <li>Faster triage: <strong>80% reduction</strong> in investigation time</li>
+      </ul>
+      <div class="note"><strong>Console navigation:</strong> <em>Alerts &gt; filter by type: Composite</em> · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/986450/composite-alerts-reference" target="_blank" rel="noopener">docs: Composite Alerts Reference</a></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q8</span> How Does the Polygraph Handle Container and Kubernetes Security?</div>
+    <div class="qa-a">
+      <p>Container environments receive the same behavioral baseline treatment as virtual machines — but with <strong>hierarchy awareness</strong>. The Polygraph understands natural hierarchies: processes → containers → pods → machines. Container-level deviations are evaluated against the pod and cluster they belong to — a web application container spawning a reverse shell is flagged against <em>its own baseline</em>, not a generic one.</p>
+      <p>For Kubernetes, FortiCNAPP ingests Kubernetes Audit Logs directly into the Polygraph Data Platform, providing detection of:</p>
+      <ul>
+        <li>Unauthorised API server access and service account token misuse</li>
+        <li>Unauthorised pod creation with elevated privileges</li>
+        <li>RBAC permission escalation</li>
+        <li>Container escape techniques (e.g. <code>hostPath</code> volume mounts targeting <code>/etc/sudoers.d</code>)</li>
+      </ul>
+      <p>Kubernetes Audit Log events are processed in <strong>under 15 minutes</strong> for near-real-time response. KSPM is also included: CIS Benchmark checks, compliance reporting, and container escape detection all run on the same platform.</p>
+      <div class="note"><strong>Deployment docs:</strong> <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener">Install on Kubernetes</a> · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener">Installing Linux Agent on Kubernetes</a> · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/354468/how-forticnapp-derives-the-k8s-cluster-name" target="_blank" rel="noopener">How FortiCNAPP Derives the K8s Cluster Name</a></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q9</span> What Cloud Threats Does the Polygraph Detect Most Effectively?</div>
+    <div class="qa-a">
+      <p>The Polygraph is strongest against threats that change behavior without matching known signatures. The primary threat classes:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th style="width:25%">Threat</th><th>How the Polygraph Detects It</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Compromised credentials</strong></td>
+            <td>Stolen cloud IAM credentials create a shifted access pattern — different geolocation, unusual timing, access to unfamiliar services. The Polygraph (API Behavior group) compares against the identity's historical baseline and surfaces the anomaly.</td>
+          </tr>
+          <tr>
+            <td><strong>Cryptojacking</strong></td>
+            <td>Multiple converging signals: CPU consumption anomalies (time series layer), unusual child process spawns (Application Launch group), and outbound connections to mining pools (Application Communication group) — all correlating into one composite alert.</td>
+          </tr>
+          <tr>
+            <td><strong>Lateral movement</strong></td>
+            <td>New machine-to-machine connection patterns between hosts that have never previously communicated — a direct Machine Communication group baseline deviation.</td>
+          </tr>
+          <tr>
+            <td><strong>Supply chain attacks</strong></td>
+            <td>Install-time process execution deviating from baseline — a Node.js process reading credential files and making unexpected outbound calls during <code>npm install</code> are all Process Communication + Application Communication deviations. Day Zero, no CVE required.</td>
+          </tr>
+          <tr>
+            <td><strong>Data exfiltration</strong></td>
+            <td>Unusual outbound transfer volumes, new identities accessing sensitive S3 buckets, or mass write-and-encrypt events surface across Machine Communication, API Behavior, and File Integrity groups.</td>
+          </tr>
+          <tr>
+            <td><strong>Ransomware</strong></td>
+            <td>Distinctive multi-signal pattern: unusual process activity, abnormal file write patterns (File Integrity group), and mass S3 write-and-encrypt events — joined by the Composite Alert engine.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q10</span> What Changed When Fortinet Acquired Lacework?</div>
+    <div class="qa-a">
+      <p>Fortinet completed the acquisition of Lacework on <strong>August 1, 2024</strong>, making FortiCNAPP generally available in October 2024. The deal transferred <strong>225 cloud security and AI patents</strong> to Fortinet, expanding the portfolio past 1,800. Lacework is no longer a standalone product — documentation lives at <a href="https://docs.fortinet.com/product/lacework-forticnapp" target="_blank" rel="noopener">docs.fortinet.com</a>.</p>
+      <p>What changed for security teams is <strong>Security Fabric integration depth</strong>:</p>
+      <ul>
+        <li><strong>FortiSOAR:</strong> Automated remediation playbooks — when the Polygraph detects compromised hosts or stolen access keys, FortiSOAR can quarantine instances and revoke credentials automatically</li>
+        <li><strong>FortiGate:</strong> Network-aware risk scoring — firewall protection status factors into FortiCNAPP workload risk assessments</li>
+        <li><strong>FortiGuard Outbreak Alerts:</strong> Threat intelligence filtered to your specific environment, not generic feeds</li>
+        <li><strong>FortiAnalyzer</strong> (with <strong>FortiAI-Assist — Agentic AI SOC</strong>): All Composite Alerts forwarded as structured SIEM events. FortiAI-Assist provides agentic AI-driven investigation — automatically correlating Polygraph findings, summarising threat context, and recommending remediation steps to accelerate SOC triage</li>
+        <li><strong>FortiCNAPP Code Security:</strong> Shift-left code scanning (SCA, SAST, IaC, Secrets detection) integrated directly into the FortiCNAPP platform — replaces FortiDevSec (end-of-life). Available across three developer touchpoints:
+          <ul style="margin:6px 0 4px 0;">
+            <li><strong>VS Code extension</strong> — SCA, SAST, and IaC scanning inline in the editor · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/695183/vs-code" target="_blank" rel="noopener">docs: VS Code</a></li>
+            <li><strong>Cursor IDE extension</strong> — same SCA, SAST, and IaC coverage for Cursor (VS Code fork) · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/5886/code-security" target="_blank" rel="noopener">docs: IDE extensions</a></li>
+            <li><strong>Claude Code plug-in</strong> — available in the Claude Code marketplace; automatically scans IaC and dependency files for security vulnerabilities within your Claude Code workflow; IaC and SCA scanners launch in parallel on the project directory · <a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in" target="_blank" rel="noopener">docs: Claude Code plug-in</a></li>
+          </ul>
+        </li>
+        <li><strong>FortiCNAPP DSPM:</strong> Data Security Posture Management — added January 2026 — extends Polygraph coverage to sensitive data discovery and classification across cloud datastores</li>
+        <li><strong>Unified Risk Manager:</strong> Cross-product risk correlation that surfaces FortiCNAPP Polygraph findings alongside network, endpoint, and application risk signals in a single prioritised risk view across the Security Fabric</li>
+        <li><strong>FortiWeb | FortiAppSec Cloud:</strong> WAF and API security — FortiCNAPP cloud workload runtime signals feed downstream into application-layer enforcement</li>
+        <li><strong>FortiCASB / SSPM:</strong> SaaS and cloud application security posture — extends FortiCNAPP cloud visibility into SaaS access risk and shadow IT, complementing the Polygraph's workload-layer coverage</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q11</span> How Does FortiCNAPP Compare to CrowdStrike, Wiz, Orca, and Cortex Cloud?</div>
+    <div class="qa-a">
+      <p>The CNAPP market has converged: every major vendor now offers <em>both</em> agentless posture scanning and some form of runtime sensor. The meaningful differentiation is no longer agent vs. agentless — it is the <strong>depth, maturity, and ML architecture</strong> of the runtime detection layer, and whether enforcement extends beyond the cloud workload into the broader security stack.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th style="width:20%">Competitor</th><th>Current approach (June 2026)</th><th style="background:var(--navy);color:#fff;">FortiCNAPP differentiators</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Wiz</strong><br>
+              <span style="font-size:11px;color:#6B7280;line-height:1.8;display:block;">$32B all-cash · Google/Alphabet</span>
+              <span style="font-size:11px;color:#6B7280;line-height:1.4;display:block;">Announced Mar 18 2025 · Closed Mar 11 2026</span>
+            </td>
+            <td>Agentless-first via Security Graph (CSPM/CIEM/DSPM/attack paths). <strong>Wiz Defend</strong> (launched 2024, via Gem Security acquisition) includes an eBPF-based Runtime Sensor for process-level threat detection. <strong>The sensor is a separately priced add-on</strong> — not included in the base Wiz platform and not deployed by default. Per AWS Marketplace published pricing, the Wiz Sensor is licensed at ~$28,000/year per 100 sensors on top of the Wiz Advanced tier. Customers must explicitly deploy it (single-click for VMs; Helm DaemonSet for Kubernetes). Core Wiz Defend detection still relies primarily on cloud audit log correlation; the sensor adds depth only where deliberately deployed. Google closed the acquisition March 11, 2026 — Wiz operates under Google Cloud but retains its brand and multi-cloud support commitment; AWS/Azure investment parity is an ongoing watch item for enterprise buyers.</td>
+            <td><ul style="margin:0;padding-left:16px;line-height:1.7;">
+  <li><strong>eBPF runtime detection is the core product, not a paid add-on</strong> — FortiCNAPP Polygraph deploys on every instrumented host by default; Wiz Runtime Sensor is a separately licensed add-on (~$28k/yr per 100 sensors) not deployed by default</li>
+  <li><strong>Continuous per-workload behavioural baseline</strong> — unsupervised ML across 13 analysis groups, hourly refresh; Wiz Defend relies primarily on cloud audit log correlation with no persistent per-workload baseline</li>
+  <li><strong>Active enforcement, not detection-only</strong> — Security Fabric (FortiSOAR automated remediation, FortiGate network isolation) closes the loop; Wiz Defend stops at detection and investigation</li>
+  <li><strong>No Google Cloud dependency risk</strong> — FortiCNAPP is cloud-neutral (AWS/Azure/GCP/OCI); Wiz's long-term investment parity across non-GCP clouds is a legitimate enterprise watch item post-acquisition</li>
+</ul></td>
+          </tr>
+          <tr>
+            <td><strong>CrowdStrike Falcon Cloud Security</strong></td>
+            <td>Single Falcon agent spans endpoint EDR, CWPP, and container runtime — no separate cloud sensor to deploy. Strongest for existing Falcon EDR customers. Detection based on adversary Indicators of Attack (IOAs) from 230+ tracked threat groups plus Threat Graph cross-domain correlation. Added Application Explorer (Mar 2026) for app-to-infrastructure visibility. Integrates CSPM, CIEM, CDR, and ASPM in one console.</td>
+            <td><ul style="margin:0;padding-left:16px;line-height:1.7;">
+  <li><strong>Unsupervised ML — no known adversary pattern required</strong> — Polygraph fires on baseline deviation; CrowdStrike relies on IOAs from 230+ tracked threat groups — novel threats with no prior IOA are a blind spot</li>
+  <li><strong>Day Zero supply chain detection</strong> — Polygraph detected Log4j and Miasma-class attacks before public disclosure and without a signature; CrowdStrike needs an adversary pattern in Threat Graph first</li>
+  <li><strong>No EDR lock-in required</strong> — FortiCNAPP delivers cloud workload depth without requiring existing Falcon EDR deployment; CrowdStrike Cloud Security is strongest when Falcon is already the endpoint agent</li>
+  <li><strong>Security Fabric breadth</strong> — FortiCNAPP + FortiGate + FortiSOAR + FortiAnalyzer spans network, endpoint, and cloud in one fabric; CrowdStrike's cross-domain correlation is strong but Falcon-platform-only</li>
+</ul></td>
+          </tr>
+          <tr>
+            <td><strong>Orca Security</strong><br><span style="font-size:12px;color:#6B7280;">Acquired Opus (AI remediation) 2025</span></td>
+            <td>Agentless-first via patented SideScanning (no agent, no network packets). Added an <strong>optional eBPF Sensor</strong> in July 2025 for hybrid/private cloud runtime protection, including Windows-specific coverage. AI-driven capabilities: Threat Investigation Agent and AppSec Triage Agent launched March 2026. Strong at attack path, reachability analysis, and eliminating CVE noise (90%+ reduction claimed). Broad CSPM/CWPP/CIEM/DSPM/CDR/AI-SPM in one platform.</td>
+            <td><ul style="margin:0;padding-left:16px;line-height:1.7;">
+  <li><strong>Temporal behavioural baseline vs. snapshots</strong> — Polygraph builds a continuous hourly-refreshed ML baseline per workload; Orca SideScanning remains snapshot-based and cannot detect runtime behavioural drift between scans</li>
+  <li><strong>Zero-day detection without a CVE</strong> — Polygraph detects unknown threats by deviation from baseline; Orca's CVE noise reduction (90%+ claimed) is impressive but still CVE-dependent — no DB entry means no detection</li>
+  <li><strong>Sensor maturity</strong> — Orca's eBPF Sensor launched July 2025 targeting hybrid/private cloud gaps; FortiCNAPP's eBPF runtime agent has been in production since the Lacework platform and is the core detection layer</li>
+  <li><strong>Active enforcement, not AI triage only</strong> — FortiSOAR and FortiGate provide automated remediation and network isolation; Orca's Threat Investigation Agent and AppSec Triage Agent accelerate investigation but do not enforce</li>
+</ul></td>
+          </tr>
+          <tr>
+            <td><strong>Palo Alto Cortex Cloud</strong><br><span style="font-size:12px;color:#6B7280;">Rebranded from Prisma Cloud, Feb 2025</span></td>
+            <td>Most feature-complete CNAPP: CSPM, CWPP (mature Twistlock-lineage Defender agents), CIEM, DSPM, code security (Checkov/Bridgecrew), CDR, and AI-SPM. Rebranded as <strong>Cortex Cloud</strong> in February 2025, merging Prisma Cloud CNAPP with Cortex XDR CDR into a unified code-to-cloud-to-SOC platform. Dual architecture: agentless posture scanning + Defender agents for runtime enforcement. Credit-based licensing creates procurement complexity. Multi-acquisition history makes console unification an ongoing effort.</td>
+            <td><ul style="margin:0;padding-left:16px;line-height:1.7;">
+  <li><strong>Unsupervised ML vs. policy-based allow-listing</strong> — Polygraph detects unknown threats by graph-based behavioural deviation; Cortex Cloud Defender agents use policy rules, allow-lists, and known-bad signatures — novel behaviour without a matching rule is missed</li>
+  <li><strong>Simpler to operate and license</strong> — FortiCNAPP is a single platform with straightforward licensing; Cortex Cloud's credit-based module system is complex to forecast at scale and carries common overage risk</li>
+  <li><strong>Multi-cloud neutral enforcement</strong> — Security Fabric (FortiGate, FortiSOAR, FortiAnalyzer) enforces across any cloud and on-prem; Cortex Cloud CDR response integrates tightly within the Palo Alto ecosystem only</li>
+  <li><strong>No console fragmentation</strong> — FortiCNAPP is purpose-built as a unified platform; Cortex Cloud is a rebrand stitching together multiple acquisitions (Twistlock, Bridgecrew, Demisto, Expanse) — seams are visible in the UI</li>
+</ul></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note" style="border-left-color:#DA291C;background:#FFF5F5;">
+        <strong>Key market shift (2025–2026):</strong> Between 2025–2026, it's no longer true to say competitors like Wiz, Orca, or Cortex Cloud are strictly "agentless." They now also support optional sensors (like eBPF) or full agent-based protection for workloads.
+        <p style="margin:10px 0 0;">So the real difference is no longer about "agent vs no agent." Instead, it's about how <strong>detection works</strong>:</p>
+        <ul style="margin:8px 0 0;">
+          <li>Some platforms mainly rely on snapshots or periodic views of systems, with sensors added on top if needed.</li>
+          <li>FortiCNAPP's Polygraph focuses on a continuous, always-learning model, building a live behavioral baseline for each workload using unsupervised ML.</li>
+        </ul>
+      </div>
+      <div class="note note-green"><strong>Analyst recognition:</strong> KuppingerCole named FortiCNAPP an Overall, Market, and Innovation Leader in the 2025 CNAPP Leadership Compass. SC Awards 2025: Best Cloud Workload Protection Solution.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q12</span> What Real-World Outcomes Have Organisations Achieved?</div>
+    <div class="qa-a">
+      <p>The <strong>Forrester Total Economic Impact™ study commissioned by Lacework (2022)</strong> — conducted prior to the Fortinet acquisition — documented <strong>342% ROI over three years</strong> for a composite organisation based on interviews with multiple Lacework customers. Published figures:</p>
+      <ul>
+        <li>3-year ROI: <strong>342%</strong></li>
+        <li>Total quantified benefits: <strong>$2.3M</strong></li>
+        <li>Productivity increase: <strong>$1.8M</strong></li>
+        <li>Net present value (NPV): <strong>$1.79M</strong></li>
+      </ul>
+      <div class="note" style="border-left-color:#BA7517;background:#FFFBF0;">
+        <strong>Date context:</strong> This study was commissioned by Lacework in 2022 — two years before the Fortinet acquisition (August 2024). The figures reflect the Lacework platform prior to Security Fabric integration (FortiSOAR, FortiGate, FortiAnalyzer). Current FortiCNAPP deployments include those enforcement and correlation capabilities, which were not measured in the original study.
+      </div>
+      <p>Additional operational outcomes cited across customer evidence:</p>
+      <ul>
+        <li>Alert volume reduction: up to <strong>86%</strong> — reaching ~1.4 critical alerts per day</li>
+        <li>False positive elimination: approximately <strong>95%</strong></li>
+        <li>Threat investigation speed: <strong>80% faster</strong> due to pre-correlated Composite Alert context</li>
+        <li>Baseline established: <strong>1–2 weeks</strong> vs. 6–12 months for conventional tooling</li>
+      </ul>
+      <p>Customer evidence: LawnStarter (improved decision context), Nylas (agent + agentless combination enabled Log4j runtime detection before public disclosure), AOK Systems GmbH (healthcare data protection), Careem (DevSecOps efficiency).</p>
+    </div>
+  </div>
+
+  <!-- Q13 — NEW -->
+  <div class="qa-block">
+    <div class="qa-q"><span class="qa-num">Q13</span> How Does the Polygraph Integrate with the Fortinet Security Fabric for Active Response?</div>
+    <div class="qa-a">
+      <p>The Polygraph is a <strong>detection engine</strong> — but within the Fortinet Security Fabric it becomes part of an enforcement chain. Detection alone is not containment. The Security Fabric integration converts Polygraph findings into automated response actions:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th style="width:22%">Fabric Component</th><th>Integration Role</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>FortiSOAR</strong></td>
+            <td>Receives Composite Alerts as triggers for automated playbooks. When the Polygraph detects a compromised host or stolen access key, FortiSOAR can quarantine the instance, revoke cloud credentials, and open an IR ticket — without analyst intervention.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiGate</strong></td>
+            <td>Network-aware risk scoring — FortiCNAPP factors firewall protection state into workload risk assessment. FortiGate policy enforcement can isolate compromised workload network segments based on FortiCNAPP signals.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiAnalyzer</strong><br><span style="font-size:12px;color:#6B7280;">FortiAI-Assist — Agentic AI SOC</span></td>
+            <td>All Composite Alerts forwarded as structured SIEM events. FortiAI-Assist provides agentic AI-driven SOC investigation — automatically correlating Polygraph findings with broader environment context, generating natural-language threat summaries, and recommending or executing remediation steps. Reduces mean time to respond without requiring manual analyst correlation.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiGuard Labs</strong></td>
+            <td>Outbreak Alerts surface FortiGuard threat intelligence filtered to your specific environment. New Polygraph custom threat feeds can be populated with campaign-specific IOCs (e.g. Miasma GCP user-agent string) for targeted detection.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiCNAPP Code Security</strong><br><span style="font-size:12px;color:#6B7280;">VS Code · Cursor · Claude Code</span></td>
+            <td>Shift-left SCA, SAST, IaC, and secrets scanning at the developer touchpoint. Three integrations: VS Code extension, Cursor IDE extension, and Claude Code marketplace plug-in — all surface FortiCNAPP Code Security findings inline before code reaches a repository or pipeline. FortiCNAPP Polygraph covers the runtime layer after deployment; FortiWeb covers the WAF/API protection layer.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiWeb | FortiAppSec Cloud</strong></td>
+            <td>WAF and API security protection at the application layer. FortiCNAPP Polygraph runtime signals (anomalous process behaviour, credential abuse, container escape) feed downstream into application-layer enforcement — closing the gap between cloud workload and web application protection.</td>
+          </tr>
+          <tr>
+            <td><strong>FortiCASB / SSPM</strong></td>
+            <td>SaaS security posture and cloud access broker — extends FortiCNAPP cloud visibility into SaaS application risk, shadow IT discovery, and misconfigured SaaS permissions. Complements the Polygraph's IaaS/PaaS workload-layer coverage with SaaS-layer posture management.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note note-green"><strong>PreSales framing:</strong> "FortiCNAPP detects, Fortinet enforces." The Polygraph provides the detection signal; the Security Fabric provides the automated enforcement chain. No other CNAPP vendor offers this end-to-end response architecture.</div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- CTAs -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;font-family:'Inter',sans-serif;">
+
+    <div style="border:1px solid #E5E7EB;border-top:3px solid #DA291C;border-radius:4px;padding:22px 24px;background:#FAFBFC;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#DA291C;margin-bottom:6px;">Explore</div>
+      <div style="font-size:17px;font-weight:700;color:#0B2545;margin-bottom:8px;">FortiCNAPP Interactive Demos</div>
+      <p style="font-size:13.5px;color:#4B5563;line-height:1.6;margin:0 0 16px 0;">Explore self-guided, hands-on walkthroughs of the FortiCNAPP platform — Polygraph, Attack Path Analysis, CSPM, CIEM, DSPM, and Code Security — without needing a live environment.</p>
+      <a href="https://www.fortinet.com/products/forticnapp" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;background:#DA291C;color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:4px;text-decoration:none;border:none;">
+        Explore demos
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <div style="border:1px solid #E5E7EB;border-top:3px solid #0B2545;border-radius:4px;padding:22px 24px;background:#FAFBFC;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#0B2545;margin-bottom:6px;">Contact</div>
+      <div style="font-size:17px;font-weight:700;color:#0B2545;margin-bottom:8px;">Schedule a Demo</div>
+      <p style="font-size:13.5px;color:#4B5563;line-height:1.6;margin:0 0 16px 0;">Request a live, guided FortiCNAPP demo with a Fortinet cloud security specialist — tailored to your cloud environment (AWS, Azure, GCP, OCI), threat model, and compliance requirements.</p>
+      <a href="https://www.fortinet.com/demo-center/forticnapp-demo" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:4px;text-decoration:none;border:none;">
+        Request a demo
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+  </div>
+
+  <hr class="rule">
+
+  <!-- References -->
+  <div class="refs">
+    <div class="refs-title">References</div>
+    <ul>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ (authoritative)</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/986450/composite-alerts-reference" target="_blank" rel="noopener">docs.fortinet.com — Composite Alerts Reference</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP: Install on Kubernetes</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/lacework-forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ (versioned)</a></li>
+      <li><a href="https://www.securityscientist.net/blog/12-questions-and-answers-about-lacework-polygraph-lacework/" target="_blank" rel="noopener">Security Scientist — Lacework Polygraph Explained: Behavioral Cloud Security (March 2026)</a> — original 12-question format this Technical Tip is based on; updated to 13 questions with FortiCNAPP branding and docs.fortinet.com authoritative references</li>
+      <li><a href="https://community.fortinet.com/forticnapp-63" target="_blank" rel="noopener">Fortinet Community — FortiCNAPP Knowledge Base</a></li>
+    </ul>
+  </div>
+
+    <!-- Tags -->
+  <div class="tags">
+    <span class="tag">forticnapp</span>
+    <span class="tag">polygraph</span>
+    <span class="tag">behavioral-analytics</span>
+    <span class="tag">machine-learning</span>
+    <span class="tag">CWPP</span>
+    <span class="tag">zero-touch</span>
+    <span class="tag">composite-alerts</span>
+    <span class="tag">kubernetes</span>
+    <span class="tag">containers</span>
+    <span class="tag">cloud-security</span>
+    <span class="tag">eBPF</span>
+    <span class="tag">baseline-deviation</span>
+    <span class="tag">Security-Fabric</span>
+    <span class="tag">FortiSOAR</span>
+    <span class="tag">analysis-groups</span>
+  </div>
+
+</article>
+
+<footer class="doc-footer">
+  <div class="doc-footer-inner">
+    <strong>Fortinet Community Knowledge Base</strong> · FortiCNAPP - AI-Driven Data Platform · June 2026 · © 2026 Fortinet, Inc.<br>
+    Authoritative reference: <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Polygraph FAQ</a>
+  </div>
+</footer>
+
+<button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Polygraph FAQ — Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/lacework-forticnapp-polygraph-faq" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Polygraph is a patented behavioral ML engine requiring no rules, no policies, and no logs for breach detection, with monitoring organized into 13 analysis groups covering processes, applications, machines, containers, pods, users, and cloud APIs.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Polygraph — Architecture Overview</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/26.1.0/administration-guide/614659/lacework-forticnapp-polygraph" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Polygraph builds a temporal baseline by aggregating entities into analysis groups based on behavior, refreshing baselines hourly for every entity and detecting changes in entity types or behavioral anomalies.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Composite Alerts Reference — FortiCNAPP Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/986450/composite-alerts-reference" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Composite Alerts use multiple detections to define specific alert conditions, correlating low-confidence signals into a single high-confidence finding, reducing alert volume by up to 86% and producing approximately 1.4 critical alerts per day.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Install FortiCNAPP on Kubernetes — Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP ingests Kubernetes Audit Logs with agent data appearing in the console after 10–15 minutes, and supports DaemonSet deployment for EKS, AKS, and GKE clusters with KSPM CIS Benchmark checks.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">GCP Audit Log Page — FortiCNAPP Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/199085/gcp-audit-log-page" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Polygraph ingests cloud control plane telemetry from GCP Audit Logs (admin activity and system event logs) to detect anomalous API call sequences and credential use from unexpected geolocations.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiSOAR Alert Channel — FortiCNAPP Integration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/lacework-forticnapp/latest/administration-guide/734784" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiSOAR receives Composite Alerts as triggers for automated playbooks; when the Polygraph detects a compromised host or stolen access key, FortiSOAR can quarantine the instance, revoke cloud credentials, and open an IR ticket without analyst intervention.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Fortinet Completes Acquisition of Lacework — Press Release</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Newsroom · August 2024 · <a href="https://www.fortinet.com/corporate/about-us/newsroom/press-releases/2024/fortinet-completes-acquisition-of-lacework" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Fortinet completed the acquisition of Lacework effective August 1, 2024, gaining 225 cloud security and AI patents and bringing Fortinet's total patent and application count to over 1,800.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Fortinet Recognized for Leadership in Three KuppingerCole CNAPP Compass Categories</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Blog · 2025 · <a href="https://www.fortinet.com/blog/business-and-technology/fortinet-recognized-for-leadership-in-three-kuppingercole-cnapp-compass-categories" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">KuppingerCole named FortiCNAPP an Overall, Market, and Innovation Leader in the 2025 CNAPP Leadership Compass, reflecting adoption across industries and recognition for Security Fabric integration and contextual attack-path analysis.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Lacework FortiCNAPP Award-Winning Approach Sets New Standard for Cloud Security</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Blog · 2025 · <a href="https://www.fortinet.com/blog/business-and-technology/forticnapp-award-winning-approach-sets-new-standard-for-cloud-security" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP earned the SC Awards 2025 Best Cloud Workload Protection Solution, providing third-party validation of its real-time threat detection and cloud workload protection capabilities.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CISA Advisory AA21-356A: Mitigating Log4Shell and Other Log4j-Related Vulnerabilities</span>
+    <span style="color:#6b7280;font-size:12px;">CISA · December 2021 · <a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-356a" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisa.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Log4Shell was actively exploited at scale against enterprise environments; the article cites it as the canonical proof point that the Polygraph can detect threats through behavioral deviation before a CVE or signature exists.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">What is eBPF? — An Introduction and Deep Dive into the eBPF Technology</span>
+    <span style="color:#6b7280;font-size:12px;">eBPF.io · 2024 · <a href="https://ebpf.io/what-is-ebpf/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">ebpf.io/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Linux host agent uses eBPF to capture process-level telemetry — process spawning, system calls, network connections, and privilege escalation — without kernel modifications, enabling low-overhead tracing and container security enforcement at the workload layer.</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+</body>
+</html>

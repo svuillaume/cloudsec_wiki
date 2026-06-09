@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Honest Look at the CNAPP Landscape in May 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- mckerlie.com format · Fortinet Marketing Colors -->
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* Password gate */
+  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="site-nav">
+  <div class="inner">
+    <a class="brand" href="/FortiCNAPP/">
+      <img class="logo" src="/fortinet-logo.png" alt="Fortinet">
+      <span class="brand-pipe">|</span>
+      <span class="brand-label">Blog</span>
+    </a>
+    <a class="nav-back" href="/FortiCNAPP/">&#8592; All posts</a>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="https://www.fortinet.com/products/forticnapp">Explore FortiCNAPP &rarr;</a>
+  </div>
+</nav>
+
+<!-- ── Article Header ── -->
+<header class="article-header">
+  <div class="article-header-inner">
+    <div class="cat-row">
+      <span class="cat-badge">PreSales</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">Competitive Intel</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">CNAPP</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">Code Security</span>
+    </div>
+    <h1>A Honest Look at the CNAPP Landscape in May 2026</h1>
+    <div class="article-meta">
+      <div class="author-avatar">SV</div>
+      <div class="meta-info">
+        <span class="author-name">Sam Vuillaume — Consulting Systems Expert, Cloud &amp; AI Security · Fortinet</span>
+        <div class="meta-line">
+          <span>May 2026</span>
+          <span class="meta-sep">·</span>
+          <span>Audience: Fortinet PreSales SE</span>
+          <span class="meta-sep">·</span>
+          <span>AWS · Azure · GCP · OCI · K8s</span>
+        </div>
+      </div>
+      <div class="share-row">
+        <a class="share-btn" href="#" aria-label="Share on LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452H17.21v-5.569c0-1.327-.027-3.035-1.848-3.035-1.851 0-2.134 1.445-2.134 2.94v5.664H9.993V9h3.099v1.561h.042c.431-.816 1.484-1.677 3.054-1.677 3.266 0 3.867 2.149 3.867 4.944v6.624zM5.337 7.433a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm1.553 13.019H3.782V9h3.108v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <button class="share-btn" aria-label="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.style.borderColor='#2e7d32';this.style.color='#2e7d32';setTimeout(()=>{this.style.borderColor='';this.style.color='';},1500)})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Article Body ── -->
+<main class="article-body">
+
+  <!-- Key stats -->
+  <div class="intro-grid">
+    <div class="intro-card"><strong>$32B</strong>Google · Wiz close, March 2026 — the largest cybersecurity acquisition in history.</div>
+    <div class="intro-card"><strong>24.7%</strong>Microsoft Defender for Cloud market share — still #1 by installed base (Frost Radar 2026).</div>
+    <div class="intro-card"><strong>3 Leaders</strong>Forrester Wave Q1-2026 named only three CNAPP Leaders: Wiz, Sysdig, Qualys.</div>
+    <div class="intro-card"><strong>$326M</strong>Snyk ARR Feb 2026, +7% YoY — CodeSec growth is decelerating as GHAS and Semgrep close in.</div>
+  </div>
+
+  <div class="aims-box">
+    <div class="aims-label">How to use this briefing</div>
+    <p>Written for Fortinet PreSales SEs walking into CNAPP or Code Security deals in Q3-2026. Nine sections, all sourced. Cite analyst references by URL when reusing in customer assets. Concede competitor strengths where the analyst record places them — lead with the Security Fabric, never with a feature checklist.</p>
+  </div>
+
+  <hr>
+
+  <h2>The bottom line — five things to know in five minutes</h2>
+  <p>If you walk into a CNAPP or CodeSec deal today, here is the field as it actually stands.</p>
+
+  <div class="grid-2">
+    <div>
+      <h4>CNAPP</h4>
+      <ol>
+        <li><strong>Consolidation is the story.</strong> Google · Wiz ($32B), Cisco · Splunk, Palo Alto's Cortex Cloud rebrand, Fortinet · Lacework, Tenable · Ermetic. Standalone CNAPPs below $50M ARR are getting rare.</li>
+        <li><strong>Microsoft still leads on share</strong> (~24.7%, Frost) by virtue of Azure, but trails on multi-cloud parity.</li>
+        <li><strong>Forrester Wave Q1-2026 named only three Leaders</strong> — Wiz, Sysdig, Qualys.</li>
+        <li><strong>Runtime + AI is the new battleground.</strong> Sysdig's 5s detection, CrowdStrike's CDR convergence, Wiz's sensor add-on.</li>
+        <li><strong>CIEM and DSPM are now table stakes</strong>, absorbed into the CNAPP SKU.</li>
+      </ol>
+    </div>
+    <div>
+      <h4>Code Security</h4>
+      <ol>
+        <li><strong>Snyk leads the developer lane</strong> ($326M ARR, +7% YoY) but growth has decelerated.</li>
+        <li><strong>GHAS + GitLab Ultimate own platform-native AppSec.</strong> GHAS for Azure DevOps GA since 2024.</li>
+        <li><strong>Microsoft's Azure DevOps story is GHAS-first.</strong> The MSDO extension still ships SDL analyzers.</li>
+        <li><strong>Wiz Code and FortiCNAPP CodeSec</strong> are the CNAPP-converged options competing on cloud-runtime context.</li>
+        <li><strong>Checkmarx ($150M+ ARR) and Veracode (11× MQ Leader)</strong> still default in regulated industries.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="pull">
+    FortiCNAPP wins where the customer values fabric breadth over best-in-class point depth. Lead with the Fabric — never with a feature checklist.
+    <cite>SE field note · May 2026</cite>
+  </div>
+
+  <hr>
+
+  <h2>ROI &amp; business value</h2>
+  <p>Numbers below come from Forrester TEI studies — vendor-commissioned but methodologically transparent. They establish the order of magnitude every CISO expects from a CNAPP investment in 2026.</p>
+
+  <div class="roi-grid">
+    <div class="roi-fig">
+      <div class="roi-n">85%</div>
+      <div class="roi-l">Reduction in Tier-1 SOC alert volume</div>
+      <div class="roi-src">Forrester TEI · Defender for Cloud</div>
+    </div>
+    <div class="roi-fig">
+      <div class="roi-n">76%</div>
+      <div class="roi-l">MTTR reduction in cloud runtime</div>
+      <div class="roi-src">Sysdig customer benchmark</div>
+    </div>
+    <div class="roi-fig">
+      <div class="roi-n">264%</div>
+      <div class="roi-l">3-year ROI · &lt;6 mo payback</div>
+      <div class="roi-src">Forrester TEI · CrowdStrike</div>
+    </div>
+    <div class="roi-fig">
+      <div class="roi-n">45%</div>
+      <div class="roi-l">Improvement in cloud runtime security</div>
+      <div class="roi-src">Forrester TEI · CrowdStrike 2026</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <h4>Where the value comes from</h4>
+      <ul>
+        <li><strong>SOC labour collapse.</strong> Tier-1 alert investigations drop 70–85%; SOC FTE redeployed to threat hunting.</li>
+        <li><strong>Tooling consolidation.</strong> CSPM, CWPP, CIEM, DSPM, KSPM, and CodeSec in one platform typically retires 3–5 point tools — $300K–$1.5M annual licence savings.</li>
+        <li><strong>Cloud-breach exposure reduction.</strong> Composite-alert engines reduce dwell time by an order of magnitude versus rule-based CSPM.</li>
+        <li><strong>Audit acceleration.</strong> Continuous compliance for PCI-DSS 4.0, NIS2, DORA, FedRAMP — measured in audit hours saved.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Where the FortiCNAPP case is sharpest</h4>
+      <ul>
+        <li><strong>Fortinet-installed estates.</strong> Customers already on FortiGate VM, FortiWeb, or FortiSOAR collapse a 3–4 SKU stack into one Fabric — typical procurement saving 20–35% versus Wiz + standalone SOAR + WAF.</li>
+        <li><strong>Mid-market and APAC channel deals</strong> where Wiz / CrowdStrike pricing models price out, and Defender doesn't cover AWS/GCP at parity.</li>
+        <li><strong>Regulated, hybrid estates</strong> — FortiAnalyzer correlates cloud + on-prem + branch telemetry in one console.</li>
+        <li><strong>Predictable pricing</strong> — resource-based subscription vs Prisma's opaque credit model is the #1 finance objection FortiCNAPP wins on.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>CNAPP market map — twelve vendors, three Leaders</h2>
+  <p>Estimated CNAPP market share, May 2026. Microsoft and Wiz are the only vendors with publicly defensible top-line numbers. Everything else is a range.</p>
+
+  <div class="chart-wrap" style="max-width:420px;margin:0 auto 1.5rem;"><canvas id="pieCNAPP"></canvas></div>
+
+  <div class="forces-grid">
+    <div class="force-card">
+      <div class="force-num">01</div>
+      <h4>Hyperscaler Bundling</h4>
+      <p>Microsoft inside Azure. Wiz now inside Google ($32B, March 2026). The two largest cloud ecosystems have absorbed the two highest-conviction CNAPP bets — locking security into the platform bill.</p>
+    </div>
+    <div class="force-card">
+      <div class="force-num">02</div>
+      <h4>Endpoint Vendors Going Long</h4>
+      <p>CrowdStrike at $800M+ ARR for Falcon Cloud Security, +35% YoY. Sensor-first coverage is extending upward into CSPM, identity, and cloud workload — unified under a single agent footprint.</p>
+    </div>
+    <div class="force-card">
+      <div class="force-num">03</div>
+      <h4>Vuln-Management Heritage</h4>
+      <p>Qualys, Tenable, and Rapid7 are leveraging decades of installed-base relationships to upsell cloud exposure management. Not best-of-breed CNAPP — but already trusted by the CISO and embedded in procurement.</p>
+    </div>
+  </div>
+
+  <div class="pull">The middle of the market — Aqua, Orca, Sysdig — increasingly competes on a single technical theme (containers, agentless, runtime) and a partner-led commercial motion. <strong>FortiCNAPP's entry rests on the Security Fabric, not a feature checklist.</strong></div>
+
+  <div class="filter-bar"><input id="fMarket" type="search" placeholder="Filter vendors…" autocomplete="off"></div>
+  <div class="table-wrap">
+    <table id="tMarket">
+      <thead><tr>
+        <th>Vendor</th>
+        <th>Forrester Q1-26</th>
+        <th>Est. share</th>
+        <th>Scale signal</th>
+        <th>Source</th>
+      </tr></thead>
+      <tbody>
+        <tr class="forti"><td>🟠 FortiCNAPP</td><td><span class="fw fw-cont">Contender</span></td><td data-sort="3.5">3–4%</td><td>Lacework pre-acq ~$100M ARR</td><td><a href="https://www.fortinet.com/products/forticnapp" target="_blank">Fortinet</a></td></tr>
+        <tr><td>Microsoft Defender for Cloud</td><td><span class="fw fw-cont">Contender</span></td><td data-sort="24.5">24–25%</td><td>Frost: 24.7% share</td><td><a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/microsoft-defender-for-cloud-named-a-leader-in-frost-radar%E2%84%A2-for-cnapp-for-the-se/4358036" target="_blank">Frost Radar 2026</a></td></tr>
+        <tr><td>Wiz (Google Cloud)</td><td><span class="fw fw-leader">Leader</span></td><td data-sort="14">13–15%</td><td>$1B+ ARR at March 2026 close</td><td><a href="https://techcrunch.com/2026/03/11/google-completes-32b-acquisition-of-wiz/" target="_blank">TechCrunch</a></td></tr>
+        <tr><td>Palo Alto Prisma / Cortex Cloud</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="11">10–12%</td><td>11.4% mindshare, down from 18.1%</td><td><a href="https://www.peerspot.com/products/prisma-cloud-by-palo-alto-networks-reviews" target="_blank">PeerSpot</a></td></tr>
+        <tr><td>CrowdStrike Falcon Cloud Security</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="9">8–10%</td><td>$800M+ ARR, +35% YoY</td><td><a href="https://www.stocktitan.net/news/CRWD/crowd-strike-named-a-frost-radar-tm-leader-in-cloud-native-39mfpxddmmzn.html" target="_blank">CrowdStrike</a></td></tr>
+        <tr><td>Sysdig</td><td><span class="fw fw-leader">Leader</span></td><td data-sort="5">4–6%</td><td>700+ enterprises; 158% NRR APJ</td><td><a href="https://www.sysdig.com/press-releases/sysdig-named-leader-forrester-wave-cnapp-2026" target="_blank">Sysdig</a></td></tr>
+        <tr><td>Trend Micro Vision One Cloud</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="4.5">4–5%</td><td>IDC MarketScape Leader</td><td><a href="https://www.prnewswire.com/news-releases/trend-micro-named-a-leader-in-idc-marketscape-for-cnapp-302491533.html" target="_blank">PRNewswire</a></td></tr>
+        <tr><td>Orca Security</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="4">3–5%</td><td>140% YoY LATAM growth</td><td><a href="https://orca.security/resources/blog/forrester-wave-cnapp-2026-strong-performer/" target="_blank">Orca</a></td></tr>
+        <tr><td>Aqua Security</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="3">2–4%</td><td>$89.9M revenue 2024 <span class="fw fw-stale">Stale</span></td><td><a href="https://www.aquasec.com/news/aqua-security-recognised-in-gartners-market-guide-for-cnapp/" target="_blank">Aqua</a></td></tr>
+        <tr><td>Tenable Cloud Security</td><td><span class="fw fw-strong">Strong Performer</span></td><td data-sort="3">2–4%</td><td>Inside Tenable One ARR</td><td><a href="https://www.tenable.com/cloud-security" target="_blank">Tenable</a></td></tr>
+        <tr><td>Qualys TotalCloud</td><td><span class="fw fw-leader">Leader</span></td><td data-sort="1.8">1–2%</td><td>FedRAMP High May 2026</td><td><a href="https://blog.qualys.com/product-tech/2026/02/17/qualys-recognized-as-a-leader-in-the-2026-forrester-wave-for-cnapp" target="_blank">Qualys</a></td></tr>
+        <tr><td>Rapid7 InsightCloudSec</td><td><span class="fw fw-cont">Contender</span></td><td data-sort="1.5">1–2%</td><td>Inside Insight platform</td><td><a href="https://www.rapid7.com/blog/post/cds-cloud-security-rapid7-recognized-cloud-native-application-protection-cnapp-2026/" target="_blank">Rapid7</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Capability heatmap — where each vendor actually wins</h2>
+  <div class="table-wrap">
+    <table id="tMatrix" class="heat">
+      <thead><tr>
+        <th>Vendor</th>
+        <th>Cloud parity</th><th>CSPM</th><th>CWPP / Runtime</th><th>CIEM</th><th>AI &amp; threat</th>
+        <th>Agentless</th><th>Deploy ease</th><th>Pricing</th><th>Channel</th><th>Fabric</th>
+        <th>Score</th>
+      </tr></thead>
+      <tbody id="heatBody"></tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>CodeSec market map — the developer-AppSec landscape</h2>
+  <div class="table-wrap">
+    <table id="tCode">
+      <thead><tr>
+        <th>Vendor</th>
+        <th>Lane</th>
+        <th>ARR signal</th>
+        <th>Parent</th>
+        <th>Source</th>
+      </tr></thead>
+      <tbody>
+        <tr class="forti"><td>🟠 FortiCNAPP CodeSec &amp; Data Governance AI</td><td>CNAPP-native (SAST · SCA · IaC · Secrets · DSPM · AI Governance)</td><td>Not broken out</td><td>Fortinet (FTNT)</td><td><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/5886/code-security" target="_blank">Fortinet docs</a></td></tr>
+        <tr><td>Wiz Code (incl. SAST Preview)</td><td>CNAPP-native</td><td>Inside Wiz ARR ($1B+)</td><td>Google</td><td><a href="https://www.wiz.io/blog/introducing-wiz-sast-where-code-risk-meets-cloud-context" target="_blank">Wiz Blog</a></td></tr>
+        <tr><td>GitHub Advanced Security</td><td>Platform-native</td><td>Inside GitHub Enterprise</td><td>Microsoft</td><td><a href="https://github.blog/news-insights/product-news/secure-code-more-than-three-times-faster-with-copilot-autofix/" target="_blank">GitHub Blog</a></td></tr>
+        <tr><td>Azure DevOps + MS Security DevOps</td><td>Platform-native (MSDO + GHAS)</td><td>Embedded in Azure DevOps</td><td>Microsoft</td><td><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/configure-azure-devops-extension" target="_blank">Microsoft Learn</a></td></tr>
+        <tr><td>GitLab Ultimate</td><td>Platform-native</td><td>Inside GitLab ARR ($875M FY25)</td><td>GitLab (GTLB)</td><td><a href="https://about.gitlab.com/solutions/application-security-testing/" target="_blank">GitLab</a></td></tr>
+        <tr><td>Snyk</td><td>Developer-led AppSec</td><td>$326M ARR (+7% YoY)</td><td>Private (IPO prep)</td><td><a href="https://sacra.com/research/snyk-at-326m-arr-growing-7-yoy/" target="_blank">Sacra · Feb 2026</a></td></tr>
+        <tr><td>Veracode</td><td>Enterprise AST</td><td>Est. $250–300M ARR</td><td>Thoma Bravo</td><td><a href="https://www.veracode.com/blog/leader-in-gartner-mq-ast-11-times/" target="_blank">Veracode 2026</a></td></tr>
+        <tr><td>Checkmarx One</td><td>Enterprise AST / ASPM</td><td>&gt;$150M ARR <span class="fw fw-stale">Oct 2025</span></td><td>Hellman &amp; Friedman</td><td><a href="https://www.businesswire.com/news/home/20251014963115/en/Checkmarx-One-Surpasses-$150M-ARR-and-Expands-Global-Leadership-in-AI-Powered-Application-Security" target="_blank">BusinessWire</a></td></tr>
+        <tr><td>Prisma Cloud Code Security</td><td>CNAPP-native (Bridgecrew/Checkov)</td><td>Inside Prisma Cloud</td><td>Palo Alto Networks</td><td><a href="https://www.paloaltonetworks.com/prisma/cloud/cloud-code-security" target="_blank">PAN</a></td></tr>
+        <tr><td>SonarQube / SonarCloud</td><td>Code quality + SAST</td><td>7M+ developers</td><td>Insight Partners</td><td><a href="https://www.sonarsource.com/plans-and-pricing/sonarqube/" target="_blank">Sonar</a></td></tr>
+        <tr><td>Semgrep</td><td>AI-powered SAST/SCA</td><td>Est. $70–100M ARR</td><td>$204M raised total</td><td><a href="https://sacra.com/c/semgrep/" target="_blank">Sacra</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Pipeline integration matrix — Azure DevOps is not optional</h2>
+  <p>Vendors that only treat GitHub as first-class are flagged. Azure DevOps Pipelines is broken out explicitly.</p>
+
+  <div class="table-wrap">
+    <table id="tPipe">
+      <thead><tr>
+        <th>Vendor</th>
+        <th>GitHub Actions</th>
+        <th>GitLab CI</th>
+        <th>Azure DevOps Pipelines</th>
+        <th>Jenkins / Tekton</th>
+        <th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr class="forti"><td>🟠 FortiCNAPP CodeSec</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native (task)</span></td><td><span class="pipe-yes">✓ Native</span></td><td>codesec.yaml standardises across all four CI systems</td></tr>
+        <tr><td>Snyk</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Marketplace task</span></td><td><span class="pipe-yes">✓ Plugin</span></td><td>Best dev UX of the group</td></tr>
+        <tr><td>Checkmarx One</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ ADO extension</span></td><td><span class="pipe-yes">✓ Plugin</span></td><td>Mature enterprise CI footprint</td></tr>
+        <tr><td>Veracode</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-part">~ Template</span></td><td><span class="pipe-yes">✓ ADO extension</span></td><td><span class="pipe-yes">✓ Plugin</span></td><td>Binary upload model; gate-style</td></tr>
+        <tr><td>Semgrep</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-part">~ YAML template</span></td><td><span class="pipe-part">~ Container task</span></td><td>ADO integration is community-maintained</td></tr>
+        <tr><td>GHAS</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-no">— N/A</span></td><td><span class="pipe-yes">✓ GHAS for ADO GA 2024</span></td><td><span class="pipe-part">~ Webhooks</span></td><td>GitHub + Azure DevOps only</td></tr>
+        <tr><td>GitLab Ultimate</td><td><span class="pipe-no">— N/A</span></td><td><span class="pipe-yes">✓ Native (built-in)</span></td><td><span class="pipe-part">~ Mirror only</span></td><td><span class="pipe-part">~ Mirror only</span></td><td>Tied to GitLab CI</td></tr>
+        <tr><td>Azure DevOps + MSDO</td><td><span class="pipe-part">~ CLI</span></td><td><span class="pipe-no">— N/A</span></td><td><span class="pipe-yes">✓ Native (first-party)</span></td><td><span class="pipe-part">~ CLI</span></td><td>MSDO secrets routed to GHAS Sept 2023</td></tr>
+        <tr><td>SonarQube / Cloud</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ ADO extension</span></td><td><span class="pipe-yes">✓ Plugin</span></td><td>Strong ADO heritage</td></tr>
+        <tr><td>Wiz Code</td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ ADO task</span></td><td><span class="pipe-part">~ CLI</span></td><td>Wiz CLI hooks any CI</td></tr>
+        <tr><td>Prisma Cloud Code Security</td><td><span class="pipe-yes">✓ Native (Checkov)</span></td><td><span class="pipe-yes">✓ Native</span></td><td><span class="pipe-yes">✓ ADO extension</span></td><td><span class="pipe-yes">✓ Plugin</span></td><td>Bridgecrew CLI; Checkov OSS</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Battle cards — six conversations you will actually have</h2>
+  <p>The six matchups Fortinet PreSales SEs encounter weekly, each with the win / lose / Fabric angle and one objection-and-response. Full 21-vendor set available on request.</p>
+
+  <!-- Battle: Wiz -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP vs Wiz</h3>
+      <div class="battle-vs">CNAPP · Forrester Leader · post-Google · $1B+ ARR</div>
+    </div>
+    <div class="battle-deck">The brand-name fight. Concede the UX; win on Fabric and runtime depth.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>Polygraph composite alerts vs Wiz graph queries</li>
+          <li>Native FortiSOAR + FortiGuard + FortiGate east-west</li>
+          <li>Channel-led commercial flexibility (mid-market, APAC)</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Wiz UX and time-to-value are still benchmark</li>
+          <li>Post-Google, Wiz inherits Mandiant intel</li>
+          <li>CISO mindshare heavily Wiz-skewed</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>One vendor across firewall, WAF, SOAR, CNAPP — collapses 3–4 procurements into one</li>
+          <li>FortiAnalyzer correlates cloud + on-prem + branch</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "Wiz deploys faster."</p>
+      <p><strong>Response:</strong> Concede time-to-first-alert; pivot to day-30 alert quality. Run a 30-day Polygraph vs graph-query benchmark on the same cloud account — the noise reduction wins.</p>
+    </div>
+  </div>
+
+  <!-- Battle: Microsoft -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP vs Microsoft Defender for Cloud</h3>
+      <div class="battle-vs">CNAPP · ~24.7% share · Forrester Contender</div>
+    </div>
+    <div class="battle-deck">The hyperscaler-bundle fight. Concede Azure depth; win on multi-cloud and predictable pricing.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>True AWS/GCP parity (Defender is ~60% depth on non-Azure)</li>
+          <li>Vendor-neutral fabric vs hyperscaler lock-in</li>
+          <li>Predictable pricing vs per-plan consumption</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Defender + Entra + Sentinel are tight for Azure-first shops</li>
+          <li>Bundled into Azure invoice — zero finance friction</li>
+          <li>Microsoft partner ecosystem is enormous</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>FortiAnalyzer ingests Defender + FortiCNAPP signals — co-exist, don't replace</li>
+          <li>SD-WAN, ZTNA, NGFW already in fabric</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "We already pay for Defender."</p>
+      <p><strong>Response:</strong> Pull their last 30 days of Defender findings; benchmark in the same window with FortiCNAPP on AWS/GCP. Practitioners typically see 30–50% additional findings on non-Azure clouds.</p>
+    </div>
+  </div>
+
+  <!-- Battle: Prisma -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP vs Palo Alto Prisma / Cortex Cloud</h3>
+      <div class="battle-vs">CNAPP · Forrester Strong Performer · Cortex migration underway</div>
+    </div>
+    <div class="battle-deck">The platform-vs-fabric fight. Concede breadth; win on pricing and consolidation discipline.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>Predictable resource pricing vs credit model</li>
+          <li>One console vs multiple Prisma UIs mid-migration</li>
+          <li>Lower false-positive rate (Polygraph behavioural)</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Prisma has the broadest module set (DSPM, AI-SPM, CDR all GA)</li>
+          <li>Gartner support score 4.6/5</li>
+          <li>PANW channel and brand are formidable</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>Cortex Cloud requires PANW Strata + XSIAM — bigger lift</li>
+          <li>Existing FortiGate / FortiWeb customers get the better discount</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "Prisma covers more modules."</p>
+      <p><strong>Response:</strong> 80% of Prisma customers don't activate 60%+ of the SKUs. Map only what they actually use, then compare FortiCNAPP + Fabric — usually fewer SKUs cover the same surface for less.</p>
+    </div>
+  </div>
+
+  <!-- Battle: CrowdStrike -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP vs CrowdStrike Falcon Cloud Security</h3>
+      <div class="battle-vs">CNAPP · Forrester Strong Performer · $800M+ ARR</div>
+    </div>
+    <div class="battle-deck">The endpoint-vendor expansion fight. Concede agent ubiquity; win on TCO and AppSec breadth.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>Lower TCO; CrowdStrike is enterprise-priced</li>
+          <li>FortiCNAPP CodeSec included; CrowdStrike has no AppSec</li>
+          <li>Better CSPM / DSPM breadth standalone</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Falcon endpoint ubiquity = "one agent" story</li>
+          <li>Threat-intel brand unmatched</li>
+          <li>Falcon CDR is mature</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>Fortinet has the network and SASE story CrowdStrike does not</li>
+          <li>FortiClient + FortiEDR + FortiGate + FortiCNAPP = full Fabric</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "We have Falcon everywhere already."</p>
+      <p><strong>Response:</strong> Falcon Cloud Security is a paid add-on, not free. Run modules comparison; pricing and AWS/GCP CSPM depth typically favour FortiCNAPP.</p>
+    </div>
+  </div>
+
+  <!-- Battle: Snyk -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP CodeSec vs Snyk</h3>
+      <div class="battle-vs">Code Security · $326M ARR · developer favourite</div>
+    </div>
+    <div class="battle-deck">The developer-AppSec fight. Concede IDE polish; win on platform economics and cloud context.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>No per-developer pricing cliff (Snyk Team caps at 10)</li>
+          <li>Native code-to-cloud lineage</li>
+          <li>Same console for AppSec + CSPM + runtime</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Snyk IDE / CLI / PR experience is benchmark</li>
+          <li>Strongest vulnerability DB in the market</li>
+          <li>AI SAST tuned to Copilot / Cursor</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>FortiSOAR closes the response loop; Snyk stops at PR</li>
+          <li>Native ADO / GitHub / GitLab / Jenkins via codesec CLI</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "Snyk is the developer favourite."</p>
+      <p><strong>Response:</strong> Concede dev UX. Demo the security workflow Snyk can't match: composite alert → SmartFix → FortiSOAR remediation. Then quantify the per-developer pricing cliff.</p>
+    </div>
+  </div>
+
+  <!-- Battle: GHAS -->
+  <div class="battle">
+    <div class="battle-header">
+      <h3>FortiCNAPP CodeSec vs GitHub Advanced Security (incl. ADO)</h3>
+      <div class="battle-vs">Code Security · platform-native · Copilot Autofix</div>
+    </div>
+    <div class="battle-deck">The platform-native fight. Concede zero-friction adoption; win on cross-SCM scope and cloud context.</div>
+    <div class="battle-cols">
+      <div class="battle-col win">
+        <h5>FortiCNAPP wins</h5>
+        <ul>
+          <li>Multi-SCM (Bitbucket, GitLab, vendor code) — GHAS is GitHub + ADO only</li>
+          <li>Cloud + runtime context GHAS cannot provide</li>
+          <li>Deeper SCA / IaC / container coverage</li>
+        </ul>
+      </div>
+      <div class="battle-col lose">
+        <h5>Where we're challenged</h5>
+        <ul>
+          <li>Zero-friction adoption if customer is on GitHub or ADO</li>
+          <li>Copilot Autofix is exceptional and improving fast</li>
+          <li>Secret scanning + push protection are mature</li>
+        </ul>
+      </div>
+      <div class="battle-col fab">
+        <h5>Fabric angle</h5>
+        <ul>
+          <li>Co-exist: keep GHAS for in-PR Copilot Autofix; layer FortiCNAPP for SCA + IaC + cloud context</li>
+        </ul>
+      </div>
+    </div>
+    <div class="battle-obj">
+      <p><strong>Objection:</strong> "We already pay for GHAS for Azure DevOps."</p>
+      <p><strong>Response:</strong> Perfect — keep it. Layer FortiCNAPP CodeSec for non-Azure clouds, non-GitHub repos, and the cloud-runtime lineage GHAS has no way to produce.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>What's hot in CNAPP now — the six things every roadmap is racing toward</h2>
+  <p>Themes drawn from Forrester Wave Q1-2026, vendor roadmaps at RSAC / Black Hat 2026, and the customer conversations Fortinet SEs report most often.</p>
+
+  <div class="hot-grid">
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #1</span>
+      <h3>Agentic AI security agents</h3>
+      <p>Wiz, Orca, CrowdStrike, Palo Alto, and Defender have all shipped "agentic" SecOps and remediation agents in preview. Expect every CNAPP roadmap to claim one by year-end.</p>
+      <div class="hot-why">FortiCNAPP angle: SmartFix + FortiSOAR playbooks already deliver the remediation outcome — agentic AI is a packaging story.</div>
+    </div>
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #2</span>
+      <h3>AI-SPM as a CNAPP module</h3>
+      <p>AI workloads, LLM endpoints, prompts, and training data are now first-class assets. Cortex Cloud 2.0 added AgentiX; Wiz added an AI-SPM SKU; Defender added AI workload posture.</p>
+      <div class="hot-why">FortiCNAPP angle: Polygraph baselines extend naturally to GenAI service identities and API calls — published roadmap.</div>
+    </div>
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #3</span>
+      <h3>Code-to-cloud-to-SOC convergence</h3>
+      <p>Prisma + Cortex (PANW), Defender + Sentinel, FortiCNAPP + FortiAnalyzer / FortiSOAR. CNAPP is no longer a posture tool — it is a SOC feed.</p>
+      <div class="hot-why">FortiCNAPP angle: Security Fabric is the most mature single-vendor expression of this convergence today.</div>
+    </div>
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #4</span>
+      <h3>Runtime sensors return</h3>
+      <p>Pure-agentless is no longer enough. Wiz Sensor, Orca Runtime, Defender for Containers all add optional lightweight sensors. Sysdig and CrowdStrike were here first.</p>
+      <div class="hot-why">FortiCNAPP angle: Optional Lacework agent + agentless snapshots — choose per workload, not per vendor.</div>
+    </div>
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #5</span>
+      <h3>Identity-first CNAPP</h3>
+      <p>Tenable / Ermetic set the bar; Wiz, Defender + Entra, and FortiCNAPP have closed it. Toxic-combination and JIT entitlement are now table stakes.</p>
+      <div class="hot-why">FortiCNAPP angle: FortiAuthenticator + FortiGate ZTNA + FortiCNAPP CIEM = identity-aware enforcement no pure CNAPP can match.</div>
+    </div>
+    <div class="hot-card">
+      <span class="hot-tag">Hot · #6</span>
+      <h3>Compliance-as-product</h3>
+      <p>European regulation (DORA, NIS2, EU AI Act) has overtaken NIST as the buy-driver for CNAPP in EMEA. Every vendor now ships out-of-the-box control mappings.</p>
+      <div class="hot-why">FortiCNAPP angle: Compliance packs ship with FortiAnalyzer report templates — single audit pane across cloud + network.</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>The future of CNAPP — six predictions for 2026–2028</h2>
+  <p>By 2028, "CNAPP" disappears as a category. What is sold today as CNAPP is becoming the operating system of cloud security. Six predictions Fortinet PreSales should be ready to defend.</p>
+
+  <div class="trends">
+    <div class="trend">
+      <div class="trend-num">01</div>
+      <h3>CNAPP collapses into the SOC platform</h3>
+      <p>The code-to-cloud-to-SOC convergence (Prisma + Cortex, Defender + Sentinel, FortiCNAPP + FortiAnalyzer) finishes by 2027. Standalone CNAPP becomes a feature inside the broader SecOps platform.</p>
+      <h4>Implication</h4>
+      <p>Sell the FortiCNAPP + FortiSOAR + FortiAnalyzer bundle, not the CNAPP SKU alone.</p>
+    </div>
+    <div class="trend">
+      <div class="trend-num">02</div>
+      <h3>AI workloads become the new attack surface</h3>
+      <p>LLM endpoints, vector stores, model weights, prompt logs, and agent workflows are the new crown jewels. AI-SPM moves from a checkbox to a CNAPP module sold separately.</p>
+      <h4>Implication</h4>
+      <p>FortiCNAPP must extend Polygraph to AI service identities, prompt-injection telemetry, and model-weight integrity checks — already roadmap.</p>
+    </div>
+    <div class="trend">
+      <div class="trend-num">03</div>
+      <h3>Agentic remediation replaces ticket-driven SecOps</h3>
+      <p>Today: alert → ticket → engineer fixes. By 2027: agent triages, scopes blast radius, proposes patch, opens PR, monitors rollout, closes loop.</p>
+      <h4>Implication</h4>
+      <p>FortiSOAR + FortiCNAPP SmartFix is the agentic-remediation play today — package and price for outcome.</p>
+    </div>
+    <div class="trend">
+      <div class="trend-num">04</div>
+      <h3>Pure-agentless ends; sensor + snapshot becomes the norm</h3>
+      <p>Wiz, Orca, and Defender have all added sensors. By 2027 the architectural debate is hybrid by default — choose the data-collection mode per workload.</p>
+      <h4>Implication</h4>
+      <p>FortiCNAPP's Lacework agent + agentless model is already there; lead with architectural choice, not deployment friction.</p>
+    </div>
+    <div class="trend">
+      <div class="trend-num">05</div>
+      <h3>Hyperscaler bundle wins multi-cloud — slowly</h3>
+      <p>Microsoft inside Azure, Wiz inside Google. AWS will buy or build. The independent CNAPP vendor relies on partner-led GTM, fabric breadth, or vertical depth. There is no fourth lane.</p>
+      <h4>Implication</h4>
+      <p>Fortinet's independence + Security Fabric is the credible alternative for buyers wary of hyperscaler lock-in.</p>
+    </div>
+    <div class="trend">
+      <div class="trend-num">06</div>
+      <h3>Compliance becomes the budget-unlock</h3>
+      <p>DORA (Jan 2025 enforcement), NIS2, EU AI Act, evolving SEC cyber-disclosure rules. CISOs increasingly justify CNAPP spend via audit cost-avoidance, not breach prevention.</p>
+      <h4>Implication</h4>
+      <p>Sell FortiCNAPP's compliance pack and FortiAnalyzer reporting as the audit-acceleration story; quantify auditor-hours saved.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    In 2026 we sell CNAPP. In 2027 we sell SecOps platforms with CNAPP inside. In 2028 we sell outcomes — "90% fewer cloud incidents, 80% less SOC labour, audit-ready by default" — and the customer no longer asks what acronym we use.
+    <cite>Fortinet PreSales · author voice · May 2026</cite>
+  </div>
+
+  <hr>
+
+  <div class="disclaimer">
+    <strong>About the author</strong><br>
+    I'm Sam Vuillaume, Consulting Systems Expert – Cloud and AI Security at Fortinet (CCIE #11828). I work day-to-day with cloud and security teams across AWS, Azure, GCP, and OCI, helping organizations operationalize security across modern application and AI-driven architectures.<br><br>
+    My focus is on positioning Fortinet's Security Fabric for the cloud — bringing together FortiCNAPP, FortiWeb / FortiAppSec Cloud, FortiGate VM, and FortiCASB-SSPM into a unified approach for securing cloud-native and AI-enabled workloads. Internal PreSales material — cite analyst and vendor sources by URL + date when reusing in customer-facing assets.
+  </div>
+
+  <div class="article-tags">
+    <span class="tags-label">Tags:</span>
+    <a class="atag" href="#">PreSales</a>
+    <a class="atag" href="#">Competitive Intel</a>
+    <a class="atag" href="#">CNAPP</a>
+    <a class="atag" href="#">Code Security</a>
+    <a class="atag" href="#">Battle Cards</a>
+    <a class="atag" href="#">FortiCNAPP</a>
+    <a class="atag" href="#">Wiz</a>
+    <a class="atag" href="#">CSPM</a>
+  </div>
+
+  <hr>
+
+  <div class="refs">
+    <h2>References — May 2026</h2>
+    <h3>Analyst &amp; market data</h3>
+    <div class="src-grid">
+      <p><a href="https://www.wiz.io/blog/forrester-wave-cnapp-2026" target="_blank">Forrester Wave CNAPP Q1-2026 (Wiz)</a></p>
+      <p><a href="https://www.sysdig.com/press-releases/sysdig-named-leader-forrester-wave-cnapp-2026" target="_blank">Forrester Wave Q1-2026 (Sysdig press)</a></p>
+      <p><a href="https://blog.qualys.com/product-tech/2026/02/17/qualys-recognized-as-a-leader-in-the-2026-forrester-wave-for-cnapp" target="_blank">Forrester Wave Q1-2026 Leader — Qualys</a></p>
+      <p><a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/microsoft-defender-for-cloud-named-a-leader-in-frost-radar%E2%84%A2-for-cnapp-for-the-se/4358036" target="_blank">Frost Radar CNAPP 2026 — Microsoft</a></p>
+      <p><a href="https://techcrunch.com/2026/03/11/google-completes-32b-acquisition-of-wiz/" target="_blank">Google completes $32B Wiz acquisition</a></p>
+      <p><a href="https://www.stocktitan.net/news/CRWD/crowd-strike-named-a-frost-radar-tm-leader-in-cloud-native-39mfpxddmmzn.html" target="_blank">CrowdStrike Falcon Cloud Security $800M+ ARR</a></p>
+      <p><a href="https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-falcon-cloud-security-delivered-264-return" target="_blank">Forrester TEI — CrowdStrike 264% ROI</a></p>
+      <p><a href="https://tei.forrester.com/go/Microsoft/DefenderForCloud/index.html" target="_blank">Forrester TEI — Microsoft Defender for Cloud</a></p>
+      <p><a href="https://www.crowdstrike.com/en-us/resources/reports/2026-forrester-tei-report/" target="_blank">2026 Forrester TEI — CrowdStrike</a></p>
+      <p><a href="https://sacra.com/research/snyk-at-326m-arr-growing-7-yoy/" target="_blank">Snyk at $326M ARR (Sacra Feb 2026)</a></p>
+      <p><a href="https://www.businesswire.com/news/home/20251014963115/en/Checkmarx-One-Surpasses-$150M-ARR-and-Expands-Global-Leadership-in-AI-Powered-Application-Security" target="_blank">Checkmarx One &gt;$150M ARR (Oct 2025)</a></p>
+      <p><a href="https://www.gartner.com/reviews/market/cloud-native-application-protection-platforms" target="_blank">Gartner Peer Insights — CNAPP</a></p>
+    </div>
+    <h3>Vendor &amp; product</h3>
+    <div class="src-grid">
+      <p><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/5886/code-security" target="_blank">FortiCNAPP CodeSec docs</a></p>
+      <p><a href="https://www.fortinet.com/corporate/about-us/newsroom/press-releases/2024/fortinet-completes-acquisition-of-lacework" target="_blank">Fortinet completes Lacework acquisition</a></p>
+      <p><a href="https://github.blog/news-insights/product-news/secure-code-more-than-three-times-faster-with-copilot-autofix/" target="_blank">GitHub Copilot Autofix metrics</a></p>
+      <p><a href="https://azure.microsoft.com/en-us/products/devops/github-advanced-security" target="_blank">GHAS for Azure DevOps (GA 2024)</a></p>
+      <p><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/configure-azure-devops-extension" target="_blank">Microsoft Security DevOps extension</a></p>
+      <p><a href="https://orca.security/resources/blog/introducing-agentic-cloud-security-platform/" target="_blank">Orca — Agentic cloud security</a></p>
+      <p><a href="https://www.wiz.io/blog/introducing-wiz-sast-where-code-risk-meets-cloud-context" target="_blank">Wiz Code / SAST preview</a></p>
+      <p><a href="https://sacra.com/c/semgrep/" target="_blank">Semgrep ARR estimate (Sacra)</a></p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  &copy; 2026 Fortinet, Inc. All rights reserved.&nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://www.fortinet.com/corporate/about-us/legal.html">Legal</a>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://www.fortinet.com/corporate/about-us/privacy.html">Privacy</a>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="/FortiCNAPP/">← All posts</a>
+</footer>
+
+<script>
+// ── Sortable tables ──
+function makeSortable(id) {
+  var t = document.getElementById(id); if (!t) return;
+  t.querySelectorAll('thead th').forEach(function(th, idx) {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function() {
+      var tbody = t.tBodies[0];
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var asc = th.dataset.dir !== 'asc';
+      rows.sort(function(a, b) {
+        var av = a.children[idx].dataset.sort || a.children[idx].textContent.trim();
+        var bv = b.children[idx].dataset.sort || b.children[idx].textContent.trim();
+        var an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+        return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+      var fortiRow = rows.find(function(r) { return r.classList.contains('forti'); });
+      var others = rows.filter(function(r) { return !r.classList.contains('forti'); });
+      tbody.innerHTML = '';
+      if (fortiRow) tbody.appendChild(fortiRow);
+      others.forEach(function(r) { tbody.appendChild(r); });
+      th.dataset.dir = asc ? 'asc' : 'desc';
+    });
+  });
+}
+function makeFilter(inputId, tableId) {
+  var i = document.getElementById(inputId), t = document.getElementById(tableId);
+  if (!i || !t) return;
+  i.addEventListener('input', function() {
+    var q = i.value.toLowerCase();
+    t.tBodies[0].querySelectorAll('tr').forEach(function(r) {
+      r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+}
+['tMarket','tPipe'].forEach(makeSortable);
+makeFilter('fMarket', 'tMarket');
+
+// ── Heatmap render ──
+(function() {
+  var rows = [
+    {n:'🟠 FortiCNAPP',        forti:true, s:[4,4,5,4,5,4,4,4,5,5]},
+    {n:'Wiz (Google)',                      s:[5,5,3,4,4,5,5,3,4,4]},
+    {n:'Palo Alto Prisma / Cortex',         s:[5,5,4,4,4,3,3,2,5,4]},
+    {n:'Microsoft Defender',                s:[3,4,4,5,4,3,4,4,5,4]},
+    {n:'CrowdStrike Falcon CS',             s:[4,4,5,4,5,3,3,2,4,4]},
+    {n:'Sysdig',                            s:[4,4,5,3,4,3,3,3,3,3]},
+    {n:'Trend Micro Vision One',            s:[4,4,4,3,4,3,3,4,4,4]},
+    {n:'Orca Security',                     s:[5,5,3,4,4,5,5,3,3,3]},
+    {n:'Aqua Security',                     s:[3,3,5,2,3,3,3,3,3,3]},
+    {n:'Tenable Cloud Security',            s:[4,4,3,5,3,4,4,3,4,3]},
+    {n:'Qualys TotalCloud',                 s:[4,4,3,3,3,4,3,4,4,3]},
+    {n:'Rapid7 InsightCloudSec',            s:[4,4,3,3,3,4,4,4,4,3]},
+  ];
+  // Compute averages then sort descending; FortiCNAPP always first
+  rows.forEach(function(r) {
+    r.avg = (r.s.reduce(function(a,b){return a+b;},0)/r.s.length);
+  });
+  var forti = rows.filter(function(r){ return r.forti; });
+  var others = rows.filter(function(r){ return !r.forti; });
+  others.sort(function(a,b){ return b.avg - a.avg; });
+  var sorted = forti.concat(others);
+
+  var tbody = document.getElementById('heatBody');
+  sorted.forEach(function(r) {
+    var avg = r.avg.toFixed(1);
+    var tr = document.createElement('tr');
+    if (r.forti) tr.classList.add('forti');
+    tr.innerHTML = '<td>' + r.n + '</td>' +
+      r.s.map(function(v){ return '<td class="h'+v+'">'+v+'</td>'; }).join('') +
+      '<td class="score-cell"><strong>' + avg + '</strong></td>';
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── Pie chart ──
+(function() {
+  var labels = ['FortiCNAPP','Microsoft Defender','Wiz (Google)','Prisma / Cortex','CrowdStrike','Sysdig','Trend Micro','Orca','Aqua','Tenable','Qualys','Rapid7','Other'];
+  var data   = [3.5,24.5,14,11,9,5,4.5,4,3,3,1.8,1.5,15.2];
+  var colors = ['#EE3124','#1A1A2E','#3B5BDB','#7c3aed','#dc2626','#0ea5e9','#16a34a','#f59e0b','#a16207','#0891b2','#14b8a6','#475569','#cbd5e1'];
+  var ctx = document.getElementById('pieCNAPP');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }] },
+    options: {
+      plugins: {
+        legend: { position: 'right', labels: { font: { family: 'system-ui', size: 11, weight: '500' }, boxWidth: 10, padding: 8 } },
+        tooltip: { callbacks: { label: function(c){ return ' '+c.label+': '+c.parsed+'%'; } } }
+      },
+      maintainAspectRatio: false,
+      cutout: '58%'
+    }
+  });
+})();
+
+// ── Glossary tooltips ──
+(function() {
+  'use strict';
+  var G = {
+    "CNAPP": "Cloud-Native Application Protection Platform — a unified security platform integrating CSPM, CIEM, CWPP, and vulnerability management into a single risk-correlated view.",
+    "CSPM": "Cloud Security Posture Management — continuous automated checking of cloud resource configurations against security policies and compliance frameworks.",
+    "CIEM": "Cloud Infrastructure Entitlement Management — analysis of who (or what service) can do what in a cloud environment, and whether those permissions are actually needed.",
+    "CWPP": "Cloud Workload Protection Platform — runtime security for containers, VMs, and serverless functions.",
+    "DSPM": "Data Security Posture Management — discovery and classification of sensitive data (PII, PCI, PHI) across cloud services.",
+    "SAST": "Static Application Security Testing — automated analysis of source code for security vulnerabilities before the code is compiled or deployed.",
+    "SCA": "Software Composition Analysis — scanning third-party and open-source libraries for known CVEs and license risks.",
+    "IaC": "Infrastructure as Code — defining cloud infrastructure in version-controlled configuration files (Terraform, CloudFormation, Bicep).",
+    "KSPM": "Kubernetes Security Posture Management — continuous assessment of Kubernetes cluster configurations, RBAC policies, and workload settings against security benchmarks.",
+    "AI-SPM": "AI Security Posture Management — discovery and risk assessment of AI/ML workloads, LLM endpoints, model weights, and prompt data in cloud environments.",
+    "Polygraph": "FortiCNAPP's patented behavioural data platform that automatically learns normal activity patterns and surfaces anomalies as composite alerts.",
+    "FortiSOAR": "Fortinet's Security Orchestration, Automation and Response platform — automates investigation and remediation workflows triggered by FortiCNAPP findings.",
+    "FortiAnalyzer": "Fortinet's centralized log analytics and reporting platform — correlates FortiCNAPP cloud telemetry with on-prem firewall, SASE, and branch data in a single console.",
+    "Security Fabric": "Fortinet's integrated security architecture — connects FortiGate, FortiWeb, FortiCNAPP, FortiSOAR, FortiAnalyzer, and other Fortinet products into a single telemetry and policy plane.",
+    "blast radius": "The scope of damage an attacker could cause if a specific identity, credential, or resource is compromised.",
+    "GHAS": "GitHub Advanced Security — Microsoft's code security platform integrating secret scanning, code scanning (CodeQL), and dependency review into GitHub and Azure DevOps.",
+    "Snyk": "Developer-first application security platform focused on SCA, SAST, container scanning, and IaC — known for its IDE and PR-native developer experience.",
+    "Wiz": "Cloud security platform (acquired by Google for $32B in March 2026) known for agentless scanning, the Wiz Security Graph, and fast time-to-value.",
+    "MSDO": "Microsoft Security DevOps — Azure DevOps extension that aggregates multiple SDL analyzer outputs (Bandit, Checkov, ESLint, Template Analyzer, Terrascan, TripleCheck) into a unified pipeline scan.",
+    "DORA": "Digital Operational Resilience Act — EU regulation (enforcement Jan 2025) requiring financial entities to test and document ICT risk management, incident reporting, and third-party oversight.",
+    "NIS2": "Network and Information Security Directive 2 — EU cybersecurity regulation expanding mandatory incident reporting and risk management obligations across critical sectors."
+  };
+
+  var terms = Object.keys(G).sort(function(a, b) { return b.length - a.length; });
+  var SKIP = { SCRIPT:1, STYLE:1, CODE:1, PRE:1, A:1, H1:1, H2:1, H3:1, FIGCAPTION:1, BUTTON:1, FOOTER:1 };
+
+  function ancestorSkipped(node) {
+    var n = node.parentElement;
+    while (n) {
+      if (SKIP[n.tagName]) return true;
+      if (n.classList && n.classList.contains('term')) return true;
+      n = n.parentElement;
+    }
+    return false;
+  }
+
+  var article = document.querySelector('.article-body') || document.body;
+  var walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [], n;
+  while ((n = walker.nextNode())) {
+    if (!ancestorSkipped(n) && n.nodeValue.trim()) nodes.push(n);
+  }
+
+  nodes.forEach(function(textNode) {
+    var text = textNode.nodeValue;
+    var remaining = text;
+    var parts = [];
+    var changed = false;
+
+    while (remaining.length > 0) {
+      var best = null;
+      for (var i = 0; i < terms.length; i++) {
+        var term = terms[i];
+        var escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var re = new RegExp(escaped, 'i');
+        var m = re.exec(remaining);
+        if (m && (!best || m.index < best.index)) {
+          var before = remaining[m.index - 1];
+          var after  = remaining[m.index + m[0].length];
+          var bOk = !before || /[^a-zA-Z0-9_-]/.test(before);
+          var aOk = !after  || /[^a-zA-Z0-9_-]/.test(after);
+          if (bOk && aOk) best = { index: m.index, match: m[0], term: term };
+        }
+      }
+      if (!best) { parts.push(document.createTextNode(remaining)); break; }
+      if (best.index > 0) parts.push(document.createTextNode(remaining.slice(0, best.index)));
+      var span = document.createElement('span');
+      span.className = 'term';
+      span.textContent = best.match;
+      span.dataset.def = G[best.term];
+      span.dataset.term = best.term;
+      parts.push(span);
+      changed = true;
+      remaining = remaining.slice(best.index + best.match.length);
+    }
+
+    if (changed && textNode.parentNode) {
+      var frag = document.createDocumentFragment();
+      parts.forEach(function(p) { frag.appendChild(p); });
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
+  });
+
+  // Tooltip
+  var tip = document.createElement('div');
+  tip.id = 'gl-tip';
+  document.body.appendChild(tip);
+
+  document.addEventListener('mouseover', function(e) {
+    var t = e.target.closest ? e.target.closest('.term') : (e.target.classList.contains('term') ? e.target : null);
+    if (t) {
+      tip.innerHTML = '<strong>' + t.dataset.term + '</strong>' + t.dataset.def;
+      tip.classList.add('visible');
+    }
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!tip.classList.contains('visible')) return;
+    var x = e.clientX + 16, y = e.clientY + 16;
+    if (x + tip.offsetWidth  > window.innerWidth  - 8) x = e.clientX - tip.offsetWidth  - 8;
+    if (y + tip.offsetHeight > window.innerHeight - 8) y = e.clientY - tip.offsetHeight - 8;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  });
+  document.addEventListener('mouseout', function(e) {
+    var t = e.target.closest ? e.target.closest('.term') : null;
+    if (t) tip.classList.remove('visible');
+  });
+  document.addEventListener('click', function(e) {
+    var t = e.target.closest ? e.target.closest('.term') : null;
+    if (t) {
+      if (tip.classList.contains('visible') && tip._src === t) {
+        tip.classList.remove('visible'); tip._src = null;
+      } else {
+        tip.innerHTML = '<strong>' + t.dataset.term + '</strong>' + t.dataset.def;
+        var r = t.getBoundingClientRect();
+        var x = r.left, y = r.bottom + 6;
+        tip.classList.add('visible');
+        if (x + tip.offsetWidth  > window.innerWidth  - 8) x = window.innerWidth  - tip.offsetWidth  - 8;
+        if (y + tip.offsetHeight > window.innerHeight - 8) y = r.top - tip.offsetHeight - 6;
+        tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip._src = t;
+      }
+      e.stopPropagation();
+    } else { tip.classList.remove('visible'); tip._src = null; }
+  });
+}());
+</script>
+
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Code Security Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/5886/code-security" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP CodeSec capabilities include SAST, SCA, IaC scanning, secrets detection, DSPM, and AI Governance, presented as a CNAPP-native code security offering.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Fortinet Completes Acquisition of Lacework</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Newsroom · 2024 · <a href="https://www.fortinet.com/corporate/about-us/newsroom/press-releases/2024/fortinet-completes-acquisition-of-lacework" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">www.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article references the Fortinet acquisition of Lacework, noting Lacework had ~$100M ARR pre-acquisition, as the basis for FortiCNAPP's market position.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Product Page</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet · 2026 · <a href="https://www.fortinet.com/products/forticnapp" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">www.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP is Fortinet's CNAPP offering, positioned as a Contender with 3–4% estimated market share in the CNAPP landscape table.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Microsoft Defender for Cloud Named Leader in Frost Radar for CNAPP</span>
+    <span style="color:#6b7280;font-size:12px;">Microsoft Tech Community · 2026 · <a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/microsoft-defender-for-cloud-named-a-leader-in-frost-radar%E2%84%A2-for-cnapp-for-the-se/4358036" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">techcommunity.microsoft.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Microsoft Defender for Cloud holds ~24.7% market share and is the leading CNAPP by installed base per the Frost Radar 2026 cited in the article.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">GitHub Advanced Security: Secure Code More Than Three Times Faster with Copilot Autofix</span>
+    <span style="color:#6b7280;font-size:12px;">GitHub Blog · 2024 · <a href="https://github.blog/news-insights/product-news/secure-code-more-than-three-times-faster-with-copilot-autofix/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">github.blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article cites Copilot Autofix as an exceptional and rapidly improving capability in the GitHub Advanced Security (GHAS) platform that FortiCNAPP CodeSec must compete against.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Configure the Microsoft Security DevOps Azure DevOps Extension</span>
+    <span style="color:#6b7280;font-size:12px;">Microsoft Learn · 2024 · <a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/configure-azure-devops-extension" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">learn.microsoft.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article references the Microsoft Security DevOps (MSDO) extension for Azure DevOps as a native pipeline security tool bundled with Microsoft Defender for Cloud.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">GitHub Advanced Security for Azure DevOps</span>
+    <span style="color:#6b7280;font-size:12px;">Microsoft Azure · 2024 · <a href="https://azure.microsoft.com/en-us/products/devops/github-advanced-security" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">azure.microsoft.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The pipeline integration matrix notes that GHAS for Azure DevOps reached GA in 2024, making it a native platform option for Azure DevOps users.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Wiz Code / SAST Preview: Where Code Risk Meets Cloud Context</span>
+    <span style="color:#6b7280;font-size:12px;">Wiz Blog · 2025 · <a href="https://www.wiz.io/blog/introducing-wiz-sast-where-code-risk-meets-cloud-context" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">www.wiz.io/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article lists Wiz Code (including SAST Preview) as a CNAPP-native code security competitor inside Wiz's $1B+ ARR, positioned against FortiCNAPP CodeSec.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Checkmarx One Surpasses $150M ARR</span>
+    <span style="color:#6b7280;font-size:12px;">BusinessWire · October 2025 · <a href="https://www.businesswire.com/news/home/20251014963115/en/Checkmarx-One-Surpasses-$150M-ARR-and-Expands-Global-Leadership-in-AI-Powered-Application-Security" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">www.businesswire.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article cites Checkmarx at $150M+ ARR as a dominant enterprise AST / ASPM player that defaults in regulated industries, alongside Veracode.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Snyk at $326M ARR, Growing 7% YoY</span>
+    <span style="color:#6b7280;font-size:12px;">Sacra · February 2026 · <a href="https://sacra.com/research/snyk-at-326m-arr-growing-7-yoy/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">sacra.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article states Snyk reached $326M ARR at +7% YoY as of February 2026, noting that CodeSec growth is decelerating as GHAS and Semgrep close in.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Qualys Recognized as a Leader in the 2026 Forrester Wave for CNAPP</span>
+    <span style="color:#6b7280;font-size:12px;">Qualys Blog · February 2026 · <a href="https://blog.qualys.com/product-tech/2026/02/17/qualys-recognized-as-a-leader-in-the-2026-forrester-wave-for-cnapp" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">blog.qualys.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article states the Forrester Wave Q1-2026 named only three CNAPP Leaders: Wiz, Sysdig, and Qualys — with Qualys earning Leader status including FedRAMP High authorization in May 2026.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Gartner Peer Insights — Cloud-Native Application Protection Platforms</span>
+    <span style="color:#6b7280;font-size:12px;">Gartner · 2026 · <a href="https://www.gartner.com/reviews/market/cloud-native-application-protection-platforms" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">www.gartner.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article references Gartner support scores (Prisma Cloud 4.6/5) and Gartner's CNAPP Market Guide category when positioning vendors like Aqua Security and assessing customer sentiment.</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="530" viewBox="0 0 680 530" role="img" aria-labelledby="py-title py-desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+<title id="py-title">FortiCNAPP five-layer security correlation pyramid</title>
+<desc id="py-desc">A pyramid with five stacked layers — Cloud Inventory at the base, then CSPM, CIEM, Internet Exposure, Vulnerabilities — converging at the apex into Attack Path Analysis and a single prioritized Risk Score.</desc>
+
+<!-- Title -->
+<text x="340" y="30" text-anchor="middle" font-size="19" font-weight="600" fill="#1d1d1f">From signals to risk score</text>
+<text x="340" y="52" text-anchor="middle" font-size="12" fill="#6e6e73">Five correlated layers — one prioritized attack path</text>
+
+<!-- ─── PYRAMID LAYERS (bottom → top) ─── -->
+
+<!-- Layer 1: Cloud Inventory — widest, base of pyramid -->
+<polygon points="54,448 626,448 590,388 90,388" fill="#F5F3EF" stroke="#C8C6BB" stroke-width="1"/>
+<text x="340" y="413" text-anchor="middle" font-size="14" font-weight="600" fill="#1d1d1f">Cloud Inventory</text>
+<text x="340" y="432" text-anchor="middle" font-size="11" fill="#444441">Resources · Configuration history · Change audit</text>
+
+<!-- Layer 2: CSPM -->
+<polygon points="90,388 590,388 554,328 126,328" fill="#FADAD7" stroke="#E0B4B1" stroke-width="1"/>
+<text x="340" y="353" text-anchor="middle" font-size="14" font-weight="600" fill="#1d1d1f">CSPM</text>
+<text x="340" y="372" text-anchor="middle" font-size="11" fill="#3a1f1e">Misconfiguration · Compliance · Drift detection</text>
+
+<!-- Layer 3: CIEM -->
+<polygon points="126,328 554,328 518,268 162,268" fill="#F0A8A3" stroke="#D08885" stroke-width="1"/>
+<text x="340" y="293" text-anchor="middle" font-size="14" font-weight="600" fill="#1d1d1f">CIEM</text>
+<text x="340" y="312" text-anchor="middle" font-size="11" fill="#2C2C2A">Identity · Entitlements · Blast radius</text>
+
+<!-- Layer 4: Internet Exposure -->
+<polygon points="162,268 518,268 482,208 198,208" fill="#E36460" stroke="#C04540" stroke-width="1"/>
+<text x="340" y="233" text-anchor="middle" font-size="14" font-weight="600" fill="#fff">Internet Exposure</text>
+<text x="340" y="252" text-anchor="middle" font-size="11" fill="#ffe4e3">Effective reachability · Attack surface</text>
+
+<!-- Layer 5: Vulnerabilities -->
+<polygon points="198,208 482,208 446,148 234,148" fill="#EE3124" stroke="#C42019" stroke-width="1"/>
+<text x="340" y="173" text-anchor="middle" font-size="14" font-weight="600" fill="#fff">Vulnerabilities</text>
+<text x="340" y="192" text-anchor="middle" font-size="11" fill="#ffd4d1">CVE · Secrets · Exploitability</text>
+
+<!-- Capstone: Attack Path Analysis — apex -->
+<polygon points="234,148 446,148 410,88 270,88" fill="#1a1a2e" stroke="#0d0d1f" stroke-width="1"/>
+<text x="340" y="113" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">Attack Path Analysis</text>
+<text x="340" y="132" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">Risk Score · One path</text>
+
+<!-- ─── Left badge: FOUNDATION → APEX ─── -->
+<text x="36" y="448" text-anchor="end" font-size="9" fill="#aaa8a0" transform="rotate(-90,36,448)">FOUNDATION</text>
+<text x="36" y="88"  text-anchor="start" font-size="9" fill="#aaa8a0" transform="rotate(-90,36,88)">APEX</text>
+<line x1="28" y1="88" x2="28" y2="448" stroke="#D3D1C7" stroke-width="1" stroke-dasharray="3 3"/>
+<polygon points="28,88 25,98 31,98" fill="#D3D1C7"/>
+
+<!-- ─── Divider & footer note ─── -->
+<line x1="54" y1="466" x2="626" y2="466" stroke="#D3D1C7" stroke-width="0.5" stroke-dasharray="2 2"/>
+<text x="340" y="486" text-anchor="middle" font-size="11" fill="#6e6e73">Each layer adds context. Together they surface only the paths an attacker could exploit today.</text>
+<text x="340" y="504" text-anchor="middle" font-size="11" fill="#6e6e73">FortiCNAPP correlates all five into a single prioritized Risk Score — no manual triage required.</text>
+
+</svg>

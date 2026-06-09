@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Servers — The AI Tool Gateway Explained · FortiCNAPP Blog</title>
+  <style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* Password gate */
+  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="gl-tip" role="tooltip"></div>
+
+<nav class="site-nav">
+  <div class="inner">
+    <a href="index.html" class="brand">
+      <img class="logo" src="/fortinet-logo.png" alt="Fortinet">
+      <span class="brand-pipe">|</span>
+      <span class="brand-label">FortiCNAPP</span>
+    </a>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      All posts
+    </a>
+    <span class="nav-spacer"></span>
+    <a href="https://www.fortinet.com/products/forticnapp" target="_blank" class="nav-cta">FortiCNAPP →</a>
+  </div>
+</nav>
+
+<header class="article-header">
+  <div class="article-header-inner">
+    <div class="cat-row">
+      <span class="cat-badge">AI Security</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">MCP</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">Architecture</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">Field Ops</span>
+    </div>
+    <h1>MCP Servers — The AI Tool Gateway Explained</h1>
+    <p class="article-sub">Model Context Protocol sits between an LLM and everything it can do. One standardized interface. Four primitives. Five inspection layers. And a single security boundary that sees every tool call, data read, and prompt request the agent makes.</p>
+    <div class="article-meta">
+      <div class="author-avatar">SV</div>
+      <div class="meta-info">
+        <span class="author-name">Sam Vuillaume — Consulting Systems Expert, Cloud &amp; AI Security · Fortinet</span>
+        <div class="meta-line">
+          <span>May 26, 2026</span>
+          <span class="meta-sep">·</span>
+          <span>~6 min read</span>
+          <span class="meta-sep">·</span>
+          <span>Field · PreSales · Architecture</span>
+        </div>
+      </div>
+      <div class="share-row">
+        <a class="share-btn" href="#" aria-label="Share on LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452H17.21v-5.569c0-1.327-.027-3.035-1.848-3.035-1.851 0-2.134 1.445-2.134 2.94v5.664H9.993V9h3.099v1.561h.042c.431-.816 1.484-1.677 3.054-1.677 3.266 0 3.867 2.149 3.867 4.944v6.624zM5.337 7.433a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm1.553 13.019H3.782V9h3.108v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <button class="share-btn" aria-label="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.style.borderColor='#2e7d32';this.style.color='#2e7d32';setTimeout(()=>{this.style.borderColor='';this.style.color='';},1500)})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="article-body">
+
+  <h2>One sentence</h2>
+
+  <p>An <span class="term" data-def="Model Context Protocol (MCP)|An open standard (Anthropic, 2024) defining a uniform JSON-RPC interface between LLMs/agents and external capabilities — tools, data sources, and prompt templates. Think of it as USB-C for AI integrations: one protocol, any tool.">MCP server</span> is a structured bridge that exposes tools, data, and prompts to an LLM through a uniform <span class="term" data-def="JSON-RPC|A lightweight remote procedure call protocol that uses JSON for encoding. The client sends a method name and parameters; the server executes and returns a result. MCP uses JSON-RPC 2.0 as its wire format for all four primitives.">JSON-RPC</span> interface — while controlling and observing every interaction that crosses it.</p>
+
+  <div class="pull">Think of MCP as the API gateway for AI agents. Nothing reaches a tool, dataset, or prompt template without passing through it first.</div>
+
+  <hr>
+
+  <h2>The four primitives</h2>
+
+  <p>MCP standardizes exactly four interaction types. Together they cover everything an agent needs: discovering capabilities, executing actions, reading data, and fetching prompts.</p>
+
+  <div class="primitives">
+    <div class="prim">
+      <div class="prim-head">
+        <span class="prim-emoji">🧰</span>
+        <span class="prim-name">tools/list</span>
+        <span class="prim-role">Discovery</span>
+      </div>
+      <div class="prim-body">
+        <p><em>"What can I call?"</em> — the model asks, the server returns tool names, input schemas, and permissions. The model never needs to know how tools are implemented.</p>
+      </div>
+    </div>
+    <div class="prim">
+      <div class="prim-head">
+        <span class="prim-emoji">⚙️</span>
+        <span class="prim-name">tools/call</span>
+        <span class="prim-role">Execution</span>
+      </div>
+      <div class="prim-body">
+        <p><em>"Run this."</em> — the model sends a tool name and arguments. The server validates, enforces policy, executes, logs, and returns the result — or denies.</p>
+      </div>
+    </div>
+    <div class="prim">
+      <div class="prim-head">
+        <span class="prim-emoji">📂</span>
+        <span class="prim-name">resources/read</span>
+        <span class="prim-role">Data access</span>
+      </div>
+      <div class="prim-body">
+        <p><em>"Give me this data."</em> — the model requests a URI (file, database record, API-backed resource). The server resolves it, enforces ACLs, and returns content within policy bounds.</p>
+      </div>
+    </div>
+    <div class="prim">
+      <div class="prim-head">
+        <span class="prim-emoji">💬</span>
+        <span class="prim-name">prompts/get</span>
+        <span class="prim-role">Prompt templates</span>
+      </div>
+      <div class="prim-body">
+        <p><em>"Give me the incident triage template."</em> — centrally managed, versioned prompts served on demand. Variables resolved server-side before delivery. Prompt injection surface is visible here.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lang-tag">json-rpc · tools/call example</div>
+  <pre><code>→ Request
+{ "method": "tools/call", "params": { "name": "get_user_data", "arguments": { "id": 123 } } }
+
+← MCP server: validate → enforce policy → log → execute → return result</code></pre>
+
+  <hr>
+
+  <h2>Five layers of inspection</h2>
+
+  <p>Every MCP exchange passes through a single protocol handler. That handler applies five layers before any action reaches the outside world:</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-ltr">A</div>
+      <div class="layer-body"><p><strong>Request interception</strong> — the server sees every message: tool name, arguments, caller identity, context metadata. It can validate, block, modify, or log before forwarding.</p></div>
+    </div>
+    <div class="layer">
+      <div class="layer-ltr">B</div>
+      <div class="layer-body"><p><strong>Schema validation</strong> — required fields, types, and value constraints are checked before execution. If a tool expects <code>user_id: integer</code>, <code>"DROP TABLE users"</code> is rejected here.</p></div>
+    </div>
+    <div class="layer">
+      <div class="layer-ltr">C</div>
+      <div class="layer-body"><p><strong>Policy enforcement</strong> — <span class="term" data-def="RBAC|Role-Based Access Control — permissions assigned to roles, not individuals. An analyst role can read logs but cannot call remediation tools.">RBAC</span>, tenant isolation, data residency rules, and per-tool allow/deny lists enforced here. Even if the model requests a call, the server can respond: <strong>❌ Denied — tool not allowed in this tenant.</strong></p></div>
+    </div>
+    <div class="layer">
+      <div class="layer-ltr">D</div>
+      <div class="layer-body"><p><strong>Audit logging</strong> — every <code>tools/list</code>, <code>tools/call</code>, <code>resources/read</code>, and <code>prompts/get</code> is logged with full inputs. The complete agent session is reconstructable from MCP logs alone — SOC 2, ISO 27001, and NIST 800-53 alignment follows naturally.</p></div>
+    </div>
+    <div class="layer">
+      <div class="layer-ltr">E</div>
+      <div class="layer-body"><p><strong>Response shaping</strong> — sensitive fields redacted, large payloads truncated, formats normalized before the model sees the result. The agent gets only what policy allows — even if the source returned more.</p></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>What the server sees — and why it matters</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Primitive</th><th>Server visibility</th><th>Security surface</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>tools/list</td><td>Full tool inventory + caller access patterns</td><td>Capability enumeration by a compromised agent</td></tr>
+        <tr><td>tools/call</td><td>Complete execution trace — name, arguments, output</td><td>Data exfiltration via output; prompt injection via arguments</td></tr>
+        <tr><td>resources/read</td><td>URI + content + caller identity</td><td>Unauthorized data access, over-broad resource scope</td></tr>
+        <tr><td>prompts/get</td><td>Template content + variables resolved</td><td>Adversarial prompt retrieval, jailbreak via managed prompts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout ok">
+    <h4>What this enables</h4>
+    <ul>
+      <li><strong>Zero-trust tool execution</strong> — every call validated and authorized, not assumed safe</li>
+      <li><strong>Prompt injection containment</strong> — malicious content in <code>prompts/get</code> filtered before the model sees it</li>
+      <li><strong>Data exfiltration control</strong> — <code>resources/read</code> responses inspected and shaped before return</li>
+      <li><strong>Full auditability</strong> — NIST 800-53 AC, AU, SC control families achievable through MCP logging alone</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <h4>The corresponding risk</h4>
+    <p>MCP server is a <strong>high-value security boundary</strong>. Compromise gives an attacker full visibility into every tool the agent can call, every argument it passes, and every resource it reads — across all tenants. Treat it with the same posture as a production API gateway or cloud IAM service.</p>
+  </div>
+
+  <hr>
+
+  <h2>Mental model — Kubernetes API Server for AI</h2>
+
+  <p>The most durable analogy: <strong>MCP server is to AI agents what the Kubernetes API server is to workloads.</strong> Every capability request flows through it. Nothing bypasses it.</p>
+
+  <div class="analogy">
+    <div class="a-l">Kubernetes concept</div><div class="a-r">MCP equivalent</div>
+    <div class="a-l">Services</div><div class="a-r">Tools (<code>tools/list</code> · <code>tools/call</code>)</div>
+    <div class="a-l">Persistent Volumes</div><div class="a-r">Resources (<code>resources/read</code>)</div>
+    <div class="a-l">ConfigMaps</div><div class="a-r">Prompts (<code>prompts/get</code>)</div>
+    <div class="a-l">RBAC + Admission Controllers</div><div class="a-r">MCP policy + schema validation (layers B + C)</div>
+    <div class="a-l">Audit logs</div><div class="a-r">MCP observability layer (layer D)</div>
+  </div>
+
+  <div class="callout">
+    <h4>FortiCNAPP relevance</h4>
+    <p>As AI agents take on autonomous remediation and risk analysis roles in cloud environments, MCP becomes the trust boundary between the AI layer and cloud APIs, IAM systems, and telemetry sources. <span class="term" data-def="AI-SPM (AI Security Posture Management)|An emerging CNAPP capability for discovering, assessing, and securing AI/ML workloads — including model registries, inference endpoints, and now agentic tool integrations.">AI-SPM</span> and AI Governance capabilities in FortiCNAPP are positioned to enforce exactly these controls — policy, audit, and response shaping — at the MCP layer.</p>
+  </div>
+
+  <hr>
+
+  <h2>Fortinet reference architecture — protecting MCP at scale</h2>
+
+  <p>How you protect MCP servers depends on where they run. Two deployment patterns, two Fortinet answers.</p>
+
+  <h3>🔷 Pattern 1 — MCP servers hosted in Kubernetes (CSP)</h3>
+
+  <p>The naive deployment: each MCP server exposed as a Kubernetes <code>Service type: LoadBalancer</code>. Every service provisions its own cloud load balancer — its own public IP, its own cost, its own attack surface. Ten MCP servers = ten external LBs, ten ingress points to monitor, ten certificates to manage.</p>
+
+  <p><strong>The FortiWeb answer: one Ingress Controller, one enforcement point for all.</strong></p>
+
+  <div class="callout ok">
+    <h4>FortiWeb — API Gateway + Kubernetes Ingress Controller</h4>
+    <p>FortiWeb's Kubernetes Ingress Controller converts K8s Ingress resources into FortiWeb virtual servers and content-routing rules on a single backing appliance (VM or physical). All inbound MCP traffic — regardless of which MCP server it targets — flows through <strong>one external endpoint</strong>, where FortiWeb applies:</p>
+    <ul>
+      <li><strong>WAF</strong> — OWASP Top 10, injection, XSS, protocol anomaly detection across every MCP route</li>
+      <li><strong>API schema validation</strong> — OpenAPI / JSON schema enforcement; malformed <code>tools/call</code> arguments rejected before reaching the MCP server</li>
+      <li><strong>Bot protection + rate limiting</strong> — prevents automated enumeration of <code>tools/list</code> and brute-force prompt retrieval</li>
+      <li><strong>mTLS + API key management</strong> — authentication enforced at the gateway before MCP protocol is even parsed</li>
+      <li><strong>Single audit trail</strong> — all MCP traffic logged at one point, not scattered across per-service logs</li>
+    </ul>
+    <p style="margin-top:0.75rem;"><strong>Key differentiator:</strong> instead of N cloud load balancers for N MCP servers, you get <strong>one FortiWeb protecting all your MCPs</strong> — with consistent policy, unified logging, and a single security perimeter across the entire agent tool layer.</p>
+  </div>
+
+  <div class="lang-tag">k8s · before vs. after FortiWeb Ingress</div>
+  <pre><code># ❌ Without FortiWeb — each MCP server gets its own external LB
+mcp-server-a   Service/LoadBalancer  → 203.0.113.10  (LB #1)
+mcp-server-b   Service/LoadBalancer  → 203.0.113.11  (LB #2)
+mcp-server-c   Service/LoadBalancer  → 203.0.113.12  (LB #3)
+# N servers = N external IPs, N attack surfaces, N bills
+
+# ✅ With FortiWeb Ingress Controller
+Ingress (all routes) → FortiWeb appliance → 203.0.113.10  (single LB)
+                            ├── /mcp-a  → mcp-server-a (ClusterIP)
+                            ├── /mcp-b  → mcp-server-b (ClusterIP)
+                            └── /mcp-c  → mcp-server-c (ClusterIP)
+# WAF + API security applied once, at the edge, for all MCPs</code></pre>
+
+  <h3>🔶 Pattern 2 — SaaS-backed or cloud-hosted MCP endpoints</h3>
+
+  <p>When the MCP server is delivered as a managed SaaS service — or hosted on cloud infrastructure without a self-managed K8s cluster — there is no Ingress Controller to deploy. The protection layer moves to the cloud edge.</p>
+
+  <div class="callout">
+    <h4>FortiAppSec Cloud — API security for SaaS-delivered MCPs</h4>
+    <p><strong>FortiAppSec Cloud</strong> is Fortinet's cloud-native SaaS platform for web application and API security — no appliance, no infrastructure to manage. For MCP endpoints exposed as cloud APIs it delivers:</p>
+    <ul>
+      <li><strong>API Gateway</strong> — API key management, access control, rate limiting per consumer or tenant</li>
+      <li><strong>API schema enforcement</strong> — OpenAPI / JSON validation; rejects structurally invalid MCP requests before they reach the server</li>
+      <li><strong>WAF + DDoS mitigation</strong> — hosted across AWS, Azure, and GCP regions, closest to where your MCP traffic originates</li>
+      <li><strong>Bot and abuse protection</strong> — prevents automated scanning of <code>tools/list</code> or mass <code>prompts/get</code> harvesting</li>
+    </ul>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Deployment scenario</th><th>Fortinet product</th><th>Key capability</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>MCP servers in K8s on CSP (AWS/Azure/GCP)</td><td><strong>FortiWeb Ingress Controller</strong></td><td>Single API GW + WAF for all MCPs; eliminates per-service LBs</td></tr>
+        <tr><td>SaaS-backed or cloud-hosted MCP APIs</td><td><strong>FortiAppSec Cloud</strong></td><td>Cloud-native API security, no infrastructure required</td></tr>
+        <tr><td>On-prem or IaaS VMs</td><td><strong>FortiWeb appliance</strong></td><td>Full WAF + API security on hardware or VM</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tags -->
+  <div class="article-tags">
+    <span class="tags-label">Tags:</span>
+    <a class="atag" href="index.html">MCP</a>
+    <a class="atag" href="index.html">AI Security</a>
+    <a class="atag" href="index.html">Agentic AI</a>
+    <a class="atag" href="index.html">Architecture</a>
+    <a class="atag" href="index.html">Zero Trust</a>
+    <a class="atag" href="index.html">FortiWeb</a>
+    <a class="atag" href="index.html">FortiAppSec Cloud</a>
+    <a class="atag" href="index.html">AI Governance</a>
+    <a class="atag" href="index.html">FortiCNAPP</a>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Fortinet, Inc. &nbsp;·&nbsp; <a href="index.html">FortiCNAPP Security Insights</a> &nbsp;·&nbsp; Authored by Sam Vuillaume &nbsp;·&nbsp; Hover underlined terms for definitions.</p>
+</footer>
+
+<script>
+(function () {
+  const tip = document.getElementById('gl-tip');
+  let hideTimer;
+  document.querySelectorAll('.term[data-def]').forEach(el => {
+    el.setAttribute('tabindex', '0');
+    function show(e) {
+      clearTimeout(hideTimer);
+      const parts = el.dataset.def.split('|');
+      tip.innerHTML = (parts[0] ? `<strong>${parts[0]}</strong>` : '') + (parts[1] || '');
+      tip.classList.add('visible');
+      position(e);
+    }
+    function position(e) {
+      const px = e.clientX ?? (el.getBoundingClientRect().left + el.offsetWidth / 2);
+      const py = e.clientY ?? el.getBoundingClientRect().top;
+      const tw = 300, pad = 12;
+      let left = px - tw / 2;
+      let top  = py - 110 - pad;
+      if (left < pad) left = pad;
+      if (left + tw > window.innerWidth - pad) left = window.innerWidth - tw - pad;
+      if (top < pad) top = py + 24;
+      tip.style.left = left + 'px';
+      tip.style.top  = top  + 'px';
+    }
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('mousemove', position);
+    el.addEventListener('focus', show);
+    el.addEventListener('mouseleave', () => { hideTimer = setTimeout(() => tip.classList.remove('visible'), 120); });
+    el.addEventListener('blur', () => tip.classList.remove('visible'));
+  });
+})();
+</script>
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Model Context Protocol — Introduction</span>
+    <span style="color:#6b7280;font-size:12px;">Anthropic / modelcontextprotocol.io · 2024 · <a href="https://modelcontextprotocol.io/introduction" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">modelcontextprotocol.io/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">MCP is described as 'an open standard (Anthropic, 2024) defining a uniform JSON-RPC interface between LLMs/agents and external capabilities — tools, data sources, and prompt templates'</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Model Context Protocol Specification — Core Architecture</span>
+    <span style="color:#6b7280;font-size:12px;">MCP Specification · 2024 · <a href="https://spec.modelcontextprotocol.io/specification/architecture/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">spec.modelcontextprotocol.io/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">MCP standardizes four interaction primitives — tools/list, tools/call, resources/read, and prompts/get — using JSON-RPC 2.0 as its wire format</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">OWASP Top 10 for Large Language Model Applications 2025</span>
+    <span style="color:#6b7280;font-size:12px;">OWASP · 2025 · <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">owasp.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article references WAF protection covering OWASP Top 10, injection, and XSS detection applied to every MCP route via FortiWeb</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">NIST SP 800-53 Rev 5 — Security and Privacy Controls (AC, AU, SC Families)</span>
+    <span style="color:#6b7280;font-size:12px;">NIST CSRC · 2020 · <a href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">csrc.nist.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article claims that NIST 800-53 AC (Access Control), AU (Audit and Accountability), and SC (System and Communications Protection) control family alignment 'follows naturally' from MCP audit logging</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiWeb Kubernetes Ingress Controller</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · docs.fortinet.com · <a href="https://docs.fortinet.com/document/fortiweb/latest/kubernetes-ingress-controller-deployment-guide/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiWeb's Kubernetes Ingress Controller converts K8s Ingress resources into FortiWeb virtual servers and content-routing rules on a single backing appliance, replacing per-service cloud load balancers</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiWeb — Web Application and API Protection</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Product Page · fortinet.com · <a href="https://www.fortinet.com/products/web-application-firewall/fortiweb" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiWeb is positioned as the API Gateway plus Kubernetes Ingress Controller answer for protecting MCP servers hosted in Kubernetes, providing WAF, API schema validation, bot protection, rate limiting, and mTLS</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiAppSec Cloud — Cloud-Native Application and API Security</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Product Page · fortinet.com · <a href="https://www.fortinet.com/products/fortisase/fortiappsec" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiAppSec Cloud is described as Fortinet's cloud-native SaaS platform for web application and API security used to protect SaaS-backed or cloud-hosted MCP endpoints without requiring an appliance</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP — Cloud-Native Application Protection Platform</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Product Page · fortinet.com · <a href="https://www.fortinet.com/products/forticnapp" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">AI-SPM and AI Governance capabilities in FortiCNAPP are positioned to enforce policy, audit, and response shaping controls at the MCP layer as AI agents take on autonomous roles in cloud environments</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">NIST AI Risk Management Framework (AI RMF 1.0)</span>
+    <span style="color:#6b7280;font-size:12px;">NIST · 2023 · <a href="https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">nist.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article's emphasis on AI governance, zero-trust tool execution, and full auditability for agentic AI systems aligns with NIST AI RMF governance and trustworthiness guidance</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CISA Guidance on AI Security — Deploying AI Systems Securely</span>
+    <span style="color:#6b7280;font-size:12px;">CISA · 2024 · <a href="https://www.cisa.gov/resources-tools/resources/deploying-ai-systems-securely" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisa.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article's zero-trust posture for MCP servers — treating the protocol gateway like a production API gateway or cloud IAM service — reflects CISA guidance on securing AI system deployment boundaries</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">JSON-RPC 2.0 Specification</span>
+    <span style="color:#6b7280;font-size:12px;">jsonrpc.org · 2010 · <a href="https://www.jsonrpc.org/specification" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">jsonrpc.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article describes MCP using 'JSON-RPC 2.0 as its wire format for all four primitives', with the client sending a method name and parameters and the server returning a result</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Kubernetes Ingress — Concepts</span>
+    <span style="color:#6b7280;font-size:12px;">Kubernetes Documentation · kubernetes.io · <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">kubernetes.io/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article describes the naive deployment of MCP servers as Kubernetes 'Service type: LoadBalancer' and contrasts it with a single Ingress Controller approach, referencing standard K8s Ingress and Service objects</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+</body>
+</html>

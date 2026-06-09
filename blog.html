@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walk the AI-Driven Systems Sec in Cloud Service Provider — Fortinet</title>
+  <style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <a class="brand" href="/genAISeC/">
+      <img class="logo" src="https://icons.fortinet.com/icons/Logos/Fortinet-logomark-rgb-red.svg" alt="Fortinet">
+      <span>Fortinet</span><span class="brand-sep">&nbsp;·&nbsp;</span><span>AI-Driven Security</span>
+    </a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="tag">Security Insights</div>
+  <h1>Walk the AI-Driven Systems Sec in Cloud Service Provider</h1>
+  <p class="subtitle">From the developer's laptop to the LLM endpoint in your cloud, AI-Driven Systems have quietly redrawn the enterprise attack surface. Here is a clean, practical view of what's changed, real attacks already happening at each layer, where the Fortinet Security Fabric fits in — and the best-of-breed vendors covering each layer alongside it.</p>
+</div>
+
+<div class="main">
+
+  <h2>Why this matters now</h2>
+  <p>Developers are "vibe coding," applications are integrating LLM APIs, and MCP is extending models into live enterprise systems. Each of these shifts introduces a new layer of risk — and like any new architecture, AI-Driven Systems do not replace the security fundamentals. They <strong>stack new concerns on top of them</strong>.</p>
+  <p>However, the real transformation is broader: AI is now a universal interface layer across society. From students and consumers to enterprise employees, users are increasingly relying on AI embedded in browsers, productivity tools, mobile apps, and SaaS platforms — often outside IT visibility.</p>
+  <p>This creates a new reality of <strong>shadow AI adoption</strong>, where AI-driven systems are used everywhere, but not always governed anywhere.</p>
+  <p>This post walks through the five layers of a typical AI-Driven Systems deployment — excluding Agentic AI Systems — covering the main risks at each layer, recent real-world incidents, how the Fortinet portfolio maps to each layer, and the leading third-party vendors customers also evaluate.</p>
+
+  <hr>
+
+  <h2>The five layers at a glance</h2>
+  <div class="wf-wrap">
+    <div class="wf-track">
+
+      <div class="wf-step">
+        <div class="wf-num">1</div>
+        <div class="wf-name">Developer Endpoint</div>
+        <div class="wf-desc">where code is written with AI assistance</div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">2</div>
+        <div class="wf-name">LLM API Consumption</div>
+        <div class="wf-desc">where your application talks to the model</div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">3</div>
+        <div class="wf-name">RAG Pipeline</div>
+        <div class="wf-desc">where retrieved data feeds the model</div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">4</div>
+        <div class="wf-name">MCP Integration</div>
+        <div class="wf-desc">where the model reads from connected tools</div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-num">5</div>
+        <div class="wf-name">Cloud &amp; Model Infrastructure</div>
+        <div class="wf-desc">where it all runs</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Layer 1 — The Developer Endpoint</h2>
+  <p>This is where "vibe coding" lives. Developers prompt AI assistants to generate, refactor, or autocomplete code at speeds that outpace traditional code review.</p>
+
+  <h3>The main risks</h3>
+  <ul>
+    <li><strong>Insecure code at scale.</strong> A December 2025 study of open-source pull requests found AI-generated code introduces <strong>2.74x more security vulnerabilities</strong> than human-written code. Veracode's 2025 AI Code Security Report tested 100+ LLMs and found AI introduced security vulnerabilities in <strong>45% of cases</strong>.</li>
+    <li><strong>Sensitive data leaving the boundary.</strong> Developers paste <code>.env</code> files, customer PII, or proprietary source into public LLM interfaces. Once submitted, it is gone.</li>
+    <li><strong>Slopsquatting.</strong> Commercial models hallucinate ~5% of suggested package names; open-source models up to ~22%. Attackers register the hallucinated names and lie in wait.</li>
+  </ul>
+
+  <h3>Recent attacks</h3>
+  <ul>
+    <li><strong>"Rules File Backdoor" — Pillar Security (March 2025).</strong> Attackers embed invisible Unicode instructions inside <code>.cursorrules</code> or Copilot configuration files. When developers pull a poisoned repo, the AI assistant silently generates backdoored code. (<a href="https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents">Pillar Security disclosure</a>)</li>
+    <li><strong>"IDEsaster" — 24+ CVEs across AI IDEs (December 2025).</strong> Researcher Ari Marzouk disclosed flaws across Cursor (<strong>CVE-2025-49150, CVE-2025-54130, CVE-2025-61590</strong>), GitHub Copilot (<strong>CVE-2025-53773, CVSS 7.8</strong>), Windsurf, Zed.dev, Roo Code, and JetBrains Junie. (<a href="https://byteiota.com/ai-ide-security-crisis-30-flaws-expose-cursor-copilot/">byteiota analysis</a>)</li>
+    <li><strong>Cursor IDE RCE via MCP — CVE-2025-54135 / CVE-2025-54136 (August 2025).</strong> Indirect prompt injection wrote a malicious <code>.cursor/mcp.json</code> configuration into the workspace, achieving persistent RCE across IDE restarts. (<a href="https://workos.com/blog/prompt-injection-attacks">WorkOS write-up</a>)</li>
+  </ul>
+
+  
+      <h3>Where Fortinet fits</h3>
+      <ul>
+        <li><a href="https://www.fortinet.com/products/sase"><strong>FortiSASE</strong></a> discovers shadow AI usage and applies DLP on outbound LLM traffic, on-network or remote, with integrated SWG, ZTNA, and CASB on a single agent.</li>
+        <li><a href="https://www.fortinet.com/products/endpoint-security/forticlient"><strong>FortiClient</strong></a> / <a href="https://www.fortinet.com/products/endpoint-security/fortiedr"><strong>FortiEDR</strong></a> enforces endpoint posture and blocks exfiltration from developer machines.</li>
+        <li><a href="https://www.fortinet.com/products/data-loss-prevention/fortidlp"><strong>FortiDLP</strong></a> enforces endpoint data loss prevention policies in real time — detecting and blocking sensitive data (PII, credentials, proprietary source code) from being pasted into AI coding assistants or submitted to external LLM interfaces, directly on the device before traffic ever hits the network.</li>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP — DSPM</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span><span class="csp-badge sent">Azure Sentinel</span> continuously discovers sensitive data flowing through AI-generated code paths and flags shadow data stores created by AI-suggested infrastructure.</li>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span> IaC + code scanning catches insecure generated code, hardcoded secrets, and slopsquatting-style dependency risks in CI/CD before merge.</li>
+        <li><strong>ZTNA via <a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances">FortiGate VM</a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge sent">Azure Sentinel</span> + FortiClient + <a href="https://www.fortinet.com/products/identity-access-management/fortiauthenticator">FortiAuthenticator</a></strong> enforces per-application, identity-aware access — a compromised AI extension or malicious MCP server cannot freely lateral-move into production GitHub, Kubernetes, or cloud accounts.</li>
+      </ul>
+
+      <!-- ── Layer 1 Architecture Diagram ── -->
+      <div class="fnet-diagram">
+    <div class="fnet-diagram-hdr">
+      <span class="fnet-diagram-tag">Fortinet Coverage</span>
+      <span class="fnet-diagram-title">Developer Endpoint — Protection Architecture</span>
+    </div>
+    <div class="fnet-diagram-body">
+
+      <!-- Stage labels -->
+      <div class="fnet-flow-bar">
+        <div class="fnet-flow-stage">On Device</div>
+        <div class="fnet-flow-arr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fnet-flow-stage">Network &amp; Identity</div>
+        <div class="fnet-flow-arr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fnet-flow-stage">Code Pipeline &amp; Data</div>
+      </div>
+
+      <!-- Cards -->
+      <div class="fnet-cols">
+
+        <!-- Column 1: Endpoint -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Monitor icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#EE3124" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiClient · FortiEDR</div>
+            </div>
+            <div class="fnet-card-desc">Enforces endpoint posture and blocks data exfiltration from developer machines — including browser extensions and AI coding tools.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Eye/scan icon for DLP -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiDLP</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Endpoint DLP</span>
+              <span class="fnet-pill">PII Detection</span>
+              <span class="fnet-pill">AI Prompt Control</span>
+            </div>
+            <div class="fnet-card-desc">Detects and blocks sensitive data — credentials, PII, proprietary source code — from being pasted into AI coding assistants or submitted to external LLMs, on-device before traffic hits the network.</div>
+          </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <!-- Column 2: Network + Identity -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Globe icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#EE3124" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiSASE</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">SWG</span>
+              <span class="fnet-pill">ZTNA</span>
+              <span class="fnet-pill">CASB</span>
+              <span class="fnet-pill">DLP</span>
+            </div>
+            <div class="fnet-card-desc">Discovers shadow AI usage and inspects every outbound LLM API call — on-network and remote — via a single unified agent.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Lock icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#EE3124" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiGate VM · FortiAuthenticator</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">ZTNA</span>
+              <span class="fnet-pill">Identity-Aware</span>
+              <span class="fnet-pill">Per-App Access</span>
+            </div>
+            <div class="fnet-card-desc">Blocks lateral movement from compromised AI extensions or MCP servers — no access to GitHub, Kubernetes, or cloud accounts without per-application identity verification.</div>
+          </div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <!-- Column 3: Code + Data -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Database icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3" stroke="#EE3124" stroke-width="2"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="#EE3124" stroke-width="2"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP — DSPM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Data Discovery</span>
+              <span class="fnet-pill">Shadow Data</span>
+            </div>
+            <div class="fnet-card-desc">Continuously discovers sensitive data in AI-generated code paths and flags shadow data stores created by AI-suggested infrastructure.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <!-- Code / branch icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="18" r="3" stroke="#EE3124" stroke-width="2"/><circle cx="6" cy="6" r="3" stroke="#EE3124" stroke-width="2"/><circle cx="6" cy="18" r="3" stroke="#EE3124" stroke-width="2"/><path d="M6 9v6M9 6h3a3 3 0 013 3v6" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP — IaC &amp; Code Scan</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">IaC</span>
+              <span class="fnet-pill">SAST</span>
+              <span class="fnet-pill">CI/CD</span>
+            </div>
+            <div class="fnet-card-desc">Catches insecure AI-generated code, hardcoded secrets, and slopsquatting-style dependency risks before they merge into production.</div>
+          </div>
+        </div>
+
+      </div><!-- /fnet-cols -->
+    </div><!-- /fnet-diagram-body -->
+      </div><!-- /fnet-diagram -->
+  
+
+  
+      <h3>Other best-of-breed vendors at this layer</h3>
+      <ul>
+        <li><strong>AI coding assistants with native enterprise security:</strong> <a href="https://github.com/features/copilot">GitHub Copilot Enterprise</a>, <a href="https://aws.amazon.com/q/developer/">Amazon Q Developer</a>, and <a href="https://www.tabnine.com/">Tabnine Enterprise</a>.</li>
+        <li><strong>AI-aware SAST and code scanning:</strong> <a href="https://snyk.io/platform/deepcode-ai/">Snyk DeepCode AI</a>, <a href="https://checkmarx.com/">Checkmarx</a>, <a href="https://www.veracode.com/">Veracode</a>, <a href="https://www.sonarsource.com/">SonarQube</a>.</li>
+        <li><strong>GitHub Advanced Security (GHAS):</strong> <a href="https://github.com/security/advanced-security">Code Security and Secret Protection</a>.</li>
+        <li><strong>MCP and AI dev-tool gateways:</strong> <a href="https://www.mintmcp.com/">MintMCP</a>, <a href="https://www.backslash.security/">Backslash Security</a>, <a href="https://www.truefoundry.com/">TrueFoundry</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Layer 2 — LLM API Consumption</h2>
+  <p>When your application calls OpenAI, Anthropic, Bedrock, Vertex AI, or Azure OpenAI, you inherit a new flow of sensitive data leaving your perimeter — and a new untrusted input source coming back.</p>
+
+  <h3>The main risks</h3>
+  <ul>
+    <li><strong>Prompt injection (direct and indirect).</strong> OWASP ranks this as <strong>LLM01:2025 — the #1 LLM risk</strong>. (<a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/">OWASP LLM01:2025</a>)</li>
+    <li><strong>Insecure output handling.</strong> When model output is rendered as HTML, executed as code, or used in SQL, the LLM becomes a fresh vector for XSS, SSRF, and RCE.</li>
+    <li><strong>Cost and availability impact.</strong> Unbounded token consumption and adversarial long-context prompts drive runaway cloud spend. A leaked API key is now a financial DoS.</li>
+  </ul>
+
+  <h3>Recent attacks</h3>
+  <ul>
+    <li><strong>EchoLeak — CVE-2025-32711, Microsoft 365 Copilot (June 2025).</strong> Disclosed by Aim Labs, the <strong>first known zero-click prompt injection in a production LLM system</strong>. An email triggered Copilot to retrieve internal documents and exfiltrate them to an attacker-controlled server with no user interaction. (<a href="https://arxiv.org/pdf/2509.10540">Academic paper</a>)</li>
+    <li><strong>ChatGPT Connector data leakage (July–August 2025).</strong> NSFOCUS documented incidents where indirect prompt injection through ChatGPT's connectors (Google Drive, SharePoint, GitHub) exfiltrated API keys, credentials, and confidential files. (<a href="https://nsfocusglobal.com/prompt-word-injection-an-analysis-of-recent-llm-security-incidents/">NSFOCUS analysis</a>)</li>
+    <li><strong>ChatGPT Windows product key leak (July 2025).</strong> A crafted "guessing game" prompt bypassed content filters and tricked ChatGPT into revealing valid Windows product keys, including an enterprise license tied to a major bank.</li>
+  </ul>
+
+  
+      <h3>Where Fortinet fits</h3>
+      <ul>
+        <li><a href="https://www.fortinet.com/products/fortiaigate"><strong>FortiAIGate</strong></a> is purpose-built for this layer. Deployed as a containerized LLM gateway between the application and the model, it inspects every prompt and completion in real time, enforces guardrails against prompt injection and jailbreaking, prevents data exfiltration and model theft, blocks excessive token consumption, and provides per-interaction logging and cost tracking.</li>
+        <li><a href="https://www.fortinet.com/products/web-application-firewall/fortiweb"><strong>FortiWeb</strong></a> / <a href="https://www.fortinet.com/products/web-application-firewall/fortiappsec-cloud"><strong>FortiAppSec Cloud</strong></a> protects the HTTP layer in front of your LLM-powered APIs — schema enforcement, rate limiting, bot mitigation, and OWASP coverage.</li>
+        <li><a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances"><strong>FortiGate VM</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge sent">Azure Sentinel</span> inspects outbound traffic to external LLM providers with application-control awareness for AI SaaS and DLP on payloads.</li>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span><span class="csp-badge sent">Azure Sentinel</span> runtime behavior detection delivers composite alerts that detect anomalous runtime behavior in the application calling the LLM — unusual outbound destinations, abnormal token-consumption spikes, sudden secret access patterns, or compromised containers attempting to reach LLM APIs.</li>
+      </ul>
+
+      <!-- ── Layer 2 Architecture Diagram ── -->
+      <div class="fnet-diagram">
+    <div class="fnet-diagram-hdr">
+      <span class="fnet-diagram-tag">Fortinet Coverage</span>
+      <span class="fnet-diagram-title">LLM API Consumption — Protection Architecture</span>
+    </div>
+    <div class="fnet-diagram-body">
+      <div class="fnet-flow-bar">
+        <div class="fnet-flow-stage">Application Layer</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">LLM Gateway</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Network &amp; Runtime</div>
+      </div>
+      <div class="fnet-cols">
+        <!-- Col 1: Application -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiWeb · FortiAppSec Cloud</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">WAF</span>
+              <span class="fnet-pill">Rate Limiting</span>
+              <span class="fnet-pill">Bot Mitigation</span>
+              <span class="fnet-pill">OWASP</span>
+            </div>
+            <div class="fnet-card-desc">Protects the HTTP layer in front of LLM-powered APIs — schema enforcement, rate limiting, and bot mitigation before prompts reach the model.</div>
+          </div>
+        </div>
+        <!-- Arrow 1 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 2: LLM Gateway -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="#EE3124"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiAIGate</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Prompt Inspection</span>
+              <span class="fnet-pill">Guardrails</span>
+              <span class="fnet-pill">Jailbreak Detection</span>
+              <span class="fnet-pill">DLP</span>
+              <span class="fnet-pill">Token Control</span>
+              <span class="fnet-pill">Cost Tracking</span>
+            </div>
+            <div class="fnet-card-desc">Purpose-built LLM gateway deployed inline between application and model. Inspects every prompt and completion in real time — blocking injection, exfiltration, and runaway token spend.</div>
+          </div>
+        </div>
+        <!-- Arrow 2 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 3: Network + Runtime -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#EE3124" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiGate VM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">DLP</span>
+              <span class="fnet-pill">App Control</span>
+              <span class="fnet-pill">AI SaaS</span>
+            </div>
+            <div class="fnet-card-desc">Inspects outbound traffic to external LLM providers with application-control awareness for AI SaaS and DLP on payloads.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3" stroke="#EE3124" stroke-width="2"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="#EE3124" stroke-width="2"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP — Runtime</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Behavioral</span>
+              <span class="fnet-pill">Anomaly Detection</span>
+              <span class="fnet-pill">Runtime</span>
+            </div>
+            <div class="fnet-card-desc">Composite alerts on unusual outbound destinations, token-consumption spikes, and compromised containers attempting to reach LLM APIs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div><!-- /fnet-diagram Layer 2 -->
+  
+
+  
+      <h3>Other best-of-breed vendors at this layer</h3>
+      <ul>
+        <li><strong>AI-native LLM firewalls / guardrails:</strong> <a href="https://www.lakera.ai/">Lakera Guard</a>, <a href="https://www.prompt.security/">Prompt Security</a>, <a href="https://www.hiddenlayer.com/">HiddenLayer AISec</a>, <a href="https://calypsoai.com/">CalypsoAI</a>, <a href="https://www.robustintelligence.com/">Robust Intelligence</a>, <a href="https://protectai.com/">Protect AI</a>.</li>
+        <li><strong>Adjacent emerging players:</strong> <a href="https://www.operant.ai/">Operant AI</a>, <a href="https://acuvity.ai/">Acuvity</a>, <a href="https://neuraltrust.ai/">NeuralTrust</a>, <a href="https://www.pillar.security/">Pillar Security</a>, <a href="https://www.enkryptai.com/">Enkrypt AI</a>.</li>
+        <li><strong>CSP-native model protections:</strong> <a href="https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety">Azure AI Content Safety</a> (Prompt Shields), <a href="https://aws.amazon.com/bedrock/guardrails/">AWS Bedrock Guardrails</a>, <a href="https://cloud.google.com/security/products/model-armor">Google Cloud Model Armor</a>.</li>
+        <li><strong>Open source:</strong> <a href="https://github.com/NVIDIA/NeMo-Guardrails">NVIDIA NeMo Guardrails</a>, <a href="https://github.com/leondz/garak">Garak LLM vulnerability scanner</a>, <a href="https://github.com/Azure/PyRIT">PyRIT</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Layer 3 — The RAG Pipeline</h2>
+  <p>Retrieval-Augmented Generation is where most enterprise AI-Driven Systems deployments live today. It is also where data governance failures hit hardest, because the model is now actively reading from your most sensitive systems.</p>
+
+  <h3>The main risks</h3>
+  <ul>
+    <li><strong>Permission bypass and over-broad retrieval.</strong> The indexer often runs with admin scope across SharePoint, Confluence, Drive, and CRM. A junior employee asks a casual question and receives executive comp data. The single most common — and most damaging — enterprise RAG failure.</li>
+    <li><strong>Indirect prompt injection through the knowledge base.</strong> Research published at <strong>USENIX Security 2025</strong> demonstrated that as few as <strong>5 carefully crafted documents</strong> can manipulate AI responses with over 90% success in a knowledge base of millions.</li>
+    <li><strong>Sensitive data sprawl and embedding inversion.</strong> The <strong>ALGEN framework (February 2025)</strong> showed that with just 1,000 alignment samples, attackers can reconstruct 50–70% of original input text from leaked embeddings.</li>
+  </ul>
+
+  <h3>Recent attacks</h3>
+  <ul>
+    <li><strong>OWASP LLM08:2025 — Vector and Embedding Weaknesses (formalized 2025).</strong> OWASP added a dedicated Top-10 entry recognizing the vector layer as a distinct attack surface.</li>
+    <li><strong>ConfusedPilot attack (2024–2025).</strong> Researchers at the University of Texas demonstrated that placing crafted documents inside a Microsoft 365 Copilot-indexed SharePoint site could manipulate Copilot's answers across an entire enterprise — no model access required.</li>
+    <li><strong>EchoLeak's RAG dimension (June 2025).</strong> Beyond Layer 2, EchoLeak (CVE-2025-32711) is fundamentally a RAG attack: the model retrieved content from a context source with no integrity check.</li>
+  </ul>
+
+  
+      <h3>Where Fortinet fits</h3>
+      <ul>
+        <li><a href="https://www.fortinet.com/products/casb/forticasb"><strong>FortiCASB</strong></a><span class="csp-badge sent">Azure Sentinel</span> and <a href="https://www.fortinet.com/products/sase"><strong>SSPM (in FortiSASE)</strong></a> govern the SaaS sources feeding RAG pipelines (Microsoft 365, Google Workspace, Salesforce). They catch over-shared SharePoint sites, exposed Drive folders, and risky OAuth apps before they get indexed.</li>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP DSPM</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span> discovers and classifies sensitive data flowing into vector stores hosted on S3, Azure Blob, or managed services like OpenSearch and Pinecone — surfacing PII, PCI, and PHI sprawl in the embedding layer.</li>
+        <li><a href="https://www.fortinet.com/products/fortisandbox"><strong>FortiSandbox</strong></a> provides dynamic file analysis in a detonation environment, identifying malicious behavior, hidden scripts, and prompt-injection payloads <strong>before</strong> they reach the vector store.</li>
+        <li><a href="https://www.fortinet.com/products/web-application-firewall/fortiweb"><strong>FortiWeb</strong></a> protects the RAG application's ingestion and query APIs with schema enforcement.</li>
+        <li><a href="https://www.fortinet.com/products/fortiaigate"><strong>FortiAIGate</strong></a> enforces guardrails on the prompts assembled from retrieved content, catching indirect injection at the model boundary.</li>
+      </ul>
+
+      <!-- ── Layer 3 Architecture Diagram ── -->
+      <div class="fnet-diagram">
+    <div class="fnet-diagram-hdr">
+      <span class="fnet-diagram-tag">Fortinet Coverage</span>
+      <span class="fnet-diagram-title">RAG Pipeline — Protection Architecture</span>
+    </div>
+    <div class="fnet-diagram-body">
+      <div class="fnet-flow-bar">
+        <div class="fnet-flow-stage">SaaS Sources</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Vector Store &amp; APIs</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Model Boundary</div>
+      </div>
+      <div class="fnet-cols">
+        <!-- Col 1: SaaS Sources -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#EE3124" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCASB · SSPM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">CASB</span>
+              <span class="fnet-pill">SSPM</span>
+              <span class="fnet-pill">OAuth Governance</span>
+            </div>
+            <div class="fnet-card-desc">Governs Microsoft 365, Google Workspace, and Salesforce — catches over-shared SharePoint sites, exposed Drive folders, and risky OAuth apps before they get indexed into RAG.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3" stroke="#EE3124" stroke-width="2"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="#EE3124" stroke-width="2"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP — DSPM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">DSPM</span>
+              <span class="fnet-pill">PII · PCI · PHI</span>
+              <span class="fnet-pill">Vector Stores</span>
+            </div>
+            <div class="fnet-card-desc">Discovers and classifies sensitive data flowing into S3, Azure Blob, OpenSearch, and Pinecone — surfacing data sprawl in the embedding layer.</div>
+          </div>
+        </div>
+        <!-- Arrow 1 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 2: Vector Store + APIs -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 2v8L4 20h16L14 10V2" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8.5" y1="2" x2="15.5" y2="2" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiSandbox</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">File Detonation</span>
+              <span class="fnet-pill">Pre-Ingestion</span>
+              <span class="fnet-pill">Injection Payloads</span>
+            </div>
+            <div class="fnet-card-desc">Dynamically analyzes documents in a detonation environment — identifies malicious behavior, hidden scripts, and prompt-injection payloads before they reach the vector store.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiWeb</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">WAF</span>
+              <span class="fnet-pill">Schema Enforcement</span>
+              <span class="fnet-pill">API Protection</span>
+            </div>
+            <div class="fnet-card-desc">Protects the RAG application's ingestion and query APIs — schema enforcement, rate limiting, and injection-attempt blocking.</div>
+          </div>
+        </div>
+        <!-- Arrow 2 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 3: Model Boundary -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="#EE3124"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiAIGate</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Guardrails</span>
+              <span class="fnet-pill">Indirect Injection</span>
+              <span class="fnet-pill">Model Boundary</span>
+            </div>
+            <div class="fnet-card-desc">Enforces guardrails on prompts assembled from retrieved content — catches indirect injection at the model boundary before it influences model output.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div><!-- /fnet-diagram Layer 3 -->
+  
+
+  
+      <h3>Other best-of-breed vendors at this layer</h3>
+      <ul>
+        <li><strong>CASB / SSPM:</strong> <a href="https://www.netskope.com/">Netskope One</a>, <a href="https://www.zscaler.com/">Zscaler</a>, <a href="https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-defender-cloud-apps">Microsoft Defender for Cloud Apps</a>, <a href="https://www.obsidiansecurity.com/">Obsidian Security</a>, <a href="https://www.reco.ai/">Reco AI</a>.</li>
+        <li><strong>DSPM specialists:</strong> <a href="https://www.cyera.io/">Cyera</a>, <a href="https://bigid.com/">BigID</a>, <a href="https://www.sentra.io/">Sentra</a>, <a href="https://www.dig.security/">Dig Security</a>.</li>
+        <li><strong>Document and content sandboxing:</strong> <a href="https://www.opswat.com/products/metadefender">OPSWAT MetaDefender</a>, <a href="https://votiro.com/">Votiro</a>, <a href="https://www.glasswall.com/">Glasswall</a>.</li>
+        <li><strong>RAG-aware security tooling:</strong> <a href="https://www.lakera.ai/">Lakera Guard for RAG</a>, <a href="https://www.cranium.ai/">Cranium AI</a>, <a href="https://securiti.ai/">Securiti AI</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Layer 4 — The MCP Integration Layer</h2>
+  <p>The Model Context Protocol lets models read from and act on external tools — file systems, databases, GitHub, Slack, Jira. Even in non-agentic usage, MCP opens a substantial new attack surface most teams underestimate.</p>
+
+  <h3>The main risks</h3>
+  <ul>
+    <li><strong>Malicious or compromised MCP servers</strong> with broad local privileges.</li>
+    <li><strong>Credential and token sprawl</strong> — long-lived OAuth tokens and API keys, almost always over-scoped.</li>
+    <li><strong>Loss of auditability</strong> — most MCP implementations log poorly, breaking SOC 2 and ISO accountability.</li>
+  </ul>
+
+  <h3>Recent attacks</h3>
+  <ul>
+    <li><strong>EscapeRoute — CVE-2025-53109 / CVE-2025-53110, Anthropic Filesystem MCP Server (July 2025).</strong> Cymulate disclosed chained path-prefix and symlink bypasses leading to full host compromise. (<a href="https://cymulate.com/blog/cve-2025-53109-53110-escaperoute-anthropic/">Cymulate disclosure</a>)</li>
+    <li><strong>CVE-2025-6514 — mcp-remote RCE (July 2025, CVSS 9.6).</strong> JFrog disclosed a critical flaw: connecting to a malicious remote MCP server triggered arbitrary OS command execution on the client. (<a href="https://jfrog.com/blog/2025-6514-critical-mcp-remote-rce-vulnerability/">JFrog write-up</a>)</li>
+    <li><strong>CVE-2025-65719 — Kubectl MCP Server RCE (January 2026).</strong> OX Security disclosed a critical RCE: visiting a malicious website while the Kubectl MCP Server was running gave full control of both the local machine and every Kubernetes cluster the victim had access to. (<a href="https://www.ox.security/blog/cve-2025-65719-critical-rce-in-kubectl-mcp-server/">OX Security disclosure</a>)</li>
+    <li><strong>CVE-2025-53967 — Framelink Figma MCP Server RCE (October 2025).</strong> Imperva disclosed an RCE affecting thousands of design and developer workstations. (<a href="https://www.imperva.com/blog/another-critical-rce-discovered-in-a-popular-mcp-server/">Imperva disclosure</a>)</li>
+  </ul>
+
+  
+      <h3>Where Fortinet fits</h3>
+      <ul>
+        <li><a href="https://www.fortinet.com/products/web-application-firewall/fortiweb"><strong>FortiWeb</strong></a> provides purpose-built MCP protection — inspecting and validating SSE (Server-Sent Events) and streamable HTTP traffic between MCP clients and servers. It delivers real-time signature detection to block injection and remote command execution attacks against tool argument values, poisoning attack scans to prevent falsified tool prompts, JSON Schema validation to enforce the unmodified MCP protocol schema, and automatic FortiGuard updates for MCP-specific threat intelligence.</li>
+        <li><a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances"><strong>FortiGate VM</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge sent">Azure Sentinel</span> inspects outbound traffic from MCP servers making network calls. Fortinet has documented specific guidance for <a href="https://community.fortinet.com/t5/FortiGate/Technical-Guide-Selective-control-of-Generative-AI-LLM-traffic/ta-p/405240">selective control of AI-Driven Systems/LLM traffic egressing through FortiGate</a>.</li>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span><span class="csp-badge sent">Azure Sentinel</span> detects MCP server processes, flags over-privileged service accounts, and surfaces runtime anomalies via behavioral baselines.</li>
+        <li><a href="https://www.fortinet.com/products/casb/forticasb"><strong>FortiCASB / SSPM</strong></a><span class="csp-badge sent">Azure Sentinel</span> maintains visibility into OAuth tokens MCP servers hold against SaaS apps, enabling revocation and rotation at scale.</li>
+        <li><a href="https://www.fortinet.com/products/fortisandbox"><strong>FortiSandbox</strong></a> dynamically analyzes MCP server npm/PyPI packages and container images before deployment.</li>
+      </ul>
+
+      <!-- ── Layer 4 Architecture Diagram ── -->
+      <div class="fnet-diagram">
+    <div class="fnet-diagram-hdr">
+      <span class="fnet-diagram-tag">Fortinet Coverage</span>
+      <span class="fnet-diagram-title">MCP Integration — Protection Architecture</span>
+    </div>
+    <div class="fnet-diagram-body">
+      <div class="fnet-flow-bar">
+        <div class="fnet-flow-stage">Supply Chain</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Runtime &amp; Access</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">SaaS &amp; OAuth</div>
+      </div>
+      <div class="fnet-cols">
+        <!-- Col 1: Supply Chain -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 2v8L4 20h16L14 10V2" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8.5" y1="2" x2="15.5" y2="2" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiSandbox</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Package Analysis</span>
+              <span class="fnet-pill">Container Scan</span>
+              <span class="fnet-pill">Pre-Deploy</span>
+            </div>
+            <div class="fnet-card-desc">Dynamically analyzes MCP server npm/PyPI packages and container images before deployment — detonating suspicious artifacts in an isolated environment.</div>
+          </div>
+        </div>
+        <!-- Arrow 1 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 2: Runtime + Access -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/><path d="M2 17l10 5 10-5" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/><path d="M2 12l10 5 10-5" stroke="#EE3124" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiWeb</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">MCP Schema Validation</span>
+              <span class="fnet-pill">SSE / HTTP Inspection</span>
+              <span class="fnet-pill">Injection Detection</span>
+            </div>
+            <div class="fnet-card-desc">Inspects SSE and streamable HTTP traffic between MCP clients and servers. Validates JSON Schema, blocks injection and RCE attacks on tool argument values, detects poisoning/jailbreak attempts, and auto-updates via FortiGuard for MCP-specific threat intelligence.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#EE3124" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiGate VM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Egress Control</span>
+              <span class="fnet-pill">LLM Traffic</span>
+              <span class="fnet-pill">Deep Inspection</span>
+            </div>
+            <div class="fnet-card-desc">Inspects outbound traffic from MCP servers making network calls — applying selective AI/LLM traffic control and DLP on payloads egressing to external systems.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3" stroke="#EE3124" stroke-width="2"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="#EE3124" stroke-width="2"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Process Detection</span>
+              <span class="fnet-pill">Over-Privilege</span>
+              <span class="fnet-pill">Behavioral</span>
+            </div>
+            <div class="fnet-card-desc">Detects MCP server processes, flags over-privileged service accounts, and surfaces runtime anomalies via behavioral baselines.</div>
+          </div>
+        </div>
+        <!-- Arrow 2 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 3: SaaS + OAuth -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#EE3124" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCASB · SSPM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">OAuth Tokens</span>
+              <span class="fnet-pill">SaaS Visibility</span>
+              <span class="fnet-pill">Token Revocation</span>
+            </div>
+            <div class="fnet-card-desc">Maintains visibility into OAuth tokens MCP servers hold against SaaS apps — enabling revocation and rotation at scale before over-scoped credentials are exploited.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div><!-- /fnet-diagram Layer 4 -->
+  
+
+  
+      <h3>Other best-of-breed vendors at this layer</h3>
+      <ul>
+        <li><strong>MCP-specific gateways and governance:</strong> <a href="https://www.lunar.dev/">Lunar.dev MCPX</a>, <a href="https://www.docker.com/products/mcp-catalog-and-toolkit/">Docker MCP Gateway and Toolkit</a>, <a href="https://www.enkryptai.com/solutions/mcp-security">Enkrypt AI MCP Security</a>, <a href="https://invariantlabs.ai/">Invariant Labs</a>, <a href="https://www.truefoundry.com/">TrueFoundry MCP Gateway</a>, <a href="https://www.mintmcp.com/">MintMCP</a>, <a href="https://composio.dev/">Composio</a>.</li>
+        <li><strong>MCP code/config scanning:</strong> <a href="https://www.backslash.security/">Backslash Open</a>, <a href="https://www.pillar.security/">Pillar Security</a>.</li>
+        <li><strong>AI agent observability adjacent to MCP:</strong> <a href="https://zenity.io/">Zenity</a>, <a href="https://calypsoai.com/">CalypsoAI</a>, <a href="https://www.lasso.security/">Lasso Security</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Layer 5 — The Cloud and Model Infrastructure</h2>
+  <p>The foundation. Easy to overlook, never the right thing to skip.</p>
+
+  <h3>The main risks</h3>
+  <ul>
+    <li><strong>IAM misconfiguration on model endpoints</strong> — wildcarded invoke permissions, cross-account role chains, missing condition keys.</li>
+    <li><strong>Runtime compromise of self-hosted inference</strong> — container escape, model weight theft, pickle-deserialization RCE.</li>
+    <li><strong>Compliance and audit gaps</strong> — prompt and completion logs holding the most sensitive enterprise data, often ungoverned.</li>
+  </ul>
+
+  <h3>Recent attacks</h3>
+  <ul>
+    <li><strong>Hugging Face malicious model uploads (ongoing through 2024–2025).</strong> JFrog, ReversingLabs, and Protect AI documented hundreds of malicious models using pickle deserialization to achieve code execution on load.</li>
+    <li><strong>AWS Bedrock invoke-permission incidents (2024–2025).</strong> Over-permissive <code>bedrock:InvokeModel*</code> IAM policies let unintended principals invoke frontier models, generating five- and six-figure unauthorized bills before detection.</li>
+    <li><strong>PyTorch pickle-deserialization RCE in model artifacts (well-documented 2024–2025).</strong> PickleScan and similar tools identified active malicious payloads in <code>.bin</code> files in public registries.</li>
+  </ul>
+
+  
+      <h3>Where Fortinet fits</h3>
+      <ul>
+        <li><a href="https://www.fortinet.com/products/forticnapp"><strong>FortiCNAPP</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge azure">Azure Defender</span><span class="csp-badge gcp">GCP SCC</span><span class="csp-badge sent">Azure Sentinel</span> delivers CSPM, CWPP, and CIEM across AWS, Azure, GCP, and OCI — covering IAM misconfigurations on AI services, runtime protection for GPU and inference workloads, IaC scanning, and compliance reporting against CIS, NIST, ISO frameworks.</li>
+        <li><a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances"><strong>FortiGate VM</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge sent">Azure Sentinel</span> segments model-serving subnets from data planes, with east-west enforcement.</li>
+        <li><a href="https://www.fortinet.com/products/fortisandbox"><strong>FortiSandbox</strong></a> detonates model artifacts and container images pulled from public registries before they reach inference clusters.</li>
+        <li><a href="https://www.fortinet.com/products/management/fortianalyzer"><strong>FortiAnalyzer</strong></a><span class="csp-badge aws">AWS Security Hub</span><span class="csp-badge sent">Azure Sentinel</span> centralizes logs from FortiGate, FortiWeb, FortiAIGate, FortiCNAPP, and FortiCASB — giving the SOC a single pane of glass for AI events.</li>
+      </ul>
+
+      <!-- ── Layer 5 Architecture Diagram ── -->
+      <div class="fnet-diagram">
+    <div class="fnet-diagram-hdr">
+      <span class="fnet-diagram-tag">Fortinet Coverage</span>
+      <span class="fnet-diagram-title">Cloud &amp; Model Infrastructure — Protection Architecture</span>
+    </div>
+    <div class="fnet-diagram-body">
+      <div class="fnet-flow-bar">
+        <div class="fnet-flow-stage">Cloud Posture &amp; IAM</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Workload &amp; Network</div>
+        <div class="fnet-flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="fnet-flow-stage">Registry &amp; Visibility</div>
+      </div>
+      <div class="fnet-cols">
+        <!-- Col 1: Cloud Posture + IAM -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="9" ry="3" stroke="#EE3124" stroke-width="2"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="#EE3124" stroke-width="2"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiCNAPP</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">CSPM</span>
+              <span class="fnet-pill">CWPP</span>
+              <span class="fnet-pill">CIEM</span>
+              <span class="fnet-pill">IaC Scan</span>
+              <span class="fnet-pill">Compliance</span>
+            </div>
+            <div class="fnet-card-desc">Covers IAM misconfigurations on AI services, runtime protection for GPU and inference workloads, IaC scanning, and compliance reporting against CIS, NIST, and ISO across AWS, Azure, GCP, and OCI.</div>
+          </div>
+        </div>
+        <!-- Arrow 1 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 2: Workload + Network -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#EE3124" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z" stroke="#EE3124" stroke-width="2"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiGate VM</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Network Segmentation</span>
+              <span class="fnet-pill">East-West</span>
+              <span class="fnet-pill">Micro-Seg</span>
+            </div>
+            <div class="fnet-card-desc">Segments model-serving subnets from data planes — enforcing east-west policy to contain lateral movement across GPU clusters and inference nodes.</div>
+          </div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 2v8L4 20h16L14 10V2" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="8.5" y1="2" x2="15.5" y2="2" stroke="#EE3124" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiSandbox</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Model Detonation</span>
+              <span class="fnet-pill">Registry Artifacts</span>
+              <span class="fnet-pill">Container Images</span>
+            </div>
+            <div class="fnet-card-desc">Detonates model artifacts and container images pulled from public registries before they reach inference clusters — catching pickle-deserialization payloads and hidden backdoors.</div>
+          </div>
+        </div>
+        <!-- Arrow 2 -->
+        <div class="fnet-col-arr">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <!-- Col 3: Registry + Visibility -->
+        <div>
+          <div class="fnet-card">
+            <div class="fnet-card-top">
+              <div class="fnet-card-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="#EE3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="fnet-card-name">FortiAnalyzer</div>
+            </div>
+            <div class="fnet-pills">
+              <span class="fnet-pill">Log Correlation</span>
+              <span class="fnet-pill">SOC Pane</span>
+              <span class="fnet-pill">AI Event Analytics</span>
+            </div>
+            <div class="fnet-card-desc">Centralizes logs from FortiGate, FortiWeb, FortiAIGate, FortiCNAPP, and FortiCASB — giving the SOC a single pane of glass for all AI security events across every layer.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div><!-- /fnet-diagram Layer 5 -->
+  
+
+  <div class="fortiguard-callout">
+    <div class="fortiguard-callout-hdr">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.5C17.25 22.15 21 17.25 21 12V7L12 2z" stroke="#EE3124" stroke-width="2" stroke-linejoin="round" fill="rgba(238,49,36,0.15)"/></svg>
+      <strong>FortiGuard Labs — The Intelligence Backbone</strong>
+      <span>fortiguard.com</span>
+    </div>
+    <p style="font-size:0.8rem;color:rgba(255,255,255,0.75);margin:0 0 1rem;">Every Fortinet product described in this post is continuously updated by <a href="https://www.fortinet.com/fortiguard/labs" style="color:#EE3124;">FortiGuard Labs</a> — Fortinet's global threat research and response organization. For AI-specific threats, FortiGuard delivers targeted intelligence across each control layer:</p>
+    <div class="fortiguard-callout-grid">
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiGate VM</div>
+        <div class="fortiguard-item-desc">FortiGuard IPS signatures for AI/LLM traffic, AppControl categories for sanctioned vs. unsanctioned LLM SaaS, and URL reputation filtering for AI endpoints.</div>
+      </div>
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiAIGate</div>
+        <div class="fortiguard-item-desc">FortiGuard AI-specific guardrail updates — new jailbreak patterns, prompt injection signatures, and model exfiltration techniques as they emerge.</div>
+      </div>
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiWeb</div>
+        <div class="fortiguard-item-desc">FortiGuard MCP protocol schema updates, web attack signatures for LLM-facing APIs, and OWASP LLM Top-10 coverage refreshes.</div>
+      </div>
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiSandbox</div>
+        <div class="fortiguard-item-desc">FortiGuard sandbox threat intelligence — IOC sharing, malicious model artifact signatures, and detonation profiles for AI-related supply chain threats.</div>
+      </div>
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiSASE</div>
+        <div class="fortiguard-item-desc">FortiGuard DLP dictionaries for AI prompt content, URL filtering for shadow AI SaaS discovery, and inline malware prevention for AI-generated file output.</div>
+      </div>
+      <div class="fortiguard-item">
+        <div class="fortiguard-item-name">FortiAnalyzer</div>
+        <div class="fortiguard-item-desc">FortiGuard IOC enrichment for AI security event correlation — threat scoring, actor attribution, and MITRE ATT&amp;CK mapping for AI-layer incidents.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  
+      <h2>Fortinet AI Security Fabric — Defense Layers</h2>
+      <p>The six diagrams below show how the Fortinet Security Fabric maps its product capabilities onto the AI attack surface described above. Each layer addresses a distinct control point — from the developer's IDE to the API compliance connector inside Claude Enterprise.</p>
+
+      <div class="png-gallery">
+
+        <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 1</span>
+        <span class="png-card-title">AI-Assisted Developer Surface</span>
+      </div>
+      <img src="images/01_ai_dev_surface.png" alt="Layer 1 — AI-assisted developer surface: FortiCNAPP plugin for Claude Code IDE, Cursor IDE, and shift-left risk detection">
+      <div class="png-card-caption">FortiCNAPP plugin for Claude Code and Cursor IDEs — inline SAST + secret scan catches risk as the AI writes it, not at PR.</div>
+    </div>
+
+    <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 2</span>
+        <span class="png-card-title">Endpoint Enforcement</span>
+      </div>
+      <img src="images/02_endpoint.png" alt="Layer 2 — Endpoint enforcement: FortiEndpoint unified agent (ZTNA + EPP + EDR + DLP), FortiAI app control, FortiAuthenticator, FortiCNAPP Code Sec, FortiCNAPP AI-DSPM">
+      <div class="png-card-caption">One unified agent for ZTNA, EPP, EDR, and DLP — extended with FortiCNAPP for AI authorship and data risk at the source.</div>
+    </div>
+
+    <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 3</span>
+        <span class="png-card-title">FortiSASE — Single Agent</span>
+      </div>
+      <img src="images/03_fortisase.png" alt="Layer 3 — FortiSASE: shadow AI discovery, DLP on LLM prompts, SWG + ZTNA + CASB on one agent">
+      <div class="png-card-caption">One agent, anywhere the user works — converged SWG, ZTNA, and CASB enforcement blocks secrets, PII, and code from reaching public LLMs.</div>
+    </div>
+
+    <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 4</span>
+        <span class="png-card-title">ZTNA Access Plane</span>
+      </div>
+      <img src="images/04_ztna.png" alt="Layer 4 — ZTNA access plane: FortiGate VM as ZTNA proxy, FortiEndpoint + FortiAuthenticator for device posture and identity, blast radius control">
+      <div class="png-card-caption">Stops a malicious MCP server or rogue IDE extension from reaching prod GitHub, Kubernetes, or cloud accounts.</div>
+    </div>
+
+    <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 5</span>
+        <span class="png-card-title">FortiCNAPP — Code, IaC, and Data</span>
+      </div>
+      <img src="images/05_forticnapp_code_data.png" alt="Layer 5 — FortiCNAPP: code and IaC scanning, dependency / slopsquatting detection, DSPM sensitive data flow, shadow data store discovery">
+      <div class="png-card-caption">Shift-left SAST/IaC plus runtime DSPM — closes the loop on AI-authored infrastructure risk before merge and after deploy.</div>
+    </div>
+
+    <div class="png-card">
+      <div class="png-card-hdr">
+        <span class="png-card-tag">Layer 6</span>
+        <span class="png-card-title">DSPM Connector to Anthropic API</span>
+      </div>
+      <img src="images/06_dspm_anthropic_connector.png" alt="Layer 6 — DSPM connector to Anthropic API: FortiData appliance connects via Anthropic Compliance API to pull chats, files, and artifacts; runs discovery policies for PII/PHI/PCI on a daily schedule">
+      <div class="png-card-caption">Out-of-band data discovery inside Claude Enterprise — audits what already lives in conversation history and artifacts: the gap inline DLP cannot see.</div>
+        </div>
+
+      </div><!-- /png-gallery -->
+  
+
+  <hr>
+
+  <h2>A simple way to think about it</h2>
+  <p>Collapsed into one sentence for a CISO conversation:</p>
+  <blockquote>
+    <strong>AI-Driven Systems change where untrusted input enters your systems, what your applications do with model output, and how data and credentials surround the model. Everything else is a variation on those three themes.</strong>
+  </blockquote>
+
+  <h3>Layer summary</h3>
+  <div class="table-wrap">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Attack surface added</th>
+          <th>Primary Fortinet coverage</th>
+          <th class="vendor-col">Notable third-party vendors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Developer Endpoint</strong></td>
+          <td>Insecure code, data leakage, supply chain, lateral movement</td>
+          <td><a href="https://www.fortinet.com/products/sase">FortiSASE</a>, <a href="https://www.fortinet.com/products/endpoint-security/forticlient">FortiClient/FortiEDR</a>, <a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP</a> (DSPM + IaC + code), ZTNA</td>
+          <td class="vendor-col">Snyk, Checkmarx, Veracode, GHAS, Tabnine, MintMCP, Backslash</td>
+        </tr>
+        <tr>
+          <td><strong>2. LLM API Consumption</strong></td>
+          <td>Prompt injection, output handling, cost DoS, runtime anomalies</td>
+          <td><a href="https://www.fortinet.com/products/fortiaigate"><strong>FortiAIGate</strong></a>, <a href="https://www.fortinet.com/products/web-application-firewall/fortiweb">FortiWeb/FortiAppSec</a>, <a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances">FortiGate VM</a>, <a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP</a></td>
+          <td class="vendor-col">Lakera, Prompt Security, HiddenLayer, CalypsoAI, Protect AI, NeMo Guardrails</td>
+        </tr>
+        <tr>
+          <td><strong>3. RAG Pipeline</strong></td>
+          <td>Permission bypass, KB poisoning, embedding leakage, data sprawl</td>
+          <td><a href="https://www.fortinet.com/products/casb/forticasb">FortiCASB/SSPM</a>, <a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP DSPM</a>, <a href="https://www.fortinet.com/products/fortisandbox"><strong>FortiSandbox</strong></a>, <a href="https://www.fortinet.com/products/web-application-firewall/fortiweb">FortiWeb</a>, <a href="https://www.fortinet.com/products/fortiaigate">FortiAIGate</a></td>
+          <td class="vendor-col">Netskope, MDCA, Obsidian, Cyera, BigID, Sentra, OPSWAT, Votiro</td>
+        </tr>
+        <tr>
+          <td><strong>4. MCP Integration</strong></td>
+          <td>Server compromise, token sprawl, audit gaps</td>
+          <td><a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances">FortiGate VM</a>, <a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP</a>, <a href="https://www.fortinet.com/products/casb/forticasb">FortiCASB/SSPM</a>, <a href="https://www.fortinet.com/products/fortisandbox">FortiSandbox</a></td>
+          <td class="vendor-col">Lunar.dev MCPX, Docker MCP Toolkit, Enkrypt AI, Invariant Labs, TrueFoundry, Zenity</td>
+        </tr>
+        <tr>
+          <td><strong>5. Cloud &amp; Model Infra</strong></td>
+          <td>IAM misconfig, runtime compromise, model supply chain, compliance</td>
+          <td><a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP</a>, <a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances">FortiGate VM</a>, <a href="https://www.fortinet.com/products/fortisandbox">FortiSandbox</a>, <a href="https://www.fortinet.com/products/management/fortianalyzer">FortiAnalyzer</a></td>
+          <td class="vendor-col">Wiz, Prisma Cloud, CrowdStrike, Defender for Cloud, SentinelOne, Orca, HiddenLayer, Protect AI</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h2>Where Fortinet differentiates in this landscape</h2>
+  <p>This is the honest PreSales view across the layers above:</p>
+  <ul>
+    <li><strong>Convergence over point products.</strong> Most third-party vendors above are deep in one layer. The <a href="https://www.fortinet.com/solutions/enterprise-midsize-business/security-fabric">Fortinet Security Fabric</a> — anchored by FortiCNAPP, FortiAIGate, FortiSASE, FortiGate, FortiWeb, FortiCASB, FortiSandbox, and FortiAnalyzer — covers all five with a single telemetry, policy, and operations model.</li>
+    <li><strong>FortiAIGate as a first-class AI runtime control plane.</strong> Few network-security incumbents have shipped a purpose-built LLM gateway; Fortinet has.</li>
+    <li><strong>The Security Fabric story.</strong> A single dashboard from endpoint to LLM gateway to cloud workload to SaaS is operationally meaningful in an environment where the threat now spans all of those tiers.</li>
+  </ul>
+  <p>Customers still combine Fortinet with best-of-breed where it makes sense: an LLM-firewall specialist for the deepest prompt-injection coverage, a dedicated DSPM where data classification is the dominant investment, or an AI-SPM tool such as HiddenLayer for granular model-supply-chain governance. The point is the conversation is no longer Fortinet <strong>or</strong> these vendors — it is the right combination, with Fortinet providing the converged backbone.</p>
+
+  <hr>
+
+  <h2>Closing thought</h2>
+  <p>AI-Driven Systems security is not a single product problem and it is not a single team problem. It crosses the developer's laptop, the application tier, the data pipeline, the integration layer, and the cloud foundation.</p>
+  <p>What it asks of us is the same thing every wave of cloud transformation has asked: <strong>defense in depth, applied with intention, measured against real outcomes</strong>. The <a href="https://www.fortinet.com/solutions/enterprise-midsize-business/security-fabric">Fortinet Security Fabric</a> — now extended with <a href="https://www.fortinet.com/products/fortiaigate">FortiAIGate</a> as the AI-runtime control plane — was built exactly for that kind of work, unifying visibility, posture, and enforcement across the layers that AI-Driven Systems now span.</p>
+  <p>If you are designing a new AI-Driven Systems workload, or retrofitting governance onto one already in production, start with the layer that worries you most, and work outward from there. The threats are new. The discipline is not.</p>
+
+  <hr>
+
+  <div style="background:var(--light);border-radius:10px;padding:1.5rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;">
+    <div>
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--red);margin-bottom:0.35rem;">PreSales Reference</div>
+      <div style="font-weight:700;font-size:1rem;margin-bottom:0.3rem;">Fortinet AI-Driven Security — Reference &amp; Positioning Guide</div>
+      <div style="font-size:0.88rem;color:var(--muted);">Product pillars, FortiAIGate deep-dive, FortiOS 8.0, MCP visibility, master reference list, and quick-hit talking points.</div>
+    </div>
+    <a href="reference.html" style="display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-weight:700;padding:0.7rem 1.4rem;border-radius:6px;font-size:0.9rem;white-space:nowrap;">Open guide &rarr;</a>
+  </div>
+
+  <hr>
+
+  <h2>References</h2>
+  <h3>Industry standards and frameworks</h3>
+  <ul>
+    <li><a href="https://genai.owasp.org/">OWASP Top 10 for LLM Applications (2025)</a></li>
+    <li><a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/">OWASP LLM01:2025 — Prompt Injection</a></li>
+    <li>OWASP LLM08:2025 — Vector and Embedding Weaknesses</li>
+    <li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI Risk Management Framework</a></li>
+    <li><a href="https://atlas.mitre.org/">MITRE ATLAS</a></li>
+  </ul>
+  <h3>Layer 1 — Developer Endpoint</h3>
+  <ul>
+    <li><a href="https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents">Pillar Security, "Rules File Backdoor" disclosure, March 2025</a></li>
+    <li><a href="https://byteiota.com/ai-ide-security-crisis-30-flaws-expose-cursor-copilot/">byteiota, "IDEsaster" — 24+ CVEs across AI IDEs, December 2025</a></li>
+    <li>CVE-2025-54135 / CVE-2025-54136 — Cursor MCP RCE, August 2025</li>
+    <li><a href="https://www.docker.com/blog/ai-coding-agent-horror-stories-security-risks/">Docker, "AI Coding Agent Horror Stories," February 2026</a></li>
+  </ul>
+  <h3>Layer 2 — LLM API Consumption</h3>
+  <ul>
+    <li><a href="https://arxiv.org/pdf/2509.10540">Aim Labs, EchoLeak (CVE-2025-32711) analysis</a></li>
+    <li><a href="https://nsfocusglobal.com/prompt-word-injection-an-analysis-of-recent-llm-security-incidents/">NSFOCUS, ChatGPT Connector prompt injection incidents, August 2025</a></li>
+    <li><a href="https://www.fortinet.com/blog/security-operations/fortiaigate-optimizing-and-protecting-ai-workloads">Fortinet, "FortiAIGate: Optimizing and Protecting AI Workloads," March 2026</a></li>
+    <li><a href="https://www.techtarget.com/searchsecurity/feature/LLM-firewalls-emerge-as-a-new-AI-security-layer">TechTarget, "LLM firewalls emerge as a new AI security layer," February 2026</a></li>
+  </ul>
+  <h3>Layer 3 — RAG Pipeline</h3>
+  <ul>
+    <li>USENIX Security 2025 — RAG poisoning research ("5 documents, 90% success")</li>
+    <li>ALGEN embedding inversion framework, February 2025</li>
+    <li>ConfusedPilot research on SharePoint-indexed Copilot manipulation</li>
+  </ul>
+  <h3>Layer 4 — MCP Integration</h3>
+  <ul>
+    <li><a href="https://cymulate.com/blog/cve-2025-53109-53110-escaperoute-anthropic/">Cymulate, EscapeRoute (CVE-2025-53109 / CVE-2025-53110), July 2025</a></li>
+    <li><a href="https://jfrog.com/blog/2025-6514-critical-mcp-remote-rce-vulnerability/">JFrog, mcp-remote RCE (CVE-2025-6514, CVSS 9.6), July 2025</a></li>
+    <li><a href="https://www.ox.security/blog/cve-2025-65719-critical-rce-in-kubectl-mcp-server/">OX Security, Kubectl MCP Server RCE (CVE-2025-65719), January 2026</a></li>
+    <li><a href="https://www.imperva.com/blog/another-critical-rce-discovered-in-a-popular-mcp-server/">Imperva, Framelink Figma MCP Server RCE (CVE-2025-53967), October 2025</a></li>
+    <li><a href="https://www.redhat.com/en/blog/mcp-security-current-situation">Red Hat, "MCP security: The current situation," February 2026</a></li>
+    <li><a href="https://community.fortinet.com/t5/FortiGate/Technical-Guide-Selective-control-of-Generative-AI-LLM-traffic/ta-p/405240">Fortinet community guide on selective control of AI-Driven Systems/LLM traffic via FortiGate</a></li>
+  </ul>
+  <h3>Layer 5 — Cloud &amp; Model Infrastructure</h3>
+  <ul>
+    <li><a href="https://www.peerspot.com/categories/cloud-native-application-protection-platforms-cnapp">PeerSpot CNAPP Top Vendors, 2026</a></li>
+    <li><a href="https://hiddenlayer.com/innovation-hub/hiddenlayer-unveils-aisec-platform-2-0-to-deliver-unmatched-context-visibility-and-observability-for-enterprise-ai-security/">HiddenLayer AISec Platform 2.0 launch, RSAC 2025</a></li>
+    <li><a href="https://aithority.com/guest-authors/the-top-ai-supply-chain-security-vendors-of-2026/">aithority, "Top AI Supply Chain Security Vendors of 2026"</a></li>
+  </ul>
+
+  <h3>Fortinet portfolio</h3>
+  <ul>
+    <li><a href="https://www.fortinet.com/solutions/ai-security">Fortinet AI Security Solutions</a></li>
+    <li><a href="https://www.fortinet.com/solutions/enterprise-midsize-business/security-fabric">Fortinet Security Fabric</a></li>
+    <li><a href="https://www.fortinet.com/products/fortiaigate">FortiAIGate</a></li>
+    <li><a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP</a></li>
+    <li><a href="https://www.fortinet.com/products/web-application-firewall/fortiweb">FortiWeb</a></li>
+    <li><a href="https://www.fortinet.com/products/web-application-firewall/fortiappsec-cloud">FortiAppSec Cloud</a></li>
+    <li><a href="https://www.fortinet.com/products/private-cloud-security/fortigate-virtual-appliances">FortiGate VM</a></li>
+    <li><a href="https://www.fortinet.com/products/sase">FortiSASE</a></li>
+    <li><a href="https://www.fortinet.com/products/casb/forticasb">FortiCASB</a></li>
+    <li><a href="https://www.fortinet.com/products/fortisandbox">FortiSandbox</a></li>
+    <li><a href="https://www.fortinet.com/products/endpoint-security/forticlient">FortiClient</a></li>
+    <li><a href="https://www.fortinet.com/products/endpoint-security/fortiedr">FortiEDR</a></li>
+    <li><a href="https://www.fortinet.com/products/identity-access-management/fortiauthenticator">FortiAuthenticator</a></li>
+    <li><a href="https://www.fortinet.com/products/management/fortianalyzer">FortiAnalyzer</a></li>
+    <li><a href="https://www.fortinet.com/products">Fortinet Product Catalog</a></li>
+  </ul>
+
+  <div class="disclaimer">
+    <p><strong>&copy; 2026 Fortinet, Inc. All rights reserved.</strong><br>
+    This document and its contents are proprietary to Fortinet and are intended solely for the internal use of the designated audience for technical discussion, solution positioning, and security strategy alignment. The views, architectural interpretations, and recommendations contained herein may change as AI security capabilities and vendor implementations continue to evolve.</p>
+    <p style="margin-top:0.75rem">No part of this document may be reproduced, distributed, modified, or transmitted in any form or by any means — electronic, mechanical, photocopying, recording, or otherwise — without the prior written consent of Fortinet, Inc. For detailed reference architectures, threat-to-control mapping, competitive positioning, implementation guidance, or PoC planning, please consult your Fortinet account team or Fortinet Systems Engineering representatives.</p>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 Fortinet, Inc. All rights reserved. &nbsp;·&nbsp; <a href="/genAISeC/" style="color:rgba(255,255,255,0.5)">Back to home</a>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Complexity ladder: 1 = Basic → 5 = Frontier */
+  var LADDER = ['Basic', 'Foundational', 'Advanced', 'Expert', 'Frontier'];
+
+  /* ── Glossary — 31 terms, each with a match() function for case-insensitive lookup ── */
+  var GLOSSARY = [
+    /* GenAI stack */
+    { term: 'AI-Driven Systems', level: 1,
+      match: function(s) { return s === 'ai-driven systems'; },
+      def: 'Technologies that apply artificial intelligence to automate, augment, or secure digital workflows — encompassing LLMs, code generators, diffusion models, and intelligent agents. The umbrella term for the current wave of AI that has redrawn the enterprise attack surface.' },
+
+    { term: 'LLM', level: 2,
+      match: function(s) { return s === 'llm' || s === 'llms'; },
+      def: 'Large Language Model — the transformer-based engine that predicts and generates text one token at a time. Stateless, non-deterministic, bounded by context window and knowledge cutoff date.' },
+
+    { term: 'RAG', level: 3,
+      match: function(s) { return s === 'rag'; },
+      def: 'Retrieval-Augmented Generation — grounding an LLM\'s response with context retrieved at runtime from a knowledge base or vector store. Brings enterprise data into the model\'s context window, expanding both capability and data-leakage risk.' },
+
+    { term: 'LLM Agent', level: 3,
+      match: function(s) { return s.startsWith('llm a'); },
+      def: 'An LLM connected to tools it can invoke — file access, web browsing, API calls, code execution. The model\'s output now triggers real-world actions, amplifying both capability and blast radius.' },
+
+    { term: 'MCP', level: 4,
+      match: function(s) { return s === 'mcp'; },
+      def: 'Model Context Protocol — Anthropic\'s open standard for connecting LLMs to external tools and data sources. Replaces N×M custom integrations with N+M standardized connectors, but dramatically expands the attack surface for privilege escalation and lateral movement.' },
+
+    { term: 'Agentic AI', level: 5,
+      match: function(s) { return s.startsWith('agentic'); },
+      def: 'Autonomous AI that plans, executes, and iterates toward a goal without per-step human approval. Creates novel governance challenges because traditional RBAC and audit models assume human-paced decisions.' },
+
+    /* Attack concepts */
+    { term: 'Vibe Coding', level: 1,
+      match: function(s) { return s === 'vibe coding'; },
+      def: 'Describing intent in natural language and letting an AI coding assistant generate the implementation. Fast but risky — AI-generated code introduces security vulnerabilities at 2–3× the rate of hand-written code.' },
+
+    { term: 'Slopsquatting', level: 2,
+      match: function(s) { return s === 'slopsquatting'; },
+      def: 'Supply chain attack exploiting AI hallucinations — models suggest package names that do not exist (~5–22% of the time), and attackers pre-register those names with malicious payloads ready to execute on install.' },
+
+    { term: 'Prompt Injection', level: 3,
+      match: function(s) { return s === 'prompt injection'; },
+      def: 'Embedding malicious instructions in text that an LLM processes, hijacking its behavior. OWASP\'s #1 LLM risk — can occur directly in user input (direct) or through poisoned documents, emails, or web pages the model retrieves (indirect).' },
+
+    { term: 'Jailbreaking', level: 2,
+      match: function(s) { return s.startsWith('jailbreak'); },
+      def: 'Crafting prompts that bypass an LLM\'s built-in safety guidelines, coaxing it to generate harmful, restricted, or policy-violating output. A core concern for any externally-facing AI application.' },
+
+    { term: 'Embeddings', level: 3,
+      match: function(s) { return s.startsWith('embedding'); },
+      def: 'Dense numerical vectors that capture semantic meaning of text or data. Used in RAG to store and retrieve knowledge. Research shows 50–70% of original text can be reconstructed from leaked embeddings (ALGEN framework, 2025).' },
+
+    /* Security standards */
+    { term: 'OWASP', level: 2,
+      match: function(s) { return s === 'owasp'; },
+      def: 'Open Web Application Security Project — the non-profit behind the Top 10 vulnerability lists for web apps and, since 2023, LLM applications. Their LLM Top 10 is the primary risk taxonomy used across the industry for AI security.' },
+
+    /* IAM & access control */
+    { term: 'IAM', level: 2,
+      match: function(s) { return s === 'iam'; },
+      def: 'Identity and Access Management — the policy engine controlling who (human or service account) can invoke what resource. Misconfigured IAM on AI services is one of the fastest paths to unauthorized model access and runaway cloud bills.' },
+
+    { term: 'OAuth', level: 2,
+      match: function(s) { return s === 'oauth'; },
+      def: 'Open Authorization — token-based delegation protocol that lets apps access resources on a user\'s behalf without sharing passwords. MCP servers accumulate OAuth tokens for every connected SaaS app; over-scoped tokens are a primary attack surface.' },
+
+    { term: 'ZTNA', level: 3,
+      match: function(s) { return s === 'ztna'; },
+      def: 'Zero Trust Network Access — grants per-application, identity-verified access without placing users on the full network. Limits blast radius when an AI extension, MCP server, or compromised credential tries to move laterally.' },
+
+    /* Network security */
+    { term: 'SASE', level: 3,
+      match: function(s) { return s === 'sase'; },
+      def: 'Secure Access Service Edge — converges network security services (SWG, CASB, ZTNA, FWaaS) and SD-WAN into a single cloud-delivered platform. Applies policy at the edge, close to the user and their AI tools.' },
+
+    { term: 'SWG', level: 2,
+      match: function(s) { return s === 'swg'; },
+      def: 'Secure Web Gateway — proxy that enforces acceptable-use policy, blocks malicious sites, and inspects encrypted HTTPS traffic. Sits between developer endpoints and external LLM APIs to catch unauthorized AI usage and shadow AI.' },
+
+    { term: 'CASB', level: 2,
+      match: function(s) { return s === 'casb'; },
+      def: 'Cloud Access Security Broker — proxy or API-based control layer between users and cloud apps. Enforces DLP, detects shadow AI usage, governs OAuth tokens, and monitors for data exfiltration to unauthorized SaaS services.' },
+
+    { term: 'DLP', level: 1,
+      match: function(s) { return s === 'dlp'; },
+      def: 'Data Loss Prevention — policies and controls that detect and block sensitive data leaving approved boundaries. Applied to outbound LLM API calls to prevent PII, source code, and proprietary content from reaching external models.' },
+
+    /* Cloud security */
+    { term: 'CSPM', level: 2,
+      match: function(s) { return s === 'cspm'; },
+      def: 'Cloud Security Posture Management — continuously scans cloud accounts for misconfigured resources, exposed storage buckets, and policy violations. The automated "did you leave the door unlocked?" check for cloud infrastructure.' },
+
+    { term: 'CWPP', level: 3,
+      match: function(s) { return s === 'cwpp'; },
+      def: 'Cloud Workload Protection Platform — runtime threat detection and response for containers, VMs, and serverless functions. Guards AI inference servers and GPU workloads against container escape, privilege escalation, and lateral movement.' },
+
+    { term: 'CIEM', level: 4,
+      match: function(s) { return s === 'ciem'; },
+      def: 'Cloud Infrastructure Entitlement Management — discovers and right-sizes over-permissive IAM roles across cloud accounts. Catches wildcarded invoke permissions on AI services before they enable unauthorized access or five-figure billing surprises.' },
+
+    { term: 'CNAPP', level: 4,
+      match: function(s) { return s === 'cnapp'; },
+      def: 'Cloud-Native Application Protection Platform — unified protection spanning code, cloud config (CSPM), workloads (CWPP), identity (CIEM), and data (DSPM) in one platform. The converged security architecture for cloud-native AI workloads.' },
+
+    { term: 'DSPM', level: 3,
+      match: function(s) { return s === 'dspm'; },
+      def: 'Data Security Posture Management — discovers, classifies, and tracks sensitive data (PII, PCI, PHI) wherever it lives: S3, databases, vector stores, SaaS apps. Finds data sprawl created by AI pipelines indexing production data.' },
+
+    { term: 'SSPM', level: 3,
+      match: function(s) { return s === 'sspm'; },
+      def: 'SaaS Security Posture Management — continuous visibility and governance of SaaS app configurations, OAuth grants, shared files, and over-privileged accounts. Critical for RAG pipelines that index collaboration tools like SharePoint and Google Drive.' },
+
+    /* Vulnerability classes */
+    { term: 'XSS', level: 3,
+      match: function(s) { return s === 'xss'; },
+      def: 'Cross-Site Scripting — injecting malicious scripts into web content viewed by other users. An LLM threat when model-generated text is rendered as HTML without sanitization, enabling session hijacking and credential theft.' },
+
+    { term: 'SSRF', level: 4,
+      match: function(s) { return s === 'ssrf'; },
+      def: 'Server-Side Request Forgery — attacker causes the server to make HTTP requests to internal systems they cannot directly reach. An LLM risk when model output drives web requests — browsing, connector callbacks, or tool invocations.' },
+
+    { term: 'RCE', level: 5,
+      match: function(s) { return s === 'rce'; },
+      def: 'Remote Code Execution — running arbitrary commands on a target system. The highest-severity vulnerability class. Several MCP CVEs in 2025 led directly to RCE via prompt injection or connections to malicious MCP servers.' },
+
+    /* Infra & data */
+    { term: 'IaC', level: 2,
+      match: function(s) { return s === 'iac'; },
+      def: 'Infrastructure as Code — defining cloud infrastructure in version-controlled files (Terraform, Bicep, CloudFormation). AI-generated IaC can embed misconfigurations that persist silently into production, making CI/CD scanning essential.' },
+
+    { term: 'PII', level: 1,
+      match: function(s) { return s === 'pii'; },
+      def: 'Personally Identifiable Information — any data that can identify an individual (name, email, SSN, biometrics). Appears unexpectedly in vector stores and LLM logs when developers paste real datasets into AI pipelines.' },
+
+    /* Fortinet */
+    { term: 'FortiAIGate', level: 4,
+      match: function(s) { return s === 'fortiaigate'; },
+      def: 'Fortinet\'s purpose-built AI security gateway — deployed inline between an application and its LLM. Inspects every prompt and completion for injection, jailbreaking, and data exfiltration; enforces token budgets; and logs per-interaction for the SOC.' },
+  ];
+
+  /* Combined regex — multi-word and longest alternatives first to avoid partial matches.
+     \b...\b prevents matching inside OWASP codes like LLM01 (digit = no word boundary after M). */
+  var PATTERN = /\b(Agentic\s+AI|[Pp]rompt\s+[Ii]njection|[Vv]ibe\s+[Cc]oding|AI-Driven\s+Systems|LLM\s+[Aa]gents?|[Jj]ailbreak(?:ing)?|[Ss]lopsquatting|[Ee]mbeddings?|FortiAIGate|OWASP|CNAPP|SSPM|CSPM|CWPP|CIEM|DSPM|ZTNA|SASE|CASB|OAuth|LLMs?|SSRF|RCE|IAM|RAG|DLP|SWG|XSS|IaC|PII|MCP)\b/g;
+
+  function findEntry(matched) {
+    var lower = matched.toLowerCase().replace(/\s+/g, ' ');
+    return GLOSSARY.find(function(e) { return e.match(lower); }) || null;
+  }
+
+  /* ── DOM text-node wrapping ── */
+  function wrapNode(node) {
+    var text = node.textContent;
+    PATTERN.lastIndex = 0;
+    if (!PATTERN.test(text)) return;
+    PATTERN.lastIndex = 0;
+
+    var frag = document.createDocumentFragment();
+    var last = 0, m;
+    while ((m = PATTERN.exec(text)) !== null) {
+      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var entry = findEntry(m[0]);
+      if (entry) {
+        var s = document.createElement('span');
+        s.className = 'gl-term';
+        s.dataset.glTerm = entry.term;
+        s.textContent = m[0];
+        frag.appendChild(s);
+      } else {
+        frag.appendChild(document.createTextNode(m[0]));
+      }
+      last = PATTERN.lastIndex;
+    }
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
+  function highlight() {
+    var walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (n) {
+          if (!n.textContent.trim()) return NodeFilter.FILTER_REJECT;
+          if (n.parentElement.closest('a, code, script, style, .gl-term, header, footer'))
+            return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(wrapNode);
+  }
+
+  /* ── Popup ── */
+  var popup = document.createElement('div');
+  popup.id = 'gl-popup';
+  popup.setAttribute('role', 'tooltip');
+  popup.innerHTML =
+    '<div class="gl-pop-badge">Quick Definition</div>' +
+    '<div class="gl-pop-term"></div>' +
+    '<div class="gl-pop-def"></div>' +
+    '<div class="gl-ladder">' +
+      '<div class="gl-ladder-hdr"><span>Basic</span><span>Frontier</span></div>' +
+      '<div class="gl-rungs">' + LADDER.map(function () { return '<div class="gl-rung"></div>'; }).join('') + '</div>' +
+      '<div class="gl-rung-names">' + LADDER.map(function (l) { return '<div class="gl-rung-name">' + l + '</div>'; }).join('') + '</div>' +
+    '</div>';
+
+  function position(el) {
+    var rect = el.getBoundingClientRect();
+    var PW = 320, PH = 230;
+    var left = rect.left;
+    if (left + PW > window.innerWidth - 12) left = window.innerWidth - PW - 12;
+    if (left < 12) left = 12;
+    var top = rect.bottom + 10;
+    if (rect.bottom + PH > window.innerHeight - 12) top = rect.top - PH - 10;
+    popup.style.left = left + 'px';
+    popup.style.top  = top  + 'px';
+  }
+
+  function show(el) {
+    var name  = el.dataset.glTerm;
+    var entry = GLOSSARY.find(function (e) { return e.term === name; });
+    if (!entry) return;
+
+    popup.querySelector('.gl-pop-term').textContent = entry.term;
+    popup.querySelector('.gl-pop-def').textContent  = entry.def;
+
+    var rungs = popup.querySelectorAll('.gl-rung');
+    var names = popup.querySelectorAll('.gl-rung-name');
+    rungs.forEach(function (r, i) { r.classList.toggle('gl-lit', i < entry.level); });
+    names.forEach(function (n, i) { n.classList.toggle('gl-lit', i === entry.level - 1); });
+
+    position(el);
+    popup.classList.add('gl-visible');
+    el.classList.add('gl-active');
+  }
+
+  function hide() {
+    popup.classList.remove('gl-visible');
+    document.querySelectorAll('.gl-term.gl-active').forEach(function (e) { e.classList.remove('gl-active'); });
+  }
+
+  var hideId;
+  function wire() {
+    document.addEventListener('mouseover', function (e) {
+      clearTimeout(hideId);
+      var t = e.target.closest('.gl-term');
+      if (t) show(t); else hideId = setTimeout(hide, 260);
+    });
+    popup.addEventListener('mouseenter', function () { clearTimeout(hideId); });
+    popup.addEventListener('mouseleave', function () { hideId = setTimeout(hide, 260); });
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('.gl-term');
+      if (t) { e.stopPropagation(); show(t); } else hide();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.appendChild(popup);
+    highlight();
+    wire();
+  });
+}());
+</script>
+
+<script>
+/* Password-gated sections */
+(function () {
+</script>
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">OWASP Top 10 for LLM Applications 2025 — LLM01: Prompt Injection</span>
+    <span style="color:#6b7280;font-size:12px;">OWASP · 2025 · <a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">genai.owasp.org/llmrisk/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">OWASP ranks prompt injection as LLM01:2025 — the #1 LLM risk, covering both direct and indirect injection vectors.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">OWASP Top 10 for LLM Applications 2025 — LLM08: Vector and Embedding Weaknesses</span>
+    <span style="color:#6b7280;font-size:12px;">OWASP · 2025 · <a href="https://genai.owasp.org/llmrisk/llm08-vector-and-embedding-weaknesses/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">genai.owasp.org/llmrisk/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">OWASP LLM08:2025 formalizes vector and embedding weaknesses as a distinct Top-10 entry, recognizing the RAG vector layer as a dedicated attack surface.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">NIST AI Risk Management Framework (AI RMF 1.0)</span>
+    <span style="color:#6b7280;font-size:12px;">NIST · 2023 · <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">nist.gov/itl/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP compliance reporting covers CIS, NIST, and ISO frameworks, including NIST AI RMF guidance cited throughout the article's cloud-infrastructure layer.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Rules File Backdoor: New Vulnerability in GitHub Copilot and Cursor — How Hackers Can Weaponize Code Agents</span>
+    <span style="color:#6b7280;font-size:12px;">Pillar Security · March 2025 · <a href="https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">pillar.security/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Attackers embed invisible Unicode instructions inside .cursorrules or Copilot configuration files so that when developers pull a poisoned repo, the AI assistant silently generates backdoored code.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">EchoLeak (CVE-2025-32711) — First Zero-Click Prompt Injection in a Production LLM System</span>
+    <span style="color:#6b7280;font-size:12px;">arXiv / Aim Labs · 2025 · <a href="https://arxiv.org/pdf/2509.10540" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">arxiv.org/pdf/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">CVE-2025-32711 in Microsoft 365 Copilot was described as the first known zero-click prompt injection in a production LLM system, where a crafted email triggered Copilot to exfiltrate internal documents with no user interaction.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Prompt Word Injection: An Analysis of Recent LLM Security Incidents</span>
+    <span style="color:#6b7280;font-size:12px;">NSFOCUS Global · August 2025 · <a href="https://nsfocusglobal.com/prompt-word-injection-an-analysis-of-recent-llm-security-incidents/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">nsfocusglobal.com/prompt-word-injection-… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Indirect prompt injection through ChatGPT's connectors (Google Drive, SharePoint, GitHub) exfiltrated API keys, credentials, and confidential files.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">EscapeRoute — CVE-2025-53109 / CVE-2025-53110: Chained Path and Symlink Bypasses in Anthropic Filesystem MCP Server</span>
+    <span style="color:#6b7280;font-size:12px;">Cymulate · July 2025 · <a href="https://cymulate.com/blog/cve-2025-53109-53110-escaperoute-anthropic/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cymulate.com/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Cymulate disclosed CVE-2025-53109 / CVE-2025-53110 in the Anthropic Filesystem MCP Server — chained path-prefix and symlink bypasses leading to full host compromise.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CVE-2025-6514: Critical mcp-remote RCE Vulnerability (CVSS 9.6)</span>
+    <span style="color:#6b7280;font-size:12px;">JFrog Security Research · July 2025 · <a href="https://jfrog.com/blog/2025-6514-critical-mcp-remote-rce-vulnerability/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">jfrog.com/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">CVE-2025-6514 (CVSS 9.6) in mcp-remote: connecting to a malicious remote MCP server triggered arbitrary OS command execution on the client machine.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CVE-2025-65719: Critical RCE in Kubectl MCP Server</span>
+    <span style="color:#6b7280;font-size:12px;">OX Security · January 2026 · <a href="https://www.ox.security/blog/cve-2025-65719-critical-rce-in-kubectl-mcp-server/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">ox.security/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Visiting a malicious website while the Kubectl MCP Server was running gave an attacker full control of both the local machine and every Kubernetes cluster the victim had access to.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Another Critical RCE Discovered in a Popular MCP Server (CVE-2025-53967 — Framelink Figma)</span>
+    <span style="color:#6b7280;font-size:12px;">Imperva · October 2025 · <a href="https://www.imperva.com/blog/another-critical-rce-discovered-in-a-popular-mcp-server/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">imperva.com/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">CVE-2025-53967 in the Framelink Figma MCP Server caused an RCE affecting thousands of design and developer workstations.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Technical Guide: Selective Control of Generative AI / LLM Traffic via FortiGate</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Community · community.fortinet.com · <a href="https://community.fortinet.com/t5/FortiGate/Technical-Guide-Selective-control-of-Generative-AI-LLM-traffic/ta-p/405240" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">community.fortinet.com/t5/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Fortinet has documented specific guidance for selective control of AI-Driven Systems/LLM traffic egressing through FortiGate, referenced in the Layer 4 MCP coverage section.</span>
+  </div>
+</li>
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiAIGate: Optimizing and Protecting AI Workloads</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Blog · March 2026 · <a href="https://www.fortinet.com/blog/security-operations/fortiaigate-optimizing-and-protecting-ai-workloads" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/blog/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiAIGate is a purpose-built containerized LLM gateway deployed inline between the application and the model, inspecting every prompt and completion in real time with guardrails against injection, jailbreaking, and data exfiltration.</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+</body>
+</html>

@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Tip: FortiCNAPP May 2026 Platform Release Features</title>
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* Password gate */
+  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="doc-brand-mark">FORTINET</div>
+    <div class="doc-brand-text">
+      FortiCNAPP
+      <span class="sub">Technical Tip — Release Notes · May 2026 Platform Release</span>
+    </div>
+  </div>
+</header>
+
+<article class="article">
+
+  <h1 class="title">Technical Tip: FortiCNAPP May 2026 Platform Release Features</h1>
+
+  <div style="font-family:'Inter',sans-serif;font-size:13px;color:#9CA3AF;padding-bottom:18px;border-bottom:1px solid #E5E7EB;margin-bottom:28px;">
+    FortiCNAPP PreSales Engineering &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp;
+    Authoritative source: <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">docs.fortinet.com — May 2026 Platform Releases</a>
+  </div>
+
+  <!-- Community table -->
+  <table class="community-table">
+    <tbody>
+      <tr>
+        <td class="ct-label">Description</td>
+        <td class="ct-body">
+          This Technical Tip documents all features and enhancements shipped in the <strong>FortiCNAPP May 2026 Platform Release</strong>. The release contains <strong>9 Generally Available features</strong> and <strong>1 Public Preview feature</strong>, spanning CWPP runtime, vulnerability management, AI Security, Code Security, GKE compliance, cloud log redesign, and Kubernetes agent support.
+        </td>
+      </tr>
+      <tr>
+        <td class="ct-label">Scope</td>
+        <td class="ct-body">
+          <strong>Product version:</strong> FortiCNAPP 26.2.0 (May 2026 Platform Release)<br>
+          <strong>Applies to:</strong> All FortiCNAPP tenants — AWS, Azure, GCP, OCI, Kubernetes<br>
+          <strong>Audience:</strong> Cloud Security Engineers, DevSecOps, PreSales SE, SOC Analysts<br>
+          <strong>Release page:</strong> <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">docs.fortinet.com — May 2026 Platform Releases</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="ct-label">Solution</td>
+        <td class="ct-body">
+          See the full feature-by-feature breakdown below. Quick summary by domain:
+          <ul>
+            <li><strong>CWPP / Runtime:</strong> Observation process attribution — processes behind runtime observations now fully attributed to source executables</li>
+            <li><strong>Vulnerability Management:</strong> AlmaLinux and ChainGuard Wolfi image support — RHEL-compatible and minimal distroless container images now scanned</li>
+            <li><strong>AI Security:</strong> AWS Bedrock LQL policies — purpose-built detection for GenAI workloads on Amazon Bedrock</li>
+            <li><strong>Code Security:</strong> Non-default branch assessments GA; Claude Code plug-in enters Public Preview</li>
+            <li><strong>GKE / K8s:</strong> Low-latency GKE audit log policy evaluation; agent support for Kubernetes on cloud platforms</li>
+            <li><strong>Platform UX:</strong> Threat Observations Policies page; redesigned GCP and Azure cloud log pages</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="rule">
+
+  <!-- Feature count summary -->
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:0 0 32px 0;font-family:'Inter',sans-serif;">
+    <div style="background:var(--navy);color:#fff;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
+      <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;opacity:.7;">Generally Available</div>
+      <div style="font-size:26px;font-weight:700;">9</div>
+      <div style="font-size:11px;opacity:.7;">features</div>
+    </div>
+    <div style="background:#BA7517;color:#fff;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
+      <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;opacity:.7;">Public Preview</div>
+      <div style="font-size:26px;font-weight:700;">1</div>
+      <div style="font-size:11px;opacity:.7;">feature</div>
+    </div>
+    <div style="background:#F4F6F8;border:1px solid #E5E7EB;border-radius:6px;padding:14px 20px;flex:1;min-width:130px;">
+      <div style="font-size:11px;color:#6B7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;">Domains covered</div>
+      <div style="font-size:26px;font-weight:700;color:var(--navy);">6</div>
+      <div style="font-size:11px;color:#6B7280;">CWPP · Vuln · AI Sec · Code Sec · K8s · UX</div>
+    </div>
+    <div style="background:#F4F6F8;border:1px solid #E5E7EB;border-radius:6px;padding:14px 20px;flex:2;min-width:200px;">
+      <div style="font-size:11px;color:#6B7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;">Release number</div>
+      <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:2px;">FortiCNAPP 26.2.0</div>
+      <div style="font-size:11px;color:#6B7280;"><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#DA291C;">docs.fortinet.com — May 2026 Platform Releases</a></div>
+    </div>
+  </div>
+
+  <!-- ── GENERALLY AVAILABLE ─────────────────────────────────── -->
+  <h2 class="section-full">Generally Available — May 2026</h2>
+
+  <div class="feature-grid">
+
+    <!-- F1 Observation process attribution -->
+    <div class="feature-card cwpp">
+      <div class="feature-num">Feature 1 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">CWPP · Runtime</span></div>
+      <div class="feature-title">Observation Process Attribution</div>
+      <div class="feature-body">
+        <p>FortiCNAPP runtime observations — anomalous events surfaced by the Polygraph ML engine — are now <strong>fully attributed to the specific process that generated them</strong>. Previously, observations could point to a workload or container without clearly identifying which executable or process was responsible for the behaviour that triggered the detection.</p>
+        <p>With this release, each observation in the console displays the <strong>originating process name, PID lineage, and execution path</strong>, enabling analysts to immediately identify which binary triggered the alert and trace it back to the application stack.</p>
+        <p><strong>PreSales impact:</strong> Directly strengthens the Day Zero detection story — when a novel threat like a supply chain attack executes an unexpected process, the observation is now immediately attributable, reducing investigation time and removing ambiguity in SOC triage.</p>
+        <ul>
+          <li>Applicable to all Linux workloads instrumented with the FortiCNAPP agent (eBPF)</li>
+          <li>Observation details visible in <em>Alerts → Composite Alerts</em> and the Polygraph investigation view</li>
+          <li>Feeds directly into FortiSOAR playbooks for automated containment based on process name</li>
+        </ul>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">↗ Release notes</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/986450/composite-alerts-reference" target="_blank" rel="noopener">↗ Composite Alerts Reference</a></span>
+      </div>
+    </div>
+
+    <!-- F2 AlmaLinux -->
+    <div class="feature-card vuln">
+      <div class="feature-num">Feature 2 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Vulnerability Management</span></div>
+      <div class="feature-title">Vulnerability Management Now Supports AlmaLinux</div>
+      <div class="feature-body">
+        <p>FortiCNAPP vulnerability scanning now supports <strong>AlmaLinux</strong> — the community-maintained RHEL-binary-compatible distribution that became a primary migration target for organisations moving off CentOS after Red Hat's 2023 CentOS Stream transition.</p>
+        <p>AlmaLinux versions supported: <strong>8.x and 9.x</strong>. CVE detection covers OS packages (RPM), installed software, and active package execution (where the FortiCNAPP agent is deployed and Code Aware Agent is enabled for Active Vulnerability Detection).</p>
+        <ul>
+          <li>Agentless scanning via snapshot analysis — no agent required for basic CVE discovery</li>
+          <li>Agent-based scanning with the FortiCNAPP Linux agent unlocks active package execution detection (which packages are actually loaded in memory vs. installed)</li>
+          <li>Results appear in <em>Vulnerabilities → Hosts</em> with AlmaLinux OS version context</li>
+        </ul>
+        <div class="note note-green"><strong>Coverage context:</strong> AlmaLinux is binary-compatible with RHEL. CVE feeds are sourced from AlmaLinux OS Foundation OVAL data and NVD. RHEL-based enterprise workloads migrated from CentOS 7/8 now have full FortiCNAPP vulnerability coverage.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/843803/different-types-of-scanning" target="_blank" rel="noopener">↗ Different Types of Scanning</a></span>
+      </div>
+    </div>
+
+    <!-- F3 Bedrock LQL -->
+    <div class="feature-card aisec">
+      <div class="feature-num">Feature 3 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">AI Security</span></div>
+      <div class="feature-title">AI Security: Bedrock LQL Policies</div>
+      <div class="feature-body">
+        <p>FortiCNAPP AI Security now ships <strong>purpose-built LQL (Lacework Query Language) detection policies for Amazon Bedrock</strong> — AWS's managed generative AI service. These policies monitor Bedrock API activity via CloudTrail and surface anomalous or policy-violating GenAI workload behaviours.</p>
+        <p>Detection scenarios covered by the Bedrock LQL policy set include:</p>
+        <ul>
+          <li>Unusual model invocation volumes or patterns (potential prompt injection campaigns or model scraping)</li>
+          <li>Bedrock API calls from unexpected identities or source IPs deviating from the established baseline</li>
+          <li>Anomalous cross-account or cross-region Bedrock access patterns</li>
+          <li>Access to Bedrock knowledge bases or agents outside established access patterns</li>
+        </ul>
+        <p>Policies are available as <strong>standard built-in policies</strong> and can be cloned and customised using the FortiCNAPP LQL editor for environment-specific AI governance requirements.</p>
+        <div class="note note-amber"><strong>AI Security positioning:</strong> This is the second FortiCNAPP AI Security capability following AI-SPM (AI Security Posture Management). Bedrock LQL extends FortiCNAPP coverage into GenAI runtime behaviour — detecting threats in AI workloads the same way Polygraph detects threats in traditional cloud workloads: by deviation from a behavioural baseline, no signature required.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">↗ Release notes</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/772309/view-alerts" target="_blank" rel="noopener">↗ View Alerts</a></span>
+      </div>
+    </div>
+
+    <!-- F4 Non-default branch assessments -->
+    <div class="feature-card codesec">
+      <div class="feature-num">Feature 4 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Code Security</span></div>
+      <div class="feature-title">Viewing Non-Default Branch Assessments in Code Security</div>
+      <div class="feature-body">
+        <p>FortiCNAPP Code Security can now display vulnerability assessment results for <strong>non-default branches</strong> (e.g. feature branches, release branches, hotfix branches) in addition to the default branch (typically <code>main</code> or <code>master</code>).</p>
+        <p>Previously, Code Security assessments — covering SCA (open-source dependency vulnerabilities), SAST (static analysis findings), IaC misconfigurations, and secrets detection — were surfaced for the default branch only. This meant vulnerabilities introduced in feature branches were invisible to FortiCNAPP until they were merged.</p>
+        <p>With this GA release, security teams can:</p>
+        <ul>
+          <li>Navigate to any scanned branch in the Code Security repository view and review findings specific to that branch</li>
+          <li>Identify vulnerabilities <strong>before merge</strong> — enabling genuinely shift-left triage without waiting for PR approval</li>
+          <li>Compare branch-level risk posture across development streams in active repositories</li>
+        </ul>
+        <div class="note note-green"><strong>Shift-left impact:</strong> This closes the gap between repository scanning and developer workflow. A critical dependency CVE introduced in a feature branch is now visible in FortiCNAPP before it reaches the default branch, reducing mean time to fix and preventing vulnerable code from entering production.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/390829/code-security-repository-scanning-process" target="_blank" rel="noopener">↗ Code Security Repository Scanning Process</a></span>
+      </div>
+    </div>
+
+    <!-- F5 GKE low latency -->
+    <div class="feature-card k8s">
+      <div class="feature-num">Feature 5 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Kubernetes · GKE</span></div>
+      <div class="feature-title">Low Latency GKE Audit Log Violation Policy Evaluation and Alerts</div>
+      <div class="feature-body">
+        <p>GKE (Google Kubernetes Engine) audit log violation policy evaluation now runs at <strong>significantly reduced latency</strong> — moving from batch-period processing to near-real-time evaluation. Alerts for GKE audit log policy violations are surfaced in the FortiCNAPP console within <strong>minutes of the triggering event</strong> rather than within the previous longer processing window.</p>
+        <p>This enhancement applies to all GKE audit log policies, including:</p>
+        <ul>
+          <li>Kubernetes RBAC modification detections (role/clusterrole binding changes)</li>
+          <li>Unauthorised API server access patterns</li>
+          <li>Pod creation with elevated privileges or HostPath volume mounts</li>
+          <li>Service account token misuse and impersonation events</li>
+          <li>Custom LQL policies using the <code>LW_ACT_K8S_AUDIT</code> datasource</li>
+        </ul>
+        <p>The implementation leverages the existing GCP Pub/Sub-based audit log ingestion path, which routes logs to FortiCNAPP within minutes of generation — the same low-latency mechanism available for GCP cloud audit logs since an earlier release.</p>
+        <div class="note"><strong>Prerequisites:</strong> GKE cluster must be integrated with FortiCNAPP via the GKE audit log integration (not the Storage-based path). See <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/280544/kubernetes-audit-logs-for-gke" target="_blank" rel="noopener">Kubernetes Audit Logs for GKE</a> for integration setup.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/280544/kubernetes-audit-logs-for-gke" target="_blank" rel="noopener">↗ Kubernetes Audit Logs for GKE</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener">↗ Install on Kubernetes</a></span>
+      </div>
+    </div>
+
+    <!-- F6 ChainGuard Wolfi -->
+    <div class="feature-card vuln">
+      <div class="feature-num">Feature 6 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Vulnerability Management</span></div>
+      <div class="feature-title">Vulnerability Management Now Supports ChainGuard Wolfi Images</div>
+      <div class="feature-body">
+        <p>FortiCNAPP vulnerability scanning now supports container images built on <strong>ChainGuard Wolfi</strong> — a minimal, security-hardened Linux distribution specifically designed for container and cloud-native workloads. Wolfi is maintained by Chainguard and is the foundation for Chainguard Images, a growing ecosystem of minimal distroless base images widely adopted for supply chain security hardening.</p>
+        <p>Wolfi images present unique scanning challenges because they use the APK package format (from Alpine), do not include a traditional OS CVE feed, and often exclude packages entirely from the final image layer. FortiCNAPP now correctly:</p>
+        <ul>
+          <li>Identifies Wolfi as the base OS and selects the appropriate package database (Wolfi SBOM / Chainguard advisory feed)</li>
+          <li>Scans installed APK packages for known CVEs against the Wolfi advisory database</li>
+          <li>Correctly handles <strong>minimal/distroless Wolfi images</strong> that contain zero OS packages and reports them as low-risk baselines accurately</li>
+        </ul>
+        <div class="note note-amber"><strong>Supply chain security context:</strong> Chainguard Wolfi images are explicitly adopted to reduce CVE surface area. FortiCNAPP's Wolfi support allows organisations to verify that their Chainguard adoption is achieving the intended reduction in vulnerability exposure — and surfaces any CVEs present in application-layer packages that Wolfi does not itself eliminate.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/843803/different-types-of-scanning" target="_blank" rel="noopener">↗ Different Types of Scanning</a></span>
+      </div>
+    </div>
+
+    <!-- F7 Threat Observations Policies -->
+    <div class="feature-card cwpp">
+      <div class="feature-num">Feature 7 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">CWPP · Runtime</span></div>
+      <div class="feature-title">Threat Observations Policies Page</div>
+      <div class="feature-body">
+        <p>FortiCNAPP introduces a dedicated <strong>Threat Observations Policies page</strong> — a new console section that centralises all policies governing how the Polygraph ML engine and CWPP agent surface threat observations. Previously, observation-related policies were distributed across multiple locations in the Posture Policies section.</p>
+        <p>The new page provides:</p>
+        <ul>
+          <li>A single view of all policies that produce threat observations — separated from compliance and misconfiguration policies</li>
+          <li>Policy status, severity, and last-triggered context for each observation policy</li>
+          <li>Ability to <strong>enable, disable, or customise</strong> observation policies from a single location</li>
+          <li>Direct linkage between an active observation in the alert view and the governing policy that produced it</li>
+        </ul>
+        <p><strong>Console navigation:</strong> <em>Policies → Threat Observations</em></p>
+        <div class="note"><strong>Operational value:</strong> This is a policy management UX improvement that reduces the time to understand <em>why</em> an observation was generated — which policy fired, at what threshold, and whether the policy is tuned for the current environment.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener">↗ FortiCNAPP Polygraph FAQ</a></span>
+      </div>
+    </div>
+
+    <!-- F8 Redesigned GCP and Azure cloud log pages -->
+    <div class="feature-card cspm">
+      <div class="feature-num">Feature 8 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Platform UX · Cloud Logs</span></div>
+      <div class="feature-title">Redesigned GCP and Azure Cloud Log Pages</div>
+      <div class="feature-body">
+        <p>The <strong>GCP Audit Log</strong> and <strong>Azure Activity Log</strong> pages in the FortiCNAPP console have been redesigned with an updated interface. These pages are the primary entry points for investigating cloud control plane activity — API calls, identity actions, and resource modifications ingested from GCP and Azure respectively.</p>
+        <p>The redesigned pages introduce:</p>
+        <ul>
+          <li>Updated layout consistent with the previously redesigned AWS CloudTrail log page (April 2026 release)</li>
+          <li>Improved filtering controls — filter by identity, resource, action type, time range, and severity in a single unified filter panel</li>
+          <li>Enhanced Polygraph integration — cloud log events are directly linked to the Polygraph visualisation, showing where each event falls on the behavioural baseline</li>
+          <li>Faster load times and improved pagination for large-scale cloud environments</li>
+        </ul>
+        <p><strong>Console navigation:</strong> <em>Cloud Logs → GCP Audit Log</em> and <em>Cloud Logs → Azure Activity Log</em></p>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/199085/gcp-audit-log-page" target="_blank" rel="noopener">↗ GCP Audit Log Page</a></span>
+      </div>
+    </div>
+
+    <!-- F9 Agent support for Kubernetes on cloud platforms -->
+    <div class="feature-card k8s">
+      <div class="feature-num">Feature 9 of 10 <span class="badge badge-ga">GA</span> <span class="badge badge-domain">Kubernetes · CWPP</span></div>
+      <div class="feature-title">Agent Support for Kubernetes on Cloud Platforms</div>
+      <div class="feature-body">
+        <p>The FortiCNAPP Linux agent now has <strong>expanded Kubernetes support across managed cloud platforms</strong> — covering EKS (AWS), AKS (Azure), and GKE (GCP) in addition to self-managed Kubernetes clusters. This release resolves agent compatibility gaps that existed for specific managed Kubernetes node configurations and Kubernetes versions on cloud provider-managed node pools.</p>
+        <p>Key improvements:</p>
+        <ul>
+          <li>Agent DaemonSet deployment validated across EKS (Bottlerocket and Amazon Linux 2023 nodes), AKS (Ubuntu and Azure Linux nodes), and GKE (Container-Optimised OS and Ubuntu nodes)</li>
+          <li>Correct process-level eBPF telemetry collection on Kubernetes nodes running Linux kernel 4.14+</li>
+          <li>Support for <strong>auto-scaling node groups</strong> — agent automatically onboards new nodes as they are provisioned and de-registers gracefully on node termination</li>
+          <li>Helm chart updated to support platform-specific tolerations and node selectors out of the box</li>
+        </ul>
+        <div class="note note-green"><strong>Deployment references:</strong> Full deployment procedures for each platform are documented at <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener">Installing Linux Agent on Kubernetes</a> and <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/354468/how-forticnapp-derives-the-k8s-cluster-name" target="_blank" rel="noopener">How FortiCNAPP Derives the K8s Cluster Name</a>.</div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener">↗ Install on Kubernetes</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener">↗ Installing Linux Agent on Kubernetes</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/354468/how-forticnapp-derives-the-k8s-cluster-name" target="_blank" rel="noopener">↗ How FortiCNAPP Derives the K8s Cluster Name</a></span>
+      </div>
+    </div>
+
+  </div><!-- end GA feature grid -->
+
+  <!-- ── PUBLIC PREVIEW ─────────────────────────────────────────── -->
+  <h2 class="section-full">Public Preview — May 2026</h2>
+
+  <div class="feature-grid">
+
+    <!-- F10 Claude Code plug-in -->
+    <div class="feature-card pp">
+      <div class="feature-num">Feature 10 of 10 <span class="badge badge-pp">Public Preview</span> <span class="badge badge-domain">Code Security</span></div>
+      <div class="feature-title">Code Security Claude Code Plug-in — Public Preview</div>
+      <div class="feature-body">
+        <p>The <strong>FortiCNAPP Code Security plug-in for Claude Code</strong> enters Public Preview. The plug-in is available in the Claude Code marketplace and brings FortiCNAPP IaC and dependency scanning directly into the Claude Code agentic development workflow.</p>
+        <p>When installed, the plug-in automatically scans:</p>
+        <ul>
+          <li><strong>Infrastructure-as-Code (IaC)</strong> files — Terraform, CloudFormation, Kubernetes manifests, Helm charts — for security misconfigurations using FortiCNAPP IaC policies (Rego/Opal engine)</li>
+          <li><strong>Dependency files</strong> (SCA) — <code>package.json</code>, <code>requirements.txt</code>, <code>go.mod</code>, <code>pom.xml</code> etc. — for known CVEs using FortiCNAPP's SCA engine</li>
+        </ul>
+        <p><strong>Key behaviour:</strong> IaC and SCA scanners launch <strong>in parallel</strong> on the project directory when the plug-in is invoked — minimising scan latency in Claude Code sessions. Findings are surfaced as natural-language security findings inline in the Claude Code workflow, with severity, policy reference, and direct remediation guidance.</p>
+        <p><strong>Installation:</strong> Available in the Claude Code marketplace. Requires a FortiCNAPP Code Security license.</p>
+        <div class="note note-amber">
+          <strong>Public Preview notice:</strong> This feature is in Public Preview as of the May 2026 release. It was previously listed as Public Preview in the April 2026 release notes. Public Preview features are available for customer evaluation but may be subject to change before General Availability. Provide feedback via the FortiCNAPP community portal.
+        </div>
+        <div class="note note-green">
+          <strong>IDE extension ecosystem:</strong> The Claude Code plug-in joins two existing GA IDE integrations — the <strong>VS Code extension</strong> and the <strong>Cursor IDE extension</strong> (both GA, covering SCA, SAST, IaC, and secrets detection). Together these three touchpoints provide FortiCNAPP Code Security coverage across the three most widely adopted AI-assisted development environments.
+        </div>
+      </div>
+      <div class="feature-meta">
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in" target="_blank" rel="noopener">↗ Claude Code Plug-in (docs)</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/695183/vs-code" target="_blank" rel="noopener">↗ VS Code Extension</a></span>
+        <span class="feature-doc"><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/5886/code-security" target="_blank" rel="noopener">↗ Code Security (IDE extensions)</a></span>
+      </div>
+    </div>
+
+  </div><!-- end PP feature grid -->
+
+  <hr class="rule">
+
+  <!-- Feature summary table -->
+  <h2 class="section-full">Release Summary</h2>
+  <table class="summary-table">
+    <thead>
+      <tr><th style="width:5%">#</th><th style="width:30%">Feature</th><th style="width:12%">Status</th><th style="width:15%">Domain</th><th>Impact</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td><td>Observation process attribution</td><td><span class="badge badge-ga">GA</span></td><td>CWPP · Runtime</td>
+        <td>Processes behind Polygraph observations now attributed to specific executable — faster SOC triage, feeds FortiSOAR automation</td>
+      </tr>
+      <tr>
+        <td>2</td><td>Vulnerability management: AlmaLinux</td><td><span class="badge badge-ga">GA</span></td><td>Vulnerability Mgmt</td>
+        <td>Closes CVE scanning gap for RHEL-compatible workloads migrated from CentOS 7/8 to AlmaLinux 8.x/9.x</td>
+      </tr>
+      <tr>
+        <td>3</td><td>AI Security: Bedrock LQL policies</td><td><span class="badge badge-ga">GA</span></td><td>AI Security</td>
+        <td>Purpose-built detection for Amazon Bedrock GenAI workloads — anomalous model invocation, identity deviation, cross-account access</td>
+      </tr>
+      <tr>
+        <td>4</td><td>Non-default branch assessments in Code Security</td><td><span class="badge badge-ga">GA</span></td><td>Code Security</td>
+        <td>SCA/SAST/IaC findings now visible for feature and release branches before merge — genuinely shift-left triage</td>
+      </tr>
+      <tr>
+        <td>5</td><td>Low latency GKE audit log policy evaluation</td><td><span class="badge badge-ga">GA</span></td><td>Kubernetes · GKE</td>
+        <td>GKE audit log policy alerts now surface in minutes via Pub/Sub path — RBAC, privilege escalation, and API anomalies detected near-real-time</td>
+      </tr>
+      <tr>
+        <td>6</td><td>Vulnerability management: ChainGuard Wolfi</td><td><span class="badge badge-ga">GA</span></td><td>Vulnerability Mgmt</td>
+        <td>Wolfi/Chainguard distroless container image scanning — validates supply chain hardening effectiveness</td>
+      </tr>
+      <tr>
+        <td>7</td><td>Threat Observations Policies page</td><td><span class="badge badge-ga">GA</span></td><td>CWPP · Platform UX</td>
+        <td>Centralised policy management for all runtime observation policies — reduces time-to-understand why an observation was generated</td>
+      </tr>
+      <tr>
+        <td>8</td><td>Redesigned GCP and Azure cloud log pages</td><td><span class="badge badge-ga">GA</span></td><td>Platform UX · Cloud Logs</td>
+        <td>Consistent UI with April 2026 CloudTrail redesign — improved filtering, Polygraph integration, faster load for large environments</td>
+      </tr>
+      <tr>
+        <td>9</td><td>Agent support for Kubernetes on cloud platforms</td><td><span class="badge badge-ga">GA</span></td><td>Kubernetes · CWPP</td>
+        <td>Expanded EKS / AKS / GKE node type coverage, auto-scaling node group support, updated Helm chart with platform tolerations</td>
+      </tr>
+      <tr>
+        <td>10</td><td>Code Security Claude Code Plug-in</td><td><span class="badge badge-pp">Preview</span></td><td>Code Security</td>
+        <td>FortiCNAPP IaC + SCA scanning in Claude Code marketplace — parallel scan on project directory; completes VS Code + Cursor + Claude Code IDE coverage</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="rule">
+
+  <!-- References -->
+  <div class="refs">
+    <div class="refs-title">References</div>
+    <ul>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP May 2026 Platform Releases (authoritative)</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/277103/forticnapp-release-updates" target="_blank" rel="noopener">docs.fortinet.com — FortiCNAPP Release Updates (index)</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in" target="_blank" rel="noopener">docs.fortinet.com — Claude Code Plug-in</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/695183/vs-code" target="_blank" rel="noopener">docs.fortinet.com — VS Code Extension</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/44596/install-on-kubernetes" target="_blank" rel="noopener">docs.fortinet.com — Install on Kubernetes</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener">docs.fortinet.com — Installing Linux Agent on Kubernetes</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/354468/how-forticnapp-derives-the-k8s-cluster-name" target="_blank" rel="noopener">docs.fortinet.com — How FortiCNAPP Derives the K8s Cluster Name</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/843803/different-types-of-scanning" target="_blank" rel="noopener">docs.fortinet.com — Different Types of Scanning</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/280544/kubernetes-audit-logs-for-gke" target="_blank" rel="noopener">docs.fortinet.com — Kubernetes Audit Logs for GKE</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/390829/code-security-repository-scanning-process" target="_blank" rel="noopener">docs.fortinet.com — Code Security Repository Scanning Process</a></li>
+    </ul>
+  </div>
+
+  <!-- Tags -->
+  <div class="tags">
+    <span class="tag">forticnapp</span>
+    <span class="tag">release-notes</span>
+    <span class="tag">may-2026</span>
+    <span class="tag">CWPP</span>
+    <span class="tag">vulnerability-management</span>
+    <span class="tag">AlmaLinux</span>
+    <span class="tag">ChainGuard-Wolfi</span>
+    <span class="tag">AI-security</span>
+    <span class="tag">Bedrock</span>
+    <span class="tag">code-security</span>
+    <span class="tag">Claude-Code-plug-in</span>
+    <span class="tag">kubernetes</span>
+    <span class="tag">GKE</span>
+    <span class="tag">EKS</span>
+    <span class="tag">AKS</span>
+    <span class="tag">observation-attribution</span>
+    <span class="tag">shift-left</span>
+    <span class="tag">polygraph</span>
+  </div>
+
+</article>
+
+<footer class="doc-footer">
+  <div class="doc-footer-inner">
+    <strong>Fortinet Community Knowledge Base</strong> · Technical Tip: FortiCNAPP May 2026 Platform Release Features · June 2026 · © 2026 Fortinet, Inc.<br>
+    Authoritative source: <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#DA291C;">docs.fortinet.com — May 2026 Platform Releases</a>
+  </div>
+</footer>
+
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP May 2026 Platform Releases</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/release-notes/782217/may-2026-platform-releases" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The article's authoritative primary source: FortiCNAPP 26.2.0 (May 2026 Platform Release) containing 9 GA features and 1 Public Preview feature across CWPP, vulnerability management, AI Security, Code Security, GKE, and platform UX.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Different Types of Scanning</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/843803/different-types-of-scanning" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">AlmaLinux 8.x and 9.x and ChainGuard Wolfi container images are now supported by FortiCNAPP vulnerability scanning, covering both agentless snapshot analysis and agent-based active package execution detection.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Claude Code Plug-in</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Code Security plug-in for Claude Code enters Public Preview as of the May 2026 release, bringing IaC and SCA scanning directly into the Claude Code agentic development workflow.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Code Security Repository Scanning Process</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/390829/code-security-repository-scanning-process" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Code Security assessments covering SCA, SAST, IaC misconfigurations, and secrets detection can now display findings for non-default branches before they are merged into main/master.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Kubernetes Audit Logs for GKE</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/280544/kubernetes-audit-logs-for-gke" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">GKE audit log violation policy evaluation now runs at near-real-time latency via GCP Pub/Sub-based ingestion; GKE cluster must be integrated with FortiCNAPP via the GKE audit log integration (not the Storage-based path).</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Installing Linux Agent on Kubernetes</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/663510/installing-linux-agent-on-kubernetes" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Linux agent now has expanded Kubernetes support across EKS, AKS, and GKE managed cloud platforms, with the DaemonSet deployment procedures documented for each platform.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Polygraph FAQ</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/567772/forticnapp-polygraph-faq" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Threat Observations Policies page centralises all policies governing how the Polygraph ML engine and CWPP agent surface threat observations, reducing time to understand why an observation was generated.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">AlmaLinux OS Foundation</span>
+    <span style="color:#6b7280;font-size:12px;">AlmaLinux OS Foundation · 2024 · <a href="https://almalinux.org/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">almalinux.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">AlmaLinux is a community-maintained RHEL-binary-compatible distribution that became a primary migration target for organisations moving off CentOS after Red Hat's 2023 CentOS Stream transition, with versions 8.x and 9.x supported by FortiCNAPP.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Chainguard Wolfi — A Linux undistro for containers</span>
+    <span style="color:#6b7280;font-size:12px;">Chainguard · 2024 · <a href="https://github.com/wolfi-dev/wolfi-os" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">github.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Chainguard Wolfi is a minimal, security-hardened Linux distribution specifically designed for container and cloud-native workloads, using the APK package format and maintained by Chainguard as the foundation for minimal distroless base images.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">Amazon Bedrock — Managed Generative AI Service</span>
+    <span style="color:#6b7280;font-size:12px;">Amazon Web Services · 2024 · <a href="https://aws.amazon.com/bedrock/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">aws.amazon.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP AI Security ships purpose-built LQL detection policies for Amazon Bedrock, AWS's managed generative AI service, monitoring Bedrock API activity via CloudTrail for anomalous GenAI workload behaviours.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">OWASP Top 10 for Large Language Model Applications</span>
+    <span style="color:#6b7280;font-size:12px;">OWASP · 2023 · <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">owasp.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">Bedrock LQL policies detect unusual model invocation volumes or patterns including potential prompt injection campaigns, which aligns with OWASP's documented LLM threat categories for GenAI workloads.</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CIS Kubernetes Benchmark</span>
+    <span style="color:#6b7280;font-size:12px;">CIS Security · 2024 · <a href="https://www.cisecurity.org/benchmark/kubernetes" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisecurity.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">GKE audit log policies include detections for Kubernetes RBAC modification, pod creation with elevated privileges or HostPath volume mounts, and service account token misuse — control areas covered by the CIS Kubernetes Benchmark.</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+</body>
+</html>

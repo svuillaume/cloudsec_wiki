@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="480" viewBox="0 0 680 480" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+<title id="title">FortiCNAPP five-layer correlation pipeline</title>
+<desc id="desc">Five noisy cloud security input layers — Inventory, CSPM, CIEM, Exposure, and Vulnerabilities — feed into a Composite Alert engine that produces a single risk-prioritized output.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<text x="40" y="30" font-size="14" font-weight="500" fill="#1f1f1f">Noisy inputs</text>
+<text x="320" y="30" font-size="14" font-weight="500" fill="#1f1f1f">Correlation</text>
+<text x="540" y="30" font-size="14" font-weight="500" fill="#1f1f1f">Prioritized output</text>
+
+<rect x="40" y="50" width="220" height="56" rx="8" fill="#FDEAE8" stroke="#DA291C" stroke-width="0.5"/>
+<text x="150" y="76" text-anchor="middle" font-size="14" font-weight="500" fill="#7A1810">Cloud inventory</text>
+<text x="150" y="94" text-anchor="middle" font-size="12" fill="#9E2A1E">Resources, configuration history</text>
+
+<rect x="40" y="120" width="220" height="56" rx="8" fill="#FDEAE8" stroke="#DA291C" stroke-width="0.5"/>
+<text x="150" y="146" text-anchor="middle" font-size="14" font-weight="500" fill="#7A1810">CSPM</text>
+<text x="150" y="164" text-anchor="middle" font-size="12" fill="#9E2A1E">Misconfiguration, compliance</text>
+
+<rect x="40" y="190" width="220" height="56" rx="8" fill="#FDEAE8" stroke="#DA291C" stroke-width="0.5"/>
+<text x="150" y="216" text-anchor="middle" font-size="14" font-weight="500" fill="#7A1810">CIEM</text>
+<text x="150" y="234" text-anchor="middle" font-size="12" fill="#9E2A1E">Identity, entitlements, blast radius</text>
+
+<rect x="40" y="260" width="220" height="56" rx="8" fill="#FDEAE8" stroke="#DA291C" stroke-width="0.5"/>
+<text x="150" y="286" text-anchor="middle" font-size="14" font-weight="500" fill="#7A1810">Internet exposure</text>
+<text x="150" y="304" text-anchor="middle" font-size="12" fill="#9E2A1E">Effective reachability path</text>
+
+<rect x="40" y="330" width="220" height="56" rx="8" fill="#FDEAE8" stroke="#DA291C" stroke-width="0.5"/>
+<text x="150" y="356" text-anchor="middle" font-size="14" font-weight="500" fill="#7A1810">Vulnerabilities</text>
+<text x="150" y="374" text-anchor="middle" font-size="12" fill="#9E2A1E">CVE, secrets, runtime exploitability</text>
+
+<line x1="260" y1="78" x2="370" y2="200" stroke="#DA291C" stroke-width="1.5" opacity="0.55" marker-end="url(#arrow)"/>
+<line x1="260" y1="148" x2="370" y2="210" stroke="#DA291C" stroke-width="1.5" opacity="0.55" marker-end="url(#arrow)"/>
+<line x1="260" y1="218" x2="370" y2="220" stroke="#DA291C" stroke-width="1.5" opacity="0.55" marker-end="url(#arrow)"/>
+<line x1="260" y1="288" x2="370" y2="230" stroke="#DA291C" stroke-width="1.5" opacity="0.55" marker-end="url(#arrow)"/>
+<line x1="260" y1="358" x2="370" y2="240" stroke="#DA291C" stroke-width="1.5" opacity="0.55" marker-end="url(#arrow)"/>
+
+<rect x="370" y="170" width="180" height="100" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text x="460" y="200" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C">Attack Path Analysis</text>
+<text x="460" y="222" text-anchor="middle" font-size="12" fill="#3C3489">Polygraph correlation</text>
+<text x="460" y="240" text-anchor="middle" font-size="12" fill="#3C3489">Risk-factor graph</text>
+<text x="460" y="258" text-anchor="middle" font-size="12" fill="#3C3489">Path-risk calculation</text>
+
+<line x1="550" y1="220" x2="600" y2="220" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="600" y="170" width="60" height="100" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text x="630" y="214" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C">Risk</text>
+<text x="630" y="232" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C">Score</text>
+<text x="630" y="252" text-anchor="middle" font-size="12" fill="#085041">One</text>
+<text x="630" y="266" text-anchor="middle" font-size="12" fill="#085041">alert</text>
+
+<text x="40" y="420" font-size="12" fill="#5F5E5A">Continuous CSPM — behavioral baseline observes the configuration-to-behavior gap and feeds runtime signals back into the correlator.</text>
+<line x1="40" y1="430" x2="640" y2="430" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="2 2"/>
+<text x="40" y="450" font-size="12" fill="#5F5E5A">Outputs surface in the FortiCNAPP console and integrate bidirectionally with AWS Security Hub, Azure Defender for Cloud, GCP SCC, and FortiSOAR.</text>
+</svg>

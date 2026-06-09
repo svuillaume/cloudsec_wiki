@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FortiCNAPP CodeSec vs. Snyk — PreSales Comparison (2025–2026)</title>
+<style>
+  :root {
+    --forti-red: #DA291C;
+    --forti-dark: #1A1F36;
+    --forti-blue: #0066B3;
+    --bg: #F7F8FB;
+    --panel: #FFFFFF;
+    --ink: #1A1F36;
+    --ink-2: #4A5468;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --good: #16A34A;
+    --warn: #D97706;
+    --bad: #DC2626;
+    --neutral: #6B7280;
+    --snyk: #4C4A73;
+    --forti: #DA291C;
+    --code-bg: #0F172A;
+    --code-ink: #E2E8F0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 28px 80px; }
+  header.hero {
+    background: linear-gradient(135deg, #1A1F36 0%, #2A3458 60%, #0066B3 100%);
+    color: #fff;
+    padding: 44px 44px 38px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(26,31,54,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::after {
+    content: "";
+    position: absolute;
+    right: -80px; top: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(218,41,28,0.35), transparent 65%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11px;
+    color: #FFD7D2;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 32px; margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.2; }
+  h1 .vs { color: #FFD7D2; font-weight: 500; }
+  .subtitle { color: #C8D2E8; font-size: 16px; max-width: 820px; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px;
+    font-size: 13px; color: #C8D2E8;
+  }
+  .meta-row span b { color: #fff; font-weight: 600; }
+
+  h2 {
+    font-size: 22px; margin: 44px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--forti-red);
+    display: inline-block;
+  }
+  h3 { font-size: 17px; margin: 28px 0 10px; color: var(--forti-dark); }
+  h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); margin: 20px 0 8px; }
+  p { margin: 0 0 12px; }
+  a { color: var(--forti-blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-top: 18px;
+    box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  }
+  .callout {
+    background: linear-gradient(180deg, #FFFAF8 0%, #FFF1ED 100%);
+    border: 1px solid #FBD3CB;
+    border-left: 4px solid var(--forti-red);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .callout .label { font-weight: 700; color: var(--forti-red); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th, td {
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th { background: #F1F4FA; font-weight: 600; color: var(--ink); font-size: 13px; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #FAFBFE; }
+  td.dim { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .score {
+    display: inline-block;
+    min-width: 38px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    color: #fff;
+  }
+  .s5 { background: #16A34A; }
+  .s4 { background: #65A30D; }
+  .s3 { background: #CA8A04; }
+  .s2 { background: #EA580C; }
+  .s1 { background: #DC2626; }
+  .winner-snyk { color: #4C4A73; font-weight: 700; }
+  .winner-forti { color: var(--forti-red); font-weight: 700; }
+  .tied { color: var(--neutral); font-weight: 600; }
+
+  /* Two-column comparison cards */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+  .vendor-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px;
+  }
+  .vendor-card.forti { border-top: 4px solid var(--forti-red); }
+  .vendor-card.snyk { border-top: 4px solid var(--snyk); }
+  .vendor-card h3 { margin-top: 0; }
+  .vendor-card ul { padding-left: 18px; margin: 8px 0; }
+  .vendor-card li { margin-bottom: 6px; }
+  .strength li::marker { color: var(--good); }
+  .weakness li::marker { color: var(--bad); }
+
+  /* Audience tabs */
+  .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 14px; }
+  .audience-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px;
+    border-top: 4px solid var(--forti-blue);
+  }
+  .audience-card h3 { margin-top: 0; font-size: 16px; }
+  .audience-card .role { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--forti-blue); font-weight: 700; margin-bottom: 4px; }
+
+  /* Verdict */
+  .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .verdict .pick { padding: 18px; border-radius: 10px; }
+  .verdict .pick-forti { background: #FFF1ED; border: 1px solid #FBD3CB; }
+  .verdict .pick-snyk { background: #EEEEF7; border: 1px solid #C8C7DC; }
+  .verdict h4 { margin-top: 0; }
+
+  /* Citations */
+  .cite { font-size: 11px; color: var(--muted); vertical-align: super; }
+  ol.refs { font-size: 13px; color: var(--ink-2); padding-left: 22px; }
+  ol.refs li { margin-bottom: 6px; }
+
+  /* Misc */
+  .key-fact {
+    display: inline-block;
+    background: #EEF6FF;
+    color: #0B4A82;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .pill-forti { background: #FFF1ED; color: var(--forti-red); }
+  .pill-snyk { background: #EEEEF7; color: var(--snyk); }
+  .legend { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .legend .score { margin-right: 6px; }
+  .small { font-size: 12px; color: var(--muted); }
+  hr.soft { border: none; border-top: 1px dashed var(--border); margin: 24px 0; }
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Bottom-line statement grid */
+  .statement-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .statement {
+    position: relative;
+    padding: 22px 22px 22px 64px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  }
+  .statement .icon {
+    position: absolute;
+    left: 18px; top: 22px;
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: #fff;
+  }
+  .statement .tag {
+    display: inline-block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .statement h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .statement p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .statement.snyk { border-left: 4px solid var(--snyk); }
+  .statement.snyk .icon { background: var(--snyk); }
+  .statement.snyk .tag { background: #EEEEF7; color: var(--snyk); }
+  .statement.forti { border-left: 4px solid var(--forti-red); }
+  .statement.forti .icon { background: var(--forti-red); }
+  .statement.forti .tag { background: #FFF1ED; color: var(--forti-red); }
+
+  @media (max-width: 880px) {
+    .two-col, .audience-grid, .verdict, .statement-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    .wrap { padding: 20px 16px 60px; }
+    header.hero { padding: 28px 24px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    header.hero { box-shadow: none; }
+    .panel, table, .vendor-card, .audience-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="eyebrow">PreSales Technical Comparison · 2025–2026 Edition</div>
+  <h1>FortiCNAPP CodeSec <span class="vs">vs.</span> Snyk</h1>
+  <div class="subtitle">
+    Evidence-based, vendor-objective comparison of FortiCNAPP CodeSec against the leading
+    developer-first AST platform (deep dive) and the top-3 analyst Leaders (Snyk, Checkmarx One,
+    Veracode) — designed for DevSecOps, CISO, and Procurement audiences.
+  </div>
+  <div class="meta-row">
+    <span><b>Author:</b> Fortinet PreSales Cloud Security</span>
+    <span><b>Date:</b> May 2026</span>
+    <span><b>Scope:</b> SAST · SCA · SBOM · IaC · DSPM · Agentic AI · DevEx</span>
+    <span><b>Benchmarks:</b> Snyk + Checkmarx One + Veracode (2025 Gartner MQ &amp; Forrester Leaders)</span>
+  </div>
+</header>
+
+<!-- EXECUTIVE SUMMARY (moved up & separated into visual statements) -->
+<h2>1 · Executive Summary</h2>
+<p style="margin-top:6px; color:var(--ink-2)">
+  Four separate findings frame the rest of this document. Each is independently defensible and
+  drives a different audience conversation.
+</p>
+<div class="statement-grid">
+  <div class="statement snyk">
+    <div class="icon">1</div>
+    <span class="tag">Finding · Best-of-Breed AST</span>
+    <h3>Snyk is the stronger best-of-breed AST point solution today.</h3>
+    <p>Deeper language coverage (19+ vs. 6), more mature AI auto-fix (Snyk Agent Fix at ~80% accuracy on 8 languages), broader IDE/CI ecosystem (including Cursor, Windsurf via VS Code fork compatibility and MCP server), and the highest analyst recognition — Leader in both 2025 Gartner MQ AST and Forrester Wave SAST Q3 2025.</p>
+  </div>
+  <div class="statement forti">
+    <div class="icon">2</div>
+    <span class="tag">Finding · Strategic Platform</span>
+    <h3>FortiCNAPP CodeSec is the stronger strategic choice when CodeSec is consumed as part of a unified CNAPP and Security Fabric.</h3>
+    <p>Code-to-cloud traceability, single-vendor commercial motion, and tight integration with FortiCNAPP runtime, FortiGate, FortiWeb, and FortiAnalyzer — a closed-loop that no standalone AST vendor can replicate.</p>
+  </div>
+  <div class="statement forti">
+    <div class="icon">3</div>
+    <span class="tag">Finding · Agentic AI CodeSec</span>
+    <h3>FortiCNAPP leads on agentic AI CodeSec via the Claude Code Plugin.</h3>
+    <p>The FortiCNAPP Code Security Plugin for Claude Code closes the loop between AI code generation and security verification: Claude writes the code, FortiCNAPP scans (SAST + SCA + IaC + Secrets in parallel via Lacework CLI), Claude auto-remediates Critical/High findings without prompting, and FortiCNAPP re-scans to confirm. This "scan-fix-verify" loop inside the AI coding session is ahead of Snyk's parallel Snyk-Claude partnership announced in May 2026.</p>
+  </div>
+  <div class="statement forti">
+    <div class="icon">4</div>
+    <span class="tag">Finding · DSPM Differentiator</span>
+    <h3>FortiCNAPP adds DSPM — Snyk does not.</h3>
+    <p>FortiCNAPP DSPM continuously discovers, classifies, and monitors sensitive data across AWS S3, Azure Blob, and other cloud stores, and feeds data-sensitivity context into the same risk prioritization engine that scores CodeSec findings. Data-aware risk scoring is a category Snyk does not currently address.</p>
+  </div>
+  <div class="statement snyk">
+    <div class="icon">5</div>
+    <span class="tag">Recommendation · Dev-First Buyers</span>
+    <h3>For developer-only shops with mature CI/CD, lean Snyk.</h3>
+    <p>If the budget owner is the engineering org, the KPI is developer NPS, and there is no FortiCNAPP CNAPP commitment in play, Snyk's free tier, $25/dev/mo Team plan, IDE ubiquity (incl. Cursor/Windsurf), and FedRAMP Moderate ATO win on adoption velocity and federal eligibility.</p>
+  </div>
+  <div class="statement forti">
+    <div class="icon">6</div>
+    <span class="tag">Recommendation · Enterprise Consolidators</span>
+    <h3>For enterprises consolidating cloud security spend and seeking code-to-runtime-to-data context, lean FortiCNAPP CodeSec.</h3>
+    <p>One PO, one support stack (FortiCare), one renewal for code + cloud + data + network security. Composite alerts spanning IaC misconfig → deployed asset → runtime exposure → sensitive data exposure → FortiGate dynamic deny — plus the Claude Code Plugin securing AI-generated code at the moment it's written — justify the strategic choice.</p>
+  </div>
+</div>
+
+<!-- METHODOLOGY -->
+<h2>2 · Methodology & Leader Identification</h2>
+<div class="panel">
+  <p>
+    Per the analyst landscape published in October 2025, no single AST vendor dominates every
+    dimension. The 2025 Gartner® Magic Quadrant™ for Application Security Testing names
+    <b>multiple Leaders</b> — Checkmarx, Veracode, Black Duck, OpenText, HCL, and Snyk among
+    them<span class="cite">[1][2][3]</span>. For the purpose of this PreSales artifact, the
+    benchmark selected is <b>Snyk</b> for the following reasons:
+  </p>
+  <ul>
+    <li><b>Dual-analyst Leader status:</b> Leader in the 2025 Gartner MQ for AST (Oct 2025) <i>and</i> in the Forrester Wave™ Static Application Security Testing Solutions, Q3 2025<span class="cite">[3][4]</span>.</li>
+    <li><b>Developer-first archetype:</b> Snyk represents the modern shift-left, IDE-native, AI-fix
+      category that most directly competes with FortiCNAPP CodeSec's positioning. A Checkmarx or
+      Veracode comparison would skew toward "enterprise SAST appliance" rather than "developer
+      platform."</li>
+    <li><b>AI/fix leadership:</b> DeepCode AI → Snyk Agent Fix is the most-cited AI auto-remediation
+      offering in independent reviews and supports auto-fix in 8 languages with sub-second
+      scanning<span class="cite">[5][6]</span>.</li>
+    <li><b>Market reach:</b> Free tier + per-developer pricing ($25/dev/mo Team) drives the broadest
+      developer adoption footprint in the segment<span class="cite">[7]</span>.</li>
+  </ul>
+  <p class="small">
+    Checkmarx One and Veracode are valid alternative benchmarks for "enterprise SAST platform"
+    framing — pricing depth, binary analysis, and FedRAMP authorization are differentiators not
+    fully covered here<span class="cite">[8]</span>.
+  </p>
+</div>
+
+<!-- SCORING MATRIX -->
+<h2>3 · Side-by-Side Scoring Matrix</h2>
+<div class="legend">
+  Scoring (1–5):
+  <span class="score s5">5</span>Best-in-class
+  <span class="score s4">4</span>Strong
+  <span class="score s3">3</span>Adequate
+  <span class="score s2">2</span>Limited
+  <span class="score s1">1</span>Insufficient
+</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:24%">Dimension</th>
+      <th style="width:14%">FortiCNAPP CodeSec</th>
+      <th style="width:14%">Snyk</th>
+      <th style="width:13%">Edge</th>
+      <th>Key Rationale (see Section 4 for evidence)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="dim">SAST — Language Coverage</td>
+        <td><span class="score s3">3</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>FortiCNAPP SAST: 6 langs (Go, Java, JS, PHP, Python, TS)<span class="cite">[9]</span>. Snyk Code: 19+ langs via DeepCode AI<span class="cite">[5]</span>.</td></tr>
+    <tr><td class="dim">SAST — Accuracy & AI Auto-Fix</td>
+        <td><span class="score s3">3</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>FortiCNAPP SmartFix offers AI-assisted remediation<span class="cite">[10][11]</span>. Snyk Agent Fix: ~80% autofix accuracy, 8-language PR auto-fix<span class="cite">[5][6]</span>.</td></tr>
+    <tr><td class="dim">SCA — Depth & License</td>
+        <td><span class="score s4">4</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>Both cover dependency CVEs. Snyk adds proprietary vuln DB, reachability analysis, Risk Score combining CVSS + EPSS + KEV<span class="cite">[12]</span>.</td></tr>
+    <tr><td class="dim">SBOM (CycloneDX / SPDX)</td>
+        <td><span class="score s4">4</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>FortiCNAPP CLI generates CycloneDX SBOMs (cdx-json)<span class="cite">[13]</span>. Snyk supports both CycloneDX and SPDX with native vuln-test of imported SBOMs<span class="cite">[12]</span>.</td></tr>
+    <tr><td class="dim">IaC Security</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s4">4</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>FortiCNAPP CodeSec IaC: Terraform, CloudFormation, Kubernetes + native CSPM rule mapping<span class="cite">[14]</span>. Snyk IaC strong but lacks runtime context.</td></tr>
+    <tr><td class="dim">IDE Integrations</td>
+        <td><span class="score s3">3</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>FortiCNAPP: VS Code extension (works in Cursor/Windsurf as VS Code forks)<span class="cite">[15]</span>. Snyk: VS Code, all JetBrains IDEs, Eclipse, Visual Studio, native Cursor &amp; Windsurf guides + MCP server<span class="cite">[16][22]</span>.</td></tr>
+    <tr><td class="dim">Agentic AI CodeSec (Claude Code)</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s4">4</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>FortiCNAPP Claude Code Plugin: parallel SAST+SCA+IaC+Secrets scan, auto-fix for Critical/High, post-fix re-verification — GA via Lacework CLI<span class="cite">[23][24]</span>. Snyk-Claude partnership announced May 2026; expanded access rolling out through 2026<span class="cite">[22]</span>.</td></tr>
+    <tr><td class="dim">DSPM (Data Security Posture)</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s1">1</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>FortiCNAPP DSPM: sensitive data discovery, classification, and monitoring across AWS S3, Azure Blob; feeds data-sensitivity into unified risk scoring<span class="cite">[25][26]</span>. Snyk: no DSPM offering.</td></tr>
+    <tr><td class="dim">CI/CD & SCM</td>
+        <td><span class="score s4">4</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>FortiCNAPP: GitHub, GitLab, Bitbucket + CLI in any pipeline<span class="cite">[17]</span>. Snyk: same + Azure DevOps, broader CI-native plugins.</td></tr>
+    <tr><td class="dim">Developer Experience</td>
+        <td><span class="score s3">3</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>Snyk is the recognized developer-experience benchmark in the segment<span class="cite">[3][4]</span>. FortiCNAPP CodeSec is improving but the platform UX leans cloud/runtime-first.</td></tr>
+    <tr><td class="dim">Code-to-Cloud / CNAPP Integration</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s3">3</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>Native correlation with FortiCNAPP CSPM/CWPP/CIEM, composite alerts spanning code → runtime. Snyk has Snyk AppRisk + native Snyk Cloud, but lacks Fortinet's network/WAF feedback loop.</td></tr>
+    <tr><td class="dim">Security Fabric Integration</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s1">1</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>Findings can drive FortiGate dynamic policy and FortiWeb virtual patching. No equivalent in Snyk.</td></tr>
+    <tr><td class="dim">Enterprise Controls (SSO/RBAC/Audit)</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="tied">Tied</td>
+        <td>Both ship SSO, RBAC, audit logging at Enterprise tier; FortiCNAPP inherits Fortinet IAM and FortiCare support stack.</td></tr>
+    <tr><td class="dim">Compliance Mappings</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s4">4</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>FortiCNAPP carries CSPM compliance packs (SOC2, ISO, PCI, NIST, CIS) at platform level; CodeSec inherits this. Snyk has compliance reporting but narrower runtime coverage.</td></tr>
+    <tr><td class="dim">FedRAMP</td>
+        <td><span class="score s3">3</span><span class="small"> *</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>Snyk holds FedRAMP Moderate ATO<span class="cite">[8]</span>. FortiCNAPP CodeSec specific FedRAMP status varies by edition — verify with account team. *Insufficient public data for direct CodeSec ATO.</td></tr>
+    <tr><td class="dim">Performance / Scan Speed</td>
+        <td><span class="score s4">4</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>Snyk Code claims millisecond-class real-time scanning via DeepCode AI<span class="cite">[5]</span>. FortiCNAPP is competitive but not independently benchmarked as faster.</td></tr>
+    <tr><td class="dim">Pricing Model</td>
+        <td><span class="score s4">4</span></td>
+        <td><span class="score s4">4</span></td>
+        <td class="tied">Different</td>
+        <td>FortiCNAPP CodeSec: per code-contributing dev, MOQ 20, bundled with FortiDAST entitlements and FortiCare<span class="cite">[18]</span>. Snyk: per contributing dev, $25/mo Team, custom Enterprise<span class="cite">[7]</span>.</td></tr>
+    <tr><td class="dim">Multi-Product TCO Story</td>
+        <td><span class="score s5">5</span></td>
+        <td><span class="score s3">3</span></td>
+        <td class="winner-forti">FortiCNAPP</td>
+        <td>CodeSec consolidates into broader FortiCNAPP + Fabric subscription; vendor consolidation reduces procurement and integration overhead.</td></tr>
+    <tr><td class="dim">Market Position (Analysts)</td>
+        <td><span class="score s3">3</span></td>
+        <td><span class="score s5">5</span></td>
+        <td class="winner-snyk">Snyk</td>
+        <td>Snyk: Gartner MQ AST Leader + Forrester SAST Leader 2025<span class="cite">[3][4]</span>. FortiCNAPP is highly placed in CNAPP analyst coverage but not yet a named AST MQ Leader.</td></tr>
+  </tbody>
+</table>
+<p class="small" style="margin-top:10px"><b>Aggregate (unweighted):</b> Snyk 74 / FortiCNAPP CodeSec 64 across 17 dimensions. <i>Weighting changes the answer — see Section 6 audience views.</i></p>
+
+<!-- TOP 3 LEADERS COMPARISON (multi-vendor) -->
+<h2>4 · Expanded Comparison — FortiCNAPP CodeSec vs. Top-3 Analyst Leaders</h2>
+<p style="margin-top:6px; color:var(--ink-2)">
+  The Snyk-only deep dive above is the most direct head-to-head. This section broadens the lens
+  against the <b>three vendors most consistently named Leader</b> across the 2025 Gartner® MQ for
+  AST and the Forrester Wave™ SAST Q3 2025: <b>Snyk</b>, <b>Checkmarx One</b>, and
+  <b>Veracode</b><span class="cite">[1][2][3][4][27]</span>.
+</p>
+<table>
+  <thead>
+    <tr>
+      <th style="width:21%">Dimension</th>
+      <th style="width:19%">FortiCNAPP CodeSec</th>
+      <th style="width:20%">Snyk</th>
+      <th style="width:20%">Checkmarx One</th>
+      <th style="width:20%">Veracode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="dim">Analyst position (2025)</td>
+      <td>CNAPP-positioned; not in AST MQ</td>
+      <td>Leader · Gartner MQ AST + Forrester SAST<span class="cite">[3][4]</span></td>
+      <td>Leader · Gartner MQ AST (7th time) + Forrester SAST (top current offering)<span class="cite">[2][27]</span></td>
+      <td>Leader · Gartner MQ AST + Forrester SAST<span class="cite">[28]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">SAST language coverage</td>
+      <td>6 (Go, Java, JS, PHP, Py, TS)<span class="cite">[9]</span></td>
+      <td>19+ via DeepCode AI<span class="cite">[5]</span></td>
+      <td>30+ (incl. C/C++, C#, Ruby, Kotlin, Swift, Apex, COBOL)<span class="cite">[29]</span></td>
+      <td>Java, .NET, JS, Py, Go, Ruby, PHP, Swift, Kotlin + legacy (COBOL, VB6, RPG, PL/SQL)<span class="cite">[30]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">IDE breadth</td>
+      <td>VS Code (works in Cursor/Windsurf as forks)<span class="cite">[15]</span></td>
+      <td>VS Code + all JetBrains + Eclipse + Visual Studio + native Cursor/Windsurf guides<span class="cite">[16][22]</span></td>
+      <td>VS Code + JetBrains + Cursor + Windsurf (Developer Assist GA)<span class="cite">[31]</span></td>
+      <td>VS Code + JetBrains (Veracode Scan plugin); Cursor via JetBrains agent protocol<span class="cite">[32]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Agentic AI / Claude Code</td>
+      <td><b>FortiCNAPP Code Security Plugin for Claude Code — GA</b>: parallel scan-fix-verify, auto-fix Critical/High<span class="cite">[23][24]</span></td>
+      <td>Snyk-Claude partnership announced May 2026; expanding access<span class="cite">[22]</span></td>
+      <td>Developer Assist: agentic remediation in Claude Code, Cursor, Windsurf, GitHub Copilot<span class="cite">[31]</span></td>
+      <td>Veracode Fix in IDE/CLI/CI (~70% flaw coverage, 10 languages)<span class="cite">[33]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">SCA + vuln DB</td>
+      <td>External vuln provider + FortiCNAPP risk graph<span class="cite">[20]</span></td>
+      <td>Snyk DB + reachability + EPSS/KEV Risk Score<span class="cite">[12]</span></td>
+      <td>Checkmarx SCA + malicious package + supply-chain<span class="cite">[29]</span></td>
+      <td>Veracode SCA (Phylum-powered) + license intel<span class="cite">[34]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">SBOM formats</td>
+      <td>CycloneDX (CLI)<span class="cite">[13]</span></td>
+      <td>CycloneDX + SPDX<span class="cite">[12]</span></td>
+      <td>CycloneDX + SPDX</td>
+      <td>CycloneDX + SPDX via REST API<span class="cite">[35]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">IaC security</td>
+      <td>Terraform, CloudFormation, K8s + CSPM policy continuity<span class="cite">[14]</span></td>
+      <td>Strong (Snyk IaC)</td>
+      <td>Included (9-engine platform)<span class="cite">[29]</span></td>
+      <td>Limited — SAST/SCA focused</td>
+    </tr>
+    <tr>
+      <td class="dim">DSPM (data security)</td>
+      <td><b>✓ Native DSPM</b> (S3, Azure Blob) + risk-scoring context<span class="cite">[25][26]</span></td>
+      <td>✗ Not offered</td>
+      <td>✗ Not offered</td>
+      <td>✗ Not offered</td>
+    </tr>
+    <tr>
+      <td class="dim">CNAPP / runtime context</td>
+      <td><b>✓ Native CNAPP</b> (CSPM, CWPP, CIEM, CDR) with code-to-cloud composite alerts</td>
+      <td>Snyk Cloud (separate SKU)</td>
+      <td>✗ ASPM only — no runtime/CSPM</td>
+      <td>✗ AppSec only</td>
+    </tr>
+    <tr>
+      <td class="dim">Security Fabric / NGFW loop</td>
+      <td><b>✓</b> FortiGate dynamic objects + FortiWeb virtual patching</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+    </tr>
+    <tr>
+      <td class="dim">FedRAMP</td>
+      <td>Verify per edition (insufficient public data)</td>
+      <td>Moderate ATO<span class="cite">[8]</span></td>
+      <td>High-Ready (not yet authorized)<span class="cite">[8]</span></td>
+      <td>Moderate ATO<span class="cite">[36]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Pricing entry / model</td>
+      <td>Per code-contributing dev, MOQ 20; CNAPP starter from ~$22K–$80K<span class="cite">[18][21]</span></td>
+      <td>Free tier; Team $25/dev/mo; Enterprise custom<span class="cite">[7]</span></td>
+      <td>~$40K+ entry; median $54K annual ($25K–$111K)<span class="cite">[37]</span></td>
+      <td>~$15K+ entry; quote-only<span class="cite">[38]</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Developer experience</td>
+      <td>Improving; cloud-first UX</td>
+      <td><b>Best-in-class</b> developer-first archetype</td>
+      <td>Strong; agentic Developer Assist is recent push</td>
+      <td>Solid; binary-scan model is async (less interactive)</td>
+    </tr>
+    <tr>
+      <td class="dim">Where it leads</td>
+      <td>Agentic Claude Code, DSPM, CNAPP, Fabric</td>
+      <td>Dev experience, AI fix maturity, IDE breadth</td>
+      <td>Polyglot SAST depth, ASPM, enterprise governance</td>
+      <td>Binary SAST, legacy languages, deep flaw analysis</td>
+    </tr>
+  </tbody>
+</table>
+<div class="callout" style="margin-top:18px">
+  <div class="label">Fortinet positioning summary against each Leader</div>
+  <p style="margin:0">
+    <b>vs Snyk:</b> Cede SAST breadth, win on DSPM + CNAPP + Claude Code agentic loop. <b>vs Checkmarx:</b>
+    Cede language coverage and Gartner credentials, win on code-to-runtime + DSPM + Security Fabric
+    + total platform consolidation. <b>vs Veracode:</b> Cede legacy-language binary SAST and federal
+    pedigree, win on cloud-native posture (CSPM/CWPP/CIEM/DSPM), IaC, and agentic AI workflows.
+    In all three cases, the Fortinet narrative is the same: <b>"You're not choosing CodeSec — you're
+    choosing a unified cloud-risk platform that happens to include CodeSec."</b>
+  </p>
+</div>
+
+<!-- DIMENSION ANALYSIS -->
+<h2>5 · Dimension-by-Dimension Analysis (Snyk Benchmark Deep Dive)</h2>
+
+<h3>4.1 SAST Capabilities</h3>
+<div class="two-col">
+  <div class="vendor-card forti">
+    <h3>FortiCNAPP CodeSec — SAST</h3>
+    <span class="key-fact pill-forti">6 languages</span>
+    <span class="key-fact pill-forti">SmartFix AI</span>
+    <span class="key-fact pill-forti">codesec.yaml</span>
+    <p>SAST supports Go, Java, JavaScript, PHP, Python, and TypeScript<span class="cite">[9]</span>. Configuration is declarative via the <code>codesec.yaml</code> file<span class="cite">[19]</span>, with PR-level integration including the <code>autofix</code> flag (default off). SmartFix and FortiCNAPP AI Assist provide contextual, prioritized remediation guidance<span class="cite">[10][11]</span>.</p>
+  </div>
+  <div class="vendor-card snyk">
+    <h3>Snyk Code — SAST</h3>
+    <span class="key-fact pill-snyk">19+ languages</span>
+    <span class="key-fact pill-snyk">Agent Fix (8 langs)</span>
+    <span class="key-fact pill-snyk">ms-scale scan</span>
+    <p>DeepCode AI engine supports 19+ programming languages with real-time, sub-second IDE feedback<span class="cite">[5]</span>. Snyk Agent Fix (formerly DeepCode AI Fix) automatically generates fix PRs with ~80% accuracy on supported languages<span class="cite">[6]</span>. Multimodal hybrid AI improves robustness on AI-generated code (a stated 2025 focus).</p>
+  </div>
+</div>
+<p class="small">Net: Snyk leads on breadth and AI-fix maturity. FortiCNAPP CodeSec covers the languages most relevant to typical cloud-native workloads (Go/Java/JS/Py) and is sufficient when those are the stack — but it will <b>not</b> satisfy polyglot enterprises with C/C++, C#, Ruby, Rust, Kotlin, or Swift footprints.</p>
+
+<h3>4.2 SCA & Dependency Risk</h3>
+<p>Both vendors offer dependency scanning, transitive analysis, and license risk detection. The differentiation is in <b>vulnerability intelligence depth and prioritization</b>:</p>
+<ul>
+  <li><b>Snyk:</b> Proprietary Snyk Vulnerability DB (frequently rated among the most curated in the industry), reachability analysis, and a Risk Score blending severity, exploit maturity, EPSS, and KEV catalog status<span class="cite">[12]</span>.</li>
+  <li><b>FortiCNAPP CodeSec SCA:</b> Compares dependencies against an external vulnerability provider with direct links to authoritative sources<span class="cite">[20]</span>. Prioritization benefits from FortiCNAPP's broader risk graph when SCA findings correlate with runtime exposure (cloud-asset reachability is a FortiCNAPP CNAPP feature).</li>
+</ul>
+
+<h3>4.3 SBOM & Supply Chain</h3>
+<p>FortiCNAPP CodeSec generates SBOMs via CLI in CycloneDX (<code>cdx-json</code>) and other formats; output is highly automatable in CI<span class="cite">[13]</span>. Snyk supports both CycloneDX and SPDX, and additionally lets you <i>test</i> an imported SBOM against the Snyk DB — useful for ingest of third-party software inventories<span class="cite">[12]</span>. Both fall within US EO 14028 expectations.</p>
+
+<h3>4.4 IaC Security (FortiCNAPP advantage)</h3>
+<p>FortiCNAPP CodeSec scans Terraform, CloudFormation, Kubernetes manifests, and other IaC languages<span class="cite">[14]</span>. The differentiator is <b>policy continuity</b>: an IaC finding that flags a public S3 bucket maps to the same CSPM rule that flags the deployed resource, so policy ownership is unified across pre-deploy (CodeSec IaC) and post-deploy (CNAPP CSPM). Snyk IaC is mature and developer-friendly but the runtime CSPM correlation is weaker unless customers also buy Snyk Cloud.</p>
+
+<h3>4.5 Developer Experience & Integrations</h3>
+<table>
+<thead><tr><th>Surface</th><th>FortiCNAPP CodeSec</th><th>Snyk</th></tr></thead>
+<tbody>
+<tr><td class="dim">IDEs (native)</td><td>VS Code<span class="cite">[15]</span></td><td>VS Code, IntelliJ IDEA, WebStorm, PyCharm, GoLand, PhpStorm, Rider, RubyMine, Android Studio, Eclipse, Visual Studio<span class="cite">[16]</span></td></tr>
+<tr><td class="dim">VS Code-fork IDEs (Cursor, Windsurf, Eclipse Theia)</td><td>Works via VS Code extension (no first-party guide)</td><td>Documented Cursor &amp; Windsurf guides + MCP server for agentic IDEs<span class="cite">[22]</span></td></tr>
+<tr><td class="dim">Agentic coding (Claude Code)</td><td><b>FortiCNAPP Code Security Plugin for Claude Code</b> — scan-fix-verify loop via Lacework CLI, auto-fix Critical/High<span class="cite">[23][24]</span></td><td>Snyk-Claude partnership announced May 2026; phased rollout<span class="cite">[22]</span></td></tr>
+<tr><td class="dim">SCM</td><td>GitHub, GitLab, Bitbucket<span class="cite">[14]</span></td><td>GitHub, GitLab, Bitbucket, Azure Repos</td></tr>
+<tr><td class="dim">CI/CD</td><td>CLI for any pipeline; documented integrations<span class="cite">[17]</span></td><td>Native CI plugins + CLI; broadest ecosystem in segment</td></tr>
+<tr><td class="dim">PR feedback</td><td>Inline comments + SmartFix suggestions<span class="cite">[10]</span></td><td>Inline comments + Agent Fix auto-PRs<span class="cite">[5]</span></td></tr>
+</tbody>
+</table>
+<div class="callout" style="margin-top:14px">
+  <div class="label">PreSales hook · The Claude Code Plugin angle</div>
+  <p style="margin:0">
+    Position FortiCNAPP's <b>Code Security Plugin for Claude Code</b> as "the first agentic CodeSec
+    loop with verified remediation." Unlike a generic LLM that <i>suggests</i> a fix, the plugin
+    forces Claude to <i>prove</i> the fix by re-scanning the file post-edit. Critical and High
+    findings trigger remediation without prompting, and SAST + SCA + IaC + Secrets run in parallel
+    to minimize developer wait time<span class="cite">[23]</span>. Snyk's announced Claude
+    partnership is a strong validation signal but, as of May 2026, is still in expanding-access
+    rollout — Fortinet is shipping today.
+  </p>
+</div>
+
+<h3>4.6 Remediation, Prioritization & AI</h3>
+<p>Snyk is best-in-class on developer-side AI-fix workflows. FortiCNAPP CodeSec brings <b>cross-domain prioritization</b>: a vulnerable dependency on a host that is internet-exposed and over-privileged becomes a composite, high-priority alert — something a code-only SAST cannot produce. For risk-based AppSec, this is FortiCNAPP's strongest narrative.</p>
+
+<h3>4.7 Enterprise Features</h3>
+<p>Both platforms ship SSO (SAML, OIDC), RBAC, audit logging, and standard compliance mappings (SOC2, ISO 27001, PCI-DSS) at their enterprise tiers. FortiCNAPP CodeSec inherits the broader FortiCNAPP compliance pack covering NIST 800-53, CIS Benchmarks, and HIPAA. Snyk holds <b>FedRAMP Moderate ATO</b><span class="cite">[8]</span> — a hard requirement for US federal customers; FortiCNAPP CodeSec FedRAMP status should be verified per edition.</p>
+
+<h3>4.8 Pricing & TCO</h3>
+<table>
+<thead><tr><th>Model</th><th>FortiCNAPP CodeSec</th><th>Snyk</th></tr></thead>
+<tbody>
+<tr><td class="dim">Unit</td><td>Per code-contributing developer (active in last 90 days)<span class="cite">[18]</span></td><td>Per contributing developer (active in last 90 days)<span class="cite">[7]</span></td></tr>
+<tr><td class="dim">Minimum order</td><td>MOQ 20 developers<span class="cite">[18]</span></td><td>Free tier; Team plan starts ~$25/dev/mo<span class="cite">[7]</span></td></tr>
+<tr><td class="dim">Bundling</td><td>Includes FortiCare Premium; bundles FortiDAST app-scan entitlements (1 URI per dev)<span class="cite">[18]</span></td><td>Modular — Code, Open Source, IaC, Container priced separately</td></tr>
+<tr><td class="dim">Term</td><td>1, 2, 3-year subscription<span class="cite">[18]</span></td><td>Annual; multi-year 20–45% discounts<span class="cite">[7]</span></td></tr>
+<tr><td class="dim">Indicative platform entry</td><td>Lacework FortiCNAPP starter packs ~$22K–$80K depending on edition<span class="cite">[21]</span></td><td>Enterprise: ~$15K–$40K for 25 devs depending on modules<span class="cite">[7]</span></td></tr>
+</tbody>
+</table>
+<p class="small">Critically, FortiCNAPP CodeSec is rarely sold standalone — it is most attractively priced when added to an existing FortiCNAPP CNAPP subscription, where the marginal cost is offset by Fabric and FortiCare consolidation.</p>
+
+<h3>4.9 Market Position</h3>
+<p>Snyk's positioning is unambiguous: Leader in both the 2025 Gartner MQ for AST and the Forrester Wave SAST Q3 2025<span class="cite">[3][4]</span>. FortiCNAPP's analyst recognition is concentrated in <b>CNAPP</b> and <b>Cloud Workload Protection</b> coverage rather than standalone AST — a reflection of Fortinet's platform strategy. CodeSec is a feature within that platform, not a point AST solution competing in the MQ.</p>
+
+<h3>4.10 DSPM — Data Security Posture Management (FortiCNAPP-only)</h3>
+<p>
+  FortiCNAPP DSPM continuously discovers, classifies, and monitors sensitive data (and malware)
+  across cloud storage including AWS S3 and Azure Blob, applying pre-configured data policies and
+  feeding data-sensitivity context into FortiCNAPP's unified risk scoring engine<span class="cite">[25]</span>.
+  The January 2026 FortiCNAPP release further unified network, data, and runtime signals into a
+  single risk-context view<span class="cite">[26]</span>. For CodeSec, the strategic value is that
+  a SAST finding in a service that reads PII-laden S3 buckets is automatically elevated above an
+  identical SAST finding in a sandbox repo — risk-based prioritization with real data context.
+</p>
+<p>
+  <b>Snyk has no equivalent DSPM module.</b> Customers requiring DSPM with Snyk must integrate a
+  third-party (e.g., Cyera, Varonis, BigID), which fragments tooling and breaks the single risk
+  graph.
+</p>
+
+<h3>4.11 Agentic AI CodeSec — Claude Code Plugin (Fortinet's 2026 differentiator)</h3>
+<p>
+  The <b>FortiCNAPP Code Security Plugin for Claude Code</b><span class="cite">[23][24]</span>
+  is, as of May 2026, one of the first production-grade scan-fix-verify loops embedded inside an
+  agentic coding environment:
+</p>
+<ul>
+  <li><b>Trigger:</b> automatically within a Claude Code session, no prompt required.</li>
+  <li><b>Coverage:</b> SAST, SCA, IaC, and Secrets — four dimensions in parallel via the Lacework CLI.</li>
+  <li><b>Auto-remediation:</b> Critical and High findings trigger Claude to fix without prompting.</li>
+  <li><b>Verification:</b> post-fix re-scan confirms the issue is closed before code is committed.</li>
+  <li><b>Local execution:</b> runs on the developer's workstation; no source code leaves the local boundary for scanning.</li>
+</ul>
+<p>
+  Snyk's parallel <b>Snyk-Claude partnership</b> was announced in May 2026 with expanded access
+  rolling out through the year<span class="cite">[22]</span>. This validates the category but means
+  Fortinet is shipping the loop today, with verification depth tied to FortiCNAPP's risk
+  prioritization (including DSPM context above).
+</p>
+
+<!-- STRENGTHS & WEAKNESSES -->
+<h2>6 · Strengths & Weaknesses (FortiCNAPP CodeSec vs. Snyk benchmark)</h2>
+<div class="two-col">
+  <div class="vendor-card forti">
+    <h3>FortiCNAPP CodeSec</h3>
+    <h4>Strengths</h4>
+    <ul class="strength">
+      <li><b>Claude Code Plugin (2026 differentiator):</b> scan-fix-verify loop with parallel SAST+SCA+IaC+Secrets and auto-remediation of Critical/High findings inside the AI coding session.</li>
+      <li><b>DSPM (Snyk has no equivalent):</b> sensitive-data discovery and classification feeds data-sensitivity into unified risk scoring.</li>
+      <li>Native code-to-cloud correlation with FortiCNAPP CSPM, CWPP, CIEM — composite alerts spanning IaC mistake → deployed asset → runtime exposure → sensitive data.</li>
+      <li>Security Fabric integration: findings drive FortiGate dynamic objects, FortiWeb virtual patching, and FortiAnalyzer correlation.</li>
+      <li>Strong IaC coverage (Terraform, CloudFormation, Kubernetes) with policy continuity into CSPM rules.</li>
+      <li>Vendor consolidation: one PO, one support stack (FortiCare), one renewal cycle for code + cloud + data + network security.</li>
+      <li>Bundled FortiDAST entitlements provide a runtime DAST validation layer not present in Snyk's base SKU.</li>
+    </ul>
+    <h4>Weaknesses</h4>
+    <ul class="weakness">
+      <li>SAST language coverage limited to 6 languages — gap for C/C++, C#, Ruby, Rust, Kotlin, Swift shops.</li>
+      <li>IDE story is currently VS Code-only; JetBrains and Eclipse users have no first-party plugin.</li>
+      <li>Not an analyst-recognized standalone AST Leader; weaker procurement narrative for an AST-specific RFP.</li>
+      <li>AI auto-fix (SmartFix) is newer and less benchmarked than Snyk Agent Fix.</li>
+      <li>MOQ of 20 developers limits SMB/team-of-5 entry.</li>
+    </ul>
+  </div>
+  <div class="vendor-card snyk">
+    <h3>Snyk</h3>
+    <h4>Strengths</h4>
+    <ul class="strength">
+      <li>Dual-analyst Leader: 2025 Gartner MQ AST + Forrester Wave SAST Q3 2025.</li>
+      <li>Best-in-class developer experience: 11+ IDE plugins, broadest CI/CD ecosystem, free tier driving bottom-up adoption.</li>
+      <li>DeepCode AI / Snyk Agent Fix — most mature AI auto-fix in the segment, with PR-level autofix.</li>
+      <li>Snyk Vulnerability DB and reachability analysis among the deepest in commercial SCA.</li>
+      <li>FedRAMP Moderate ATO unlocks US federal segment.</li>
+      <li>Modular pricing (Code / Open Source / IaC / Container) lets buyers start small and expand.</li>
+    </ul>
+    <h4>Weaknesses</h4>
+    <ul class="weakness">
+      <li>No native network/WAF feedback loop — runtime context requires Snyk Cloud or third-party CNAPP.</li>
+      <li>Modular pricing can compound at scale; multi-module enterprise contracts can exceed CNAPP-bundled CodeSec on TCO.</li>
+      <li>Limited posture coverage outside the SDLC — CSPM/CIEM are not the same depth as a CNAPP platform.</li>
+      <li>No integrated WAF or NGFW story; "virtual patching" loop must be assembled externally.</li>
+      <li>Consumption discipline required: Snyk's per-test limits are a frequent source of overage in fast-moving pipelines.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- AUDIENCE-SPECIFIC RECOMMENDATIONS -->
+<h2>7 · Recommendation by Audience</h2>
+<div class="audience-grid">
+  <div class="audience-card">
+    <div class="role">DevSecOps / Security Architecture</div>
+    <h3>The technical lens</h3>
+    <p><b>If shift-left depth is the priority</b> (polyglot stack, AI-fix in PRs, JetBrains/Eclipse footprint, federal compliance), select <b>Snyk</b>.</p>
+    <p><b>If code-to-runtime context is the priority</b> (you already operate or are planning FortiCNAPP CSPM/CWPP/CIEM), select <b>FortiCNAPP CodeSec</b> — the composite alert and IaC-to-CSPM policy continuity are uniquely valuable.</p>
+  </div>
+  <div class="audience-card">
+    <div class="role">CISO / Security Leadership</div>
+    <h3>The risk &amp; consolidation lens</h3>
+    <p><b>If the strategy is portfolio rationalization and Security Fabric leverage</b>, FortiCNAPP CodeSec is the right call. Vendor consolidation reduces operational overhead and unlocks composite risk views from code to network.</p>
+    <p><b>If best-of-breed AppSec maturity is the headline KPI</b> (developer NPS, AI fix rate, analyst-validated outcomes), Snyk is the safer answer.</p>
+  </div>
+  <div class="audience-card">
+    <div class="role">Procurement / Commercial</div>
+    <h3>The TCO lens</h3>
+    <p>For organizations already buying FortiCNAPP, adding CodeSec is typically the lowest <b>marginal</b> cost path to SAST/SCA/IaC, with FortiCare support bundled and FortiDAST entitlements included.</p>
+    <p>For greenfield AppSec-only buyers, Snyk's free tier + $25/dev/mo Team plan offers the smoothest commercial entry; Enterprise quotes (~$15K–$40K for 25 devs) typically beat enterprise SAST appliances on entry.</p>
+  </div>
+</div>
+
+<!-- FINAL VERDICT -->
+<h2>8 · Final Verdict</h2>
+<div class="verdict">
+  <div class="pick pick-forti">
+    <h4>Choose FortiCNAPP CodeSec when…</h4>
+    <ul>
+      <li>You are already invested in Fortinet (FortiGate VM, FortiWeb/FortiAppSec, FortiCNAPP).</li>
+      <li>Your stack is dominated by Go, Java, JavaScript/TypeScript, Python, PHP — and Terraform/CloudFormation/K8s is heavy.</li>
+      <li>Risk-based prioritization across code + cloud + network outweighs raw SAST analyst rankings.</li>
+      <li>Vendor consolidation, single-support-stack, and Fabric automation matter to operations.</li>
+    </ul>
+  </div>
+  <div class="pick pick-snyk">
+    <h4>Choose Snyk when…</h4>
+    <ul>
+      <li>Best-in-class developer experience, AI auto-fix, and IDE breadth are non-negotiable.</li>
+      <li>Polyglot stack (C/C++, C#, Ruby, Rust, Kotlin, Swift, etc.) requires SAST coverage today.</li>
+      <li>You need FedRAMP Moderate ATO for federal workloads.</li>
+      <li>You want to start with a free tier and scale developer adoption bottom-up.</li>
+      <li>You do not yet have a CNAPP or are buying CodeSec as a discrete, decoupled capability.</li>
+    </ul>
+  </div>
+</div>
+<div class="callout" style="margin-top:18px">
+  <div class="label">PreSales tactical positioning</div>
+  <p style="margin:0">
+    Against Snyk in an active opportunity, do <b>not</b> compete on raw SAST features. Reframe to
+    <b>code-to-cloud risk</b>: walk the prospect through a composite alert that ties an IaC misconfig
+    (CodeSec) to a deployed S3 bucket exposure (FortiCNAPP CSPM) to a runtime exfil attempt
+    (FortiCNAPP CWPP) to a FortiGate dynamic deny. That story is exclusive to FortiCNAPP and is the
+    fastest path to a strategic-vs-tactical conversation with the customer.
+  </p>
+</div>
+
+<!-- DATA GAPS -->
+<h2>9 · Data Gaps &amp; Caveats</h2>
+<div class="panel">
+  <ul>
+    <li><b>FortiCNAPP CodeSec FedRAMP status:</b> Insufficient public data on specific CodeSec module ATO. Verify with Fortinet federal account team for opportunities requiring FedRAMP.</li>
+    <li><b>SAST false-positive rates:</b> No independent head-to-head benchmark (e.g., OWASP Benchmark) published in 2025 for FortiCNAPP CodeSec SAST. Claims here rely on vendor documentation and analyst commentary.</li>
+    <li><b>AI auto-fix accuracy:</b> Snyk publishes ~80% accuracy for Agent Fix<span class="cite">[6]</span>. No comparable public number for FortiCNAPP SmartFix.</li>
+    <li><b>Pricing:</b> All pricing in this document is indicative from public reseller listings (CDW, AWS Marketplace) and third-party pricing analyses. Always confirm via official quote.</li>
+    <li><b>Analyst comparison:</b> The 2025 Gartner MQ for AST does not currently include FortiCNAPP as a separately positioned AST vendor; Fortinet's strength sits in the CNAPP analyst landscape.</li>
+  </ul>
+</div>
+
+<!-- REFERENCES -->
+<h2>10 · References</h2>
+<ol class="refs">
+  <li id="r1">Gartner — <a href="https://www.gartner.com/en/documents/7027498">Magic Quadrant for Application Security Testing</a> (Oct 6, 2025).</li>
+  <li id="r2">Checkmarx — <a href="https://checkmarx.com/blog/checkmarx-named-a-leader-for-the-7th-time-in-the-2025-gartner-magic-quadrant-for-application-security-testing/">Named Leader in 2025 Gartner MQ for AST</a>.</li>
+  <li id="r3">Snyk — <a href="https://snyk.io/blog/snyk-named-a-leader-in-the-2025-gartner-r-magic-quadrant-tm-for-application/">Snyk Named a Leader in the 2025 Gartner MQ for AST</a>.</li>
+  <li id="r4">Snyk — <a href="https://snyk.io/blog/snyk-named-a-leader-in-the-2025-forrester-sast-wave-sast-solutions-q3-2025/">Snyk Named a Leader in the Forrester Wave: SAST Q3 2025</a>.</li>
+  <li id="r5">Snyk — <a href="https://snyk.io/platform/deepcode-ai/">DeepCode AI Platform</a> / <a href="https://updates.snyk.io/snyk-code-deepcode-ai-fix-now-supports-7-languages-284463">DeepCode AI Fix language support</a>.</li>
+  <li id="r6">Snyk — <a href="https://snyk.io/blog/building-ai-trust-with-snyk-code-and-snyk-agent-fix/">Building AI Trust with Snyk Code and Snyk Agent Fix</a>.</li>
+  <li id="r7">Snyk — <a href="https://snyk.io/plans/">Plans &amp; Pricing</a>; <a href="https://dev.to/rahulxsingh/snyk-pricing-in-2026-free-plan-team-business-and-enterprise-costs-breakdown-5e88">Snyk Pricing 2026 breakdown</a>.</li>
+  <li id="r8">Pixee — <a href="https://www.pixee.ai/blog/checkmarx-vs-veracode">Checkmarx vs Veracode in 2026 (FedRAMP &amp; pricing context)</a>.</li>
+  <li id="r9">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/909400/languages-supported-by-sast">FortiCNAPP: Languages supported by SAST</a>.</li>
+  <li id="r10">Fortinet Video Library — <a href="https://video.fortinet.com/products/lacework-forticnapp/2025/lacework-forticnapp-smart-fix-feature-overview">FortiCNAPP SmartFix Feature Overview</a>.</li>
+  <li id="r11">Fortinet Blog — <a href="https://www.fortinet.com/blog/business-and-technology/ai-powered-alert-investigation-and-remediation-with-forticnapp">AI-Powered Alert Investigation and Remediation with FortiCNAPP</a>.</li>
+  <li id="r12">Snyk Docs — <a href="https://docs.snyk.io/scan-with-snyk/snyk-open-source">Snyk Open Source</a>; SBOM &amp; vuln intelligence.</li>
+  <li id="r13">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/332864/sbom-management">FortiCNAPP SBOM Management</a>.</li>
+  <li id="r14">Fortinet Docs — <a href="https://docs.fortinet.com/document/lacework-forticnapp/latest/administration-guide/641470/supported-languages">FortiCNAPP IaC: Supported Languages</a>.</li>
+  <li id="r15">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/695183/vs-code">FortiCNAPP CodeSec: VS Code Extension</a>.</li>
+  <li id="r16">Snyk Docs — <a href="https://docs.snyk.io/developer-tools/snyk-ide-plugins-and-extensions">Snyk IDE Plugins and Extensions</a>.</li>
+  <li id="r17">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/526554/integrate-with-a-ci-cd-pipeline">FortiCNAPP CodeSec: Integrate with CI/CD</a>.</li>
+  <li id="r18">Fortinet — <a href="https://www.fortinet.com/content/dam/fortinet/assets/data-sheets/og-forticnapp.pdf">FortiCNAPP Ordering Guide (PDF)</a>.</li>
+  <li id="r19">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/975371/leveraging-the-codesec-yaml-file">FortiCNAPP CodeSec: codesec.yaml</a>.</li>
+  <li id="r20">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/433465/software-composition-analysis-sca">FortiCNAPP: Software Composition Analysis</a>.</li>
+  <li id="r21">PeerSpot — <a href="https://www.peerspot.com/products/lacework-forticnapp-reviews">Lacework FortiCNAPP Reviews &amp; Pricing</a>; CDW Reseller Listings.</li>
+  <li id="r22">Snyk — <a href="https://snyk.io/snyk-for-cursor/">Getting Started with Snyk for Cursor</a>; <a href="https://snyk.io/ai-partners/cursor/">Snyk Integration with Cursor (MCP)</a>; SD Times — <a href="https://sdtimes.com/ai/may-8-2026-ai-updates-from-the-past-week-coder-agents-launch-snyk-claude-partnership-opsera-cursor-partnership-and-more/">Snyk-Claude partnership (May 2026)</a>.</li>
+  <li id="r23">Fortinet Community — <a href="https://community.fortinet.com/blogs-103/fortinetcnapp-securing-ai-generated-code-at-the-moment-it-s-written-introducing-the-forticnapp-code-security-plugin-for-claude-code-227582">Introducing the FortiCNAPP Code Security Plugin for Claude Code</a>.</li>
+  <li id="r24">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/26.2.0/administration-guide/626586/claude-code-plug-in">FortiCNAPP Claude Code Plug-in</a>.</li>
+  <li id="r25">Fortinet Docs — <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/080769/dspm">FortiCNAPP DSPM</a>.</li>
+  <li id="r26">Fortinet Press Release — <a href="https://www.fortinet.com/corporate/about-us/newsroom/press-releases/2026/fortinet-expands-forticnapp-cloud-risk-management-with-network-data-and-unified-risk-context">FortiCNAPP unified risk context (Jan 2026)</a>.</li>
+  <li id="r27">Checkmarx — <a href="https://checkmarx.com/blog/checkmarx-named-a-leader-in-the-forrester-wave-static-application-security-testing-solutions-q3-2025/">Forrester Wave SAST Q3 2025 Leader</a>.</li>
+  <li id="r28">Veracode — <a href="https://www.veracode.com/resources/analyst-reports/magic-quadrant-leader-application-security-testing/">Leader in Gartner MQ AST</a>; <a href="https://www.veracode.com/sast-leader-forrester-wave/">Leader in Forrester Wave SAST 2025</a>.</li>
+  <li id="r29">AppSec Santa — <a href="https://appsecsanta.com/checkmarx">Checkmarx One Review 2026 (9 scanners, 30+ languages)</a>.</li>
+  <li id="r30">DEV — <a href="https://dev.to/rahulxsingh/semgrep-vs-veracode-sast-comparison-for-2026-5dn6">Veracode SAST 2026 language coverage</a>.</li>
+  <li id="r31">Checkmarx — <a href="https://checkmarx.com/blog/ai-code-needs-ai-security-why-claudes-announcement-signals-a-bigger-shift/">Developer Assist (Claude Code / Cursor / Windsurf / Copilot)</a>; <a href="https://devops.com/agentic-ai-for-defense-how-checkmarx-turns-security-into-a-coding-partner/">Agentic AI for defense</a>.</li>
+  <li id="r32">Veracode — <a href="https://docs.veracode.com/r/Scan_for_JetBrains">Veracode Scan for JetBrains</a>; <a href="https://plugins.jetbrains.com/plugin/22143-veracode-scan">Veracode Scan plugin</a>.</li>
+  <li id="r33">Veracode — <a href="https://www.veracode.com/products/fix/">Veracode Fix (AI auto-remediation, 10 languages)</a>.</li>
+  <li id="r34">AppSec Santa — <a href="https://appsecsanta.com/veracode#veracode-static-analysis-sast">Veracode SCA (Phylum) overview</a>.</li>
+  <li id="r35">Veracode Docs — <a href="https://docs.veracode.com/r/Generate_an_SBOM_with_the_REST_API">Generate SBOM (CycloneDX/SPDX) via REST API</a>.</li>
+  <li id="r36">Veracode — FedRAMP Moderate ATO (per <a href="https://www.pixee.ai/blog/checkmarx-vs-veracode">Pixee comparison</a>).</li>
+  <li id="r37">WeavAI Blog — <a href="https://weavai.app/blog/en/2026/05/06/checkmarx-sast-2026-review-pricing-alternatives/">Checkmarx SAST 2026 Pricing</a>; Vendr — <a href="https://www.vendr.com/marketplace/checkmarx">Checkmarx pricing benchmarks</a>.</li>
+  <li id="r38">DEV — <a href="https://dev.to/rahulxsingh/checkmarx-vs-veracode-enterprise-sast-platforms-compared-in-2026-3l41">Checkmarx vs Veracode 2026 (Veracode entry pricing)</a>.</li>
+</ol>
+
+<footer>
+  Prepared by Fortinet PreSales Cloud Security · Sources: Gartner (Oct 2025), Forrester (Q3 2025), Fortinet Docs, Snyk Docs, public reseller pricing.
+  This document represents a vendor-objective PreSales comparison; specific pricing and feature availability should be validated with the respective vendors before customer-facing use.
+</footer>
+
+</div>
+</body>
+</html>

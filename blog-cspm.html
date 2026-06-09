@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FortiCNAPP - Risk Based Prioritized CSPM — Fortinet Blog</title>
+  <style>
+  /* ═══════════════════════════════════════════════════════════════════
+     FORTICNAPP WIKI — MASTER STYLESHEET
+     Template: ai-security-hook-blog.html
+     Colors: Fortinet Red #EE3124 · Navy #1a1a2e · White #ffffff
+  ═══════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { border-top: 3px solid #EE3124; }
+
+  :root {
+    --bg:        #ffffff;
+    --surface:   #f7f8fa;
+    --surface2:  #f0f2f5;
+    --border:    #e0e2e8;
+    --accent:    #EE3124;
+    --navy:      #1a1a2e;
+    --text:      #1d1d2e;
+    --text-body: #374151;
+    --text-muted:#6b7280;
+    --code-bg:   #f5f6f8;
+    --green:     #16a34a;
+    --yellow:    #d97706;
+    --red:       #dc2626;
+    --blue:      #0057b8;
+    /* legacy vars kept for backward compat */
+    --dark: #1a1a2e;
+    --mid:  #2d3a4a;
+    --light: #f7f8fa;
+    --muted: #6b7280;
+    --link:  #0057b8;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-body);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* ── Universal image scaling ── */
+  img { max-width: 100%; height: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NAV BARS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  nav, .topnav, .site-nav, .doc-header, header.site,
+  header.topbar, .nav {
+    background: var(--navy) !important;
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding: 0 24px;
+  }
+  .topnav-inner, .nav-inner, .inner,
+  .doc-header-inner, .site-nav .inner {
+    max-width: 860px; margin: 0 auto;
+    min-height: 52px; padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand, .topnav-brand, .nav-brand, .doc-brand-mark {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; color: #fff !important;
+    font-size: 14px; font-weight: 700;
+  }
+  .brand img, .logo { height: 26px; width: auto; }
+  .brand-sep, .topnav-sep { color: rgba(255,255,255,0.35); margin: 0 2px; }
+  .nav-back, .nav-cta {
+    font-size: 13px; color: rgba(255,255,255,0.7) !important;
+    text-decoration: none;
+  }
+  .nav-back:hover, .nav-cta:hover { color: #fff !important; }
+  .nav-spacer { flex: 1; }
+  .breadcrumb {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'SF Mono', monospace; margin-left: auto;
+  }
+  .breadcrumb a { color: rgba(255,255,255,0.55) !important; text-decoration: none; }
+  .breadcrumb a:hover { color: #fff !important; }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+  .nav-mark, .logo-mark, .doc-brand-mark {
+    width: 28px; height: 28px; background: var(--accent) !important;
+    border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 900; color: #fff;
+  }
+  .nav-byline { font-size: 12px; color: rgba(255,255,255,0.45); border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; margin-left: 4px; }
+  .nav-search { margin-left: auto; position: relative; }
+  .nav-search input, #q, #gl-search {
+    width: 200px; height: 30px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; padding: 0 28px 0 10px; font-size: 13px;
+    color: #fff; background: rgba(255,255,255,0.1); outline: none; font-family: inherit;
+  }
+  .nav-search input::placeholder, #q::placeholder, #gl-search::placeholder { color: rgba(255,255,255,0.4); }
+  .nav-search input:focus, #q:focus { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-search .kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px; padding: 1px 4px; font-family: 'SF Mono', monospace; pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HERO / PAGE HEADER (all variants — ALWAYS LIGHT)
+  ══════════════════════════════════════════════════════════════════ */
+  header, .hero, section.hero, .article-header, .header-wrap,
+  .doc-header + *, .page-head {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid var(--border);
+  }
+  header .inner, .hero-inner, .article-header-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 24px 32px;
+  }
+  /* Override any gradient on hero */
+  .hero, section.hero, .article-header { padding: 40px 24px 32px !important; }
+
+  .header-tag, .eyebrow, .cat-badge, .sub {
+    display: inline-block;
+    background: var(--surface2) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border) !important;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: 'SF Mono', monospace;
+  }
+
+  h1, .hero h1, header h1, .article-header h1, .post-title {
+    font-size: clamp(24px, 4vw, 38px) !important;
+    font-weight: 800; line-height: 1.2;
+    color: var(--navy) !important;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  h1 span, header h1 span { color: var(--accent) !important; }
+
+  .subtitle, .lede, .article-sub {
+    font-size: 16px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 20px;
+  }
+
+  .meta, .article-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-muted) !important;
+    font-family: 'SF Mono', monospace;
+  }
+  .meta a { color: var(--text-muted) !important; text-decoration: none; }
+  .meta a:hover { color: var(--accent) !important; }
+  .meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .meta-sep, .cat-sep { color: var(--border); margin: 0 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN CONTENT WRAPPERS
+  ══════════════════════════════════════════════════════════════════ */
+  .container, .main, .article-body, article, .content,
+  section:not(.hero), main {
+    max-width: 860px; margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TYPOGRAPHY — ENLARGED FOR READABILITY
+  ══════════════════════════════════════════════════════════════════ */
+  h2, .main h2 {
+    font-size: 26px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 2.5rem 0 1rem;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: -0.01em; line-height: 1.3;
+    border-top: none !important; display: block !important;
+  }
+  h3, .main h3 {
+    font-size: 19px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.75rem 0 0.6rem; line-height: 1.4;
+  }
+  h4 {
+    font-size: 15px !important; font-weight: 700;
+    color: var(--navy) !important;
+    margin: 1.25rem 0 0.5rem;
+  }
+  p {
+    font-size: 16px; color: var(--text-body) !important;
+    margin-bottom: 18px; line-height: 1.8;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text) !important; font-weight: 700; }
+  em { font-style: italic; }
+
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { color: var(--accent) !important; text-decoration: underline; }
+
+  ul, ol { padding-left: 1.75em; margin: 1em 0; }
+  li { margin: 0.5em 0; color: var(--text-body) !important; font-size: 16px; line-height: 1.7; }
+  li::marker { color: var(--accent) !important; }
+
+  blockquote {
+    border-left: 4px solid rgba(238,49,36,0.4);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    font-style: italic; font-size: 16px;
+    color: var(--text-muted) !important;
+    background: var(--surface) !important;
+    border-radius: 0 6px 6px 0;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CODE
+  ══════════════════════════════════════════════════════════════════ */
+  code {
+    background: var(--code-bg) !important; padding: 2px 7px;
+    border-radius: 4px; font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; color: #c0392b !important; border: 1px solid var(--border);
+  }
+  pre, .code-block {
+    background: var(--code-bg) !important; border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px !important; margin: 1.5em 0;
+    font-family: 'SF Mono', 'Fira Code', monospace !important;
+    font-size: 14px; line-height: 1.65; overflow-x: auto;
+    color: var(--text) !important;
+  }
+  pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; }
+  .code-block code { background: none !important; border: none !important; padding: 0 !important; }
+  .code-block .comment, pre .comment { color: #9ca3af; }
+  .code-block .string, pre .string { color: #15803d; }
+  .code-block .key, pre .key { color: var(--blue); }
+  .code-block .highlight { color: var(--accent) !important; font-weight: 700; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CALLOUTS (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .callout, .note {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important;
+    border-radius: 6px; padding: 18px 22px; margin: 28px 0;
+  }
+  .callout.warning, .callout.warn, .note-amber { border-left-color: var(--yellow) !important; background: #fffbf0 !important; }
+  .callout.info { border-left-color: var(--blue) !important; background: #f0f5ff !important; }
+  .callout.success, .callout.ok, .note-green { border-left-color: var(--green) !important; background: #f0faf4 !important; }
+  .note-navy { border-left-color: var(--navy) !important; background: #f0f2f5 !important; }
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px;
+  }
+  .callout.warning .callout-label, .callout.warn .callout-label { color: var(--yellow) !important; }
+  .callout.info .callout-label { color: var(--blue) !important; }
+  .callout.success .callout-label, .callout.ok .callout-label { color: var(--green) !important; }
+  .callout p, .note p { margin: 0; font-size: 15px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     CARDS (risk, scan, compare, mode, pillar, hot, force, trend)
+  ══════════════════════════════════════════════════════════════════ */
+  .risk-grid, .scan-grid, .compare, .mode-grid, .pillar-grid,
+  .hot-grid, .forces-grid, .deploy-grid, .intro-grid, .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .risk-card, .scan-card, .compare-col, .mode-card, .pillar-card,
+  .hot-card, .force-card, .deploy-card, .intro-card, .feature-card,
+  .presales-col {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 8px; padding: 20px;
+    color: var(--text-body) !important;
+  }
+  .risk-card .risk-title {
+    font-size: 15px; font-weight: 700; color: var(--text) !important;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .risk-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .badge-critical { background: rgba(220,38,38,0.1) !important; color: var(--red) !important; }
+  .badge-high     { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .risk-card p, .scan-card p, .pillar-card p, .hot-card p,
+  .force-card p, .deploy-card p { font-size: 14px; color: var(--text-muted) !important; margin: 0; }
+  .scan-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 6px; }
+  .scan-card h3, .hot-card h3, .force-card h3, .deploy-card strong { color: var(--navy) !important; }
+  .compare-col.bad  { border-top: 3px solid var(--red) !important; }
+  .compare-col.good { border-top: 3px solid var(--green) !important; }
+  .compare-header {
+    padding: 12px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border);
+  }
+  .bad .compare-header  { color: var(--red) !important;   background: rgba(220,38,38,0.04) !important; }
+  .good .compare-header { color: var(--green) !important; background: rgba(22,163,74,0.04) !important; }
+  .compare-body { padding: 14px 18px; }
+  .compare-body p { font-size: 15px; color: var(--text-body) !important; margin: 0; }
+  .mode-card.green { border-top: 3px solid var(--green) !important; }
+  .mode-card.blue  { border-top: 3px solid var(--blue) !important; }
+  .mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .mode-card.green .mode-label { color: var(--green) !important; }
+  .mode-card.blue  .mode-label { color: var(--blue) !important; }
+  .pillar-card { border-left: 4px solid var(--accent) !important; }
+  .pillar-card strong { display: block; margin-bottom: 4px; color: var(--navy) !important; font-size: 15px; }
+
+  /* Force / hot / trend cards */
+  .force-num, .hot-tag, .trend-num {
+    font-size: 11px; font-weight: 700; color: var(--accent) !important;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .hot-why { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .trends { margin: 24px 0; }
+  .trend { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 16px; }
+  .trend-num { font-size: 32px; font-weight: 900; color: var(--accent) !important; opacity: 0.2; width: 48px; flex-shrink: 0; }
+
+  /* Feature cards (TechTips) */
+  .feature-card { border-top: 3px solid var(--accent) !important; }
+  .feature-card-header { background: var(--surface) !important; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .feature-domain-bar { width: 4px; height: 100%; background: var(--accent); border-radius: 2px; }
+  .feature-num { font-size: 11px; font-weight: 700; color: var(--text-muted) !important; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-title { font-size: 15px; font-weight: 700; color: var(--navy) !important; }
+  .feature-body { padding: 14px 18px; font-size: 14px; color: var(--text-body) !important; }
+  .feature-footer { padding: 10px 18px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     NVIDIA STACK (dark component — convert to light)
+  ══════════════════════════════════════════════════════════════════ */
+  .nvidia-stack {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 8px; padding: 24px; margin: 24px 0;
+    color: var(--text-body) !important;
+  }
+  .nvidia-stack h4 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 14px;
+  }
+  .nvidia-stack ul { margin-left: 1.25em; }
+  .nvidia-stack li { color: var(--text-body) !important; }
+  .nvidia-stack li strong { color: var(--accent) !important; }
+  .nv-grid { display: grid; gap: 12px; margin-top: 8px; }
+  .nv-item {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-radius: 6px; overflow: hidden;
+  }
+  .nv-item-head {
+    padding: 10px 16px; background: var(--surface2) !important;
+    border-bottom: 1px solid var(--border) !important;
+    font-weight: 700; font-size: 14px; color: var(--navy) !important;
+  }
+  .nv-item-body { padding: 14px 16px; }
+  .nv-what { font-size: 14px; color: var(--text-body) !important; line-height: 1.6; margin-bottom: 10px; }
+  .nv-why {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: #fff8f7 !important; border-left: 3px solid var(--accent) !important;
+    border-radius: 0 5px 5px 0; padding: 10px 12px;
+    font-size: 14px; color: var(--text-body) !important; line-height: 1.5;
+  }
+  .nv-why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; white-space: nowrap; padding-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SECTION BADGES
+  ══════════════════════════════════════════════════════════════════ */
+  .section-badge, .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .badge-what, .badge-ga  { background: rgba(238,49,36,0.1) !important; color: var(--accent) !important; }
+  .badge-why              { background: rgba(217,119,6,0.1) !important;  color: var(--yellow) !important; }
+  .badge-how              { background: rgba(22,163,74,0.1) !important;  color: var(--green) !important; }
+  .badge-angle, .badge-domain { background: rgba(26,26,46,0.08) !important; color: var(--navy) !important; }
+  .badge-domain { font-size: 10px; background: var(--surface2) !important; color: var(--text-muted) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     SUPPLY CHAIN / LAYERS / ANALOGY (special components)
+  ══════════════════════════════════════════════════════════════════ */
+  .chain { margin: 24px 0; }
+  .phase {
+    background: var(--bg) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .num { font-size: 11px; font-weight: 700; color: var(--accent) !important; text-transform: uppercase; margin-bottom: 6px; }
+  .lang-tag { display: inline-block; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; margin-left: 8px; }
+  .layers { margin: 24px 0; }
+  .layer, .layer-ltr {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .layer:last-child, .layer-ltr:last-child { border-bottom: none; }
+  .layer-body { flex: 1; min-width: 0; }
+  .analogy { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .a-l, .a-r { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px 20px; }
+  .a-l { border-top: 3px solid var(--red) !important; }
+  .a-r { border-top: 3px solid var(--green) !important; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .stat { text-align: center; min-width: 80px; }
+  .big { font-size: 2.5rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .label { font-size: 12px; color: var(--text-muted) !important; margin-top: 4px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BATTLE / COMPETITIVE CARDS
+  ══════════════════════════════════════════════════════════════════ */
+  .battle { margin: 28px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .battle-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .battle-deck { padding: 16px 20px; background: var(--surface) !important; }
+  .battle-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .battle-col { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 6px; padding: 16px; }
+  .battle-obj { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRESALES BOX
+  ══════════════════════════════════════════════════════════════════ */
+  .presales-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+  .presales-header {
+    background: var(--navy) !important; color: #fff !important;
+    padding: 14px 20px; font-size: 14px; font-weight: 700;
+  }
+  .presales-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; }
+  .presales-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+  .presales-col:last-child { border-right: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     AIMS BOX / PULL QUOTE / CTA
+  ══════════════════════════════════════════════════════════════════ */
+  .aims-box {
+    background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important;
+    border-left: 4px solid var(--accent) !important; border-radius: 6px;
+    padding: 20px 24px; margin: 24px 0;
+  }
+  .aims-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 10px; }
+  .pull {
+    font-size: 20px; font-style: italic; color: var(--navy) !important;
+    border-left: 4px solid var(--accent); padding: 16px 24px;
+    margin: 28px 0; line-height: 1.5;
+    background: var(--surface) !important;
+  }
+  .cta-box {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-top: 3px solid var(--accent) !important; border-radius: 8px;
+    padding: 24px; margin: 28px 0;
+  }
+  .cta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 8px; }
+  .cta-title { font-size: 18px; font-weight: 700; color: var(--navy) !important; margin-bottom: 8px; }
+  .cta-desc  { font-size: 15px; color: var(--text-body) !important; margin-bottom: 16px; }
+  .cta-btn {
+    display: inline-block; background: var(--accent) !important;
+    color: #fff !important; padding: 10px 20px; border-radius: 6px;
+    font-weight: 700; font-size: 14px; text-decoration: none;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TABLES (all variants)
+  ══════════════════════════════════════════════════════════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table, .community-table, .summary-table {
+    width: 100%; border-collapse: collapse; font-size: 14px;
+    background: var(--bg) !important;
+  }
+  th {
+    border-bottom: 2px solid var(--border); padding: 10px 14px;
+    text-align: left; font-weight: 700; font-size: 13px;
+    color: var(--navy) !important; background: var(--surface) !important;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  td { border-bottom: 1px solid var(--border); padding: 10px 14px; color: var(--text-body) !important; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .ct-label, .ct-body { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .ct-label { font-weight: 700; font-size: 13px; color: var(--navy) !important; background: var(--surface) !important; }
+  .ct-body  { font-size: 14px; color: var(--text-body) !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     ROI / CHART COMPONENTS
+  ══════════════════════════════════════════════════════════════════ */
+  .roi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 24px 0; }
+  .roi-fig { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .roi-n { font-size: 2.25rem; font-weight: 900; color: var(--accent) !important; line-height: 1; }
+  .roi-l { font-size: 13px; color: var(--text-muted) !important; margin-top: 4px; }
+  .roi-src { font-size: 11px; color: var(--text-muted) !important; margin-top: 6px; font-style: italic; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     INTRO GRID
+  ══════════════════════════════════════════════════════════════════ */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  @media (max-width: 600px) { .grid-2, .battle-cols, .analogy { grid-template-columns: 1fr; } }
+  .intro-card { border-top: 3px solid var(--accent) !important; }
+  .intro-card h3 { font-size: 16px !important; color: var(--navy) !important; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MCP PRIMITIVES / PROTOCOL LAYERS
+  ══════════════════════════════════════════════════════════════════ */
+  .primitives { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 24px 0; }
+  .prim { background: var(--bg) !important; border: 1px solid var(--border) !important; border-radius: 8px; padding: 18px; }
+  .prim-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prim-emoji { font-size: 22px; }
+  .prim-name { font-weight: 700; font-size: 15px; color: var(--navy) !important; }
+  .prim-role { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent) !important; }
+  .prim-body { font-size: 14px; color: var(--text-muted) !important; }
+
+  /* Glossary tooltip */
+  .gl-term, .term {
+    border-bottom: 2px dashed var(--accent);
+    cursor: help; color: inherit;
+    font-style: normal;
+  }
+  #gl-tip, .tip {
+    position: absolute; background: var(--navy) !important; color: #fff !important;
+    font-size: 13px; padding: 10px 14px; border-radius: 6px;
+    max-width: 280px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FABRIC / NOTE BLOCKS (TechTips)
+  ══════════════════════════════════════════════════════════════════ */
+  .fabric-block {
+    background: var(--surface) !important; border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--navy) !important; border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .fabric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--navy) !important; margin-bottom: 8px; }
+  .rule { border: none; border-top: 2px solid var(--accent); margin: 40px 0; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     BLOG INDEX — WIKI NAVIGATION
+  ══════════════════════════════════════════════════════════════════ */
+  .page-head { max-width: 860px; margin: 0 auto; padding: 48px 24px 32px; border-bottom: 1px solid var(--border); }
+  .page-head h1 { font-size: 32px !important; font-weight: 800; letter-spacing: -0.02em; color: var(--navy) !important; margin-bottom: 10px; }
+  .page-head h1 span { color: var(--accent) !important; }
+  .page-head p { font-size: 15px; color: var(--text-muted) !important; max-width: 560px; line-height: 1.6; }
+  .author-row { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+  .filters { max-width: 860px; margin: 0 auto; padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; color: var(--text-muted) !important; font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.1s; }
+  .filter-btn:hover { border-color: #9ca3af; color: var(--text) !important; }
+  .filter-btn.active { background: var(--navy) !important; border-color: var(--navy) !important; color: #fff !important; font-weight: 600; }
+  .filter-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .cat-block { padding: 32px 0 0; }
+  .cat-block.hidden { display: none; }
+  .cat-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .cat-pip { width: 3px; height: 14px; border-radius: 2px; }
+  .art { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: padding-left 0.12s; }
+  .art:first-of-type { border-top: 1px solid var(--border); }
+  .art:hover { padding-left: 8px; }
+  .art.hidden { display: none; }
+  .art-title { font-size: 16px; font-weight: 600; color: var(--text) !important; line-height: 1.4; margin-bottom: 4px; display: block; }
+  .art:hover .art-title { color: var(--accent) !important; }
+  .art-desc { font-size: 14px; color: var(--text-muted) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px; }
+  .art-right { text-align: right; flex-shrink: 0; }
+  .art-date, .art-time { font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; white-space: nowrap; display: block; }
+  .results-bar { max-width: 860px; margin: 0 auto; padding: 12px 24px 0; font-size: 12px; color: var(--text-muted) !important; font-family: 'SF Mono', monospace; }
+  .empty, .empty-state { text-align: center; color: var(--text-muted); padding: 64px 0; display: none; }
+  .empty.visible, .empty-state.visible { display: block; }
+  .empty strong, .empty-state strong { display: block; font-size: 16px; color: var(--text) !important; margin-bottom: 4px; }
+
+  /* Blog card (index) */
+  .cards { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .card { border: 1px solid var(--border) !important; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.2s; margin-bottom: 1.25rem; }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .card-top { background: var(--navy) !important; color: #fff; padding: 1.75rem 2rem; }
+  .card-top.alt { background: #16213e !important; }
+  .card-top .tag { display: inline-block; background: var(--accent) !important; color: #fff !important; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .card-date { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px; }
+  .card-top h3 { font-size: 1.15rem !important; font-weight: 700; line-height: 1.3; color: #fff !important; }
+  .card-body { padding: 1.25rem 2rem; background: var(--bg) !important; }
+  .card-body p { font-size: 14px; color: var(--text-muted) !important; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .card-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; background: var(--surface2) !important; color: var(--text-muted) !important; text-transform: uppercase; }
+  .card-footer { padding: 0.85rem 2rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--accent) !important; font-weight: 600; background: var(--bg) !important; }
+  .card-hidden { display: none !important; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted) !important; margin-bottom: 1rem; }
+  .card-section { margin-bottom: 1.5rem; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg) !important; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--text-muted) !important; font-family: inherit; }
+  .tag-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .tag-btn.active { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  .search-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 0.65rem 1rem 0.65rem 2.5rem; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-body); background: var(--bg) !important; outline: none; }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(238,49,36,0.1); }
+
+  /* ══════════════════════════════════════════════════════════════════
+     TL;DR / INSIGHT / CHECKLIST / PILLS / AUTHOR / REFS
+  ══════════════════════════════════════════════════════════════════ */
+  .tldr { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+  .tldr h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent) !important; margin-bottom: 12px; border-left: none !important; padding-left: 0 !important; }
+  .tldr p { font-size: 16px; margin-bottom: 10px; color: var(--text-body) !important; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .insight { background: #fff8f7 !important; border: 1px solid rgba(238,49,36,0.18) !important; border-left: 4px solid var(--accent) !important; border-radius: 6px; padding: 24px 28px; margin: 28px 0; }
+  .insight p { font-size: 18px; font-style: italic; color: var(--navy) !important; margin: 0; line-height: 1.6; }
+  .insight p span { color: var(--accent) !important; font-style: normal; font-weight: 700; }
+  .checklist { list-style: none; margin: 18px 0; }
+  .checklist li { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; color: var(--text-body) !important; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .num { width: 26px; height: 26px; background: rgba(238,49,36,0.1) !important; border: 1px solid rgba(238,49,36,0.2) !important; border-radius: 50%; color: var(--accent) !important; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+  .pill-blue   { background: #f0f4ff !important; color: #1e40af !important; border: 1px solid #bfdbfe; }
+  .pill-yellow { background: #fffbeb !important; color: #92400e !important; border: 1px solid #fde68a; }
+  .pill-green  { background: #f0fdf4 !important; color: #166534 !important; border: 1px solid #bbf7d0; }
+  .feature-list { list-style: none; margin: 16px 0; padding: 0; }
+  .feature-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text-body) !important; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list .check { width: 20px; height: 20px; background: rgba(22,163,74,0.12) !important; border-radius: 50%; color: var(--green) !important; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .install-block { background: var(--surface2) !important; border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; margin: 20px 0; }
+  .install-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted) !important; margin-bottom: 12px; }
+  .install-cmd { font-family: 'SF Mono', monospace !important; font-size: 14px; background: var(--code-bg) !important; padding: 10px 14px; border-radius: 5px; display: block; color: #15803d !important; margin-bottom: 8px; border: 1px solid var(--border); }
+  .divider { width: 40px; height: 3px; background: var(--accent) !important; border-radius: 2px; margin: 0 0 28px; }
+  .author-block { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--surface) !important; border-bottom: 1px solid var(--border); }
+  .author-block-inner { max-width: 860px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 12px; }
+  .author-avatar { width: 40px; height: 40px; background: var(--navy) !important; border-radius: 50%; font-size: 14px; font-weight: 800; color: #fff !important; display: flex; align-items: center; justify-content: center; font-family: 'SF Mono', monospace; flex-shrink: 0; }
+  .author-info { line-height: 1.4; }
+  .author-name { font-size: 14px; font-weight: 700; color: var(--text) !important; }
+  .author-role, .author-meta { font-size: 13px; color: var(--text-muted) !important; margin-top: 2px; }
+  .author-meta .sep { margin: 0 5px; color: var(--border); }
+  .post-tags, .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .post-tag, .post-tag-pill, .atag { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 16px; background: var(--surface2) !important; color: var(--text-muted) !important; border: 1px solid var(--border); text-decoration: none; display: inline-block; }
+  .references, .refs { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .references h2, .refs h3, .refs-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted) !important; border-left: none !important; padding-left: 0 !important; margin-bottom: 16px; }
+  .ref-list { list-style: none; counter-reset: refs; padding: 0; }
+  .ref-list li { counter-increment: refs; display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(refs); font-size: 10px; font-weight: 700; font-family: 'SF Mono', monospace; color: var(--text-muted) !important; padding-top: 3px; }
+  .ref-title { font-weight: 600; color: var(--text) !important; display: block; margin-bottom: 3px; }
+  .ref-source { color: var(--text-muted) !important; font-size: 13px; }
+  .ref-source a, .refs a { color: var(--blue) !important; text-decoration: none; }
+  .share-row { display: flex; gap: 8px; margin: 20px 0; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-body) !important; text-decoration: none; background: var(--bg) !important; }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent) !important; }
+  .disclaimer { font-size: 13px; color: var(--text-muted) !important; font-style: italic; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 24px; }
+
+  /* Password gate */
+  .password-gate { background: var(--surface) !important; border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin: 16px 0; text-align: center; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════════ */
+  footer, .site-footer, .doc-footer {
+    background: var(--navy) !important; color: rgba(255,255,255,0.5) !important;
+    padding: 28px 24px; text-align: center; font-size: 13px; margin-top: 64px;
+    border-top: none !important;
+  }
+  footer a, .site-footer a, .doc-footer a { color: rgba(255,255,255,0.65) !important; text-decoration: underline; }
+  footer a:hover, .site-footer a:hover { color: #fff !important; }
+  .doc-footer-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PDF BUTTON + REFERENCES POPUP
+  ══════════════════════════════════════════════════════════════════ */
+  .pdf-btn { position: fixed; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 8px; background: var(--accent) !important; color: #fff !important; border: none; border-radius: 7px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 12px rgba(238,49,36,0.35); z-index: 100; }
+  .pdf-btn:hover { opacity: 0.88; }
+  #ref-panel { font-family: inherit !important; background: var(--bg) !important; }
+  #ref-panel * { font-family: inherit !important; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     PRINT
+  ══════════════════════════════════════════════════════════════════ */
+  @media print {
+    .pdf-btn, nav, .topnav, .site-nav, #ref-overlay,
+    #ref-panel, button[onclick*="ref-panel"] { display: none !important; }
+    html { border-top: none; }
+    footer, .site-footer { background: #f0f0f0 !important; color: #555 !important; }
+    h2 { page-break-after: avoid; }
+    section, .phase, .risk-card { page-break-inside: avoid; }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .battle-cols, .analogy, .grid-2, .pillar-grid,
+    .battle-cols, .presales-body { grid-template-columns: 1fr !important; }
+    .art-right { display: none; }
+    .container, .main, .article-body { padding: 32px 18px 48px; }
+    header, .hero, .article-header { padding: 32px 18px 24px !important; }
+  }
+</style>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="site-nav">
+  <div class="inner">
+    <a class="brand" href="/FortiCNAPP/">
+      <img class="logo" src="/fortinet-logo.png" alt="Fortinet">
+      <span class="brand-pipe">|</span>
+      <span class="brand-label">Blog</span>
+    </a>
+    <a class="nav-back" href="/FortiCNAPP/">&#8592; All posts</a>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="https://www.fortinet.com/products/forticnapp">Explore FortiCNAPP &rarr;</a>
+  </div>
+</nav>
+
+<!-- ── Article Header ── -->
+<header class="article-header">
+  <div class="article-header-inner">
+    <div class="cat-row">
+      <span class="cat-badge">Cloud Security</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">CSPM</span>
+      <span class="cat-sep">·</span>
+      <span class="cat-badge">CNAPP</span>
+    </div>
+    <h1>FortiCNAPP - Risk Based Prioritized CSPM</h1>
+    <p class="article-sub">Let's have a deeper look at Cloud Security Posture Management</p>
+    <div class="article-meta">
+      <div class="author-avatar">SV</div>
+      <div class="meta-info">
+        <span class="author-name">Sam Vuillaume — Consulting Systems Expert, Cloud &amp; AI Security · Fortinet</span>
+        <div class="meta-line">
+          <span>May 22, 2026</span>
+          <span class="meta-sep">·</span>
+          <span>15 min read</span>
+        </div>
+      </div>
+      <div class="share-row">
+        <a class="share-btn" href="#" aria-label="Share on LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452H17.21v-5.569c0-1.327-.027-3.035-1.848-3.035-1.851 0-2.134 1.445-2.134 2.94v5.664H9.993V9h3.099v1.561h.042c.431-.816 1.484-1.677 3.054-1.677 3.266 0 3.867 2.149 3.867 4.944v6.624zM5.337 7.433a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm1.553 13.019H3.782V9h3.108v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a class="share-btn" href="#" aria-label="Share on X">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <button class="share-btn" aria-label="Copy link" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{this.style.borderColor='#2e7d32';this.style.color='#2e7d32';setTimeout(()=>{this.style.borderColor='';this.style.color='';},1500)})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Article Body ── -->
+<main class="article-body">
+
+  <h2>Cloud security posture — a brief level-set</h2>
+  <p>Cloud environments are built to move fast. A developer can provision a new compute instance, an IAM role, or an S3 bucket with a single API call. An autoscaling group can add fifty new nodes overnight. A CI/CD pipeline can push a new container image to production in minutes. That velocity is the business value. It is also the security challenge.</p>
+  <p><strong>Cloud security posture</strong> is the practice of continuously answering three questions about every resource across every cloud account:</p>
+  <div class="intro-grid">
+    <div class="intro-card"><strong>Is it configured correctly?</strong>Does the resource's configuration match an accepted security baseline — and which framework or policy says so?</div>
+    <div class="intro-card"><strong>Has it drifted?</strong>Has it changed since it was last checked, who changed it, and when?</div>
+    <div class="intro-card"><strong>What is the actual risk?</strong>Not the theoretical risk (a CVSS score or a CIS delta) but the operational risk: who can reach it, who can use it, and what is running inside it?</div>
+  </div>
+  <p>On-premises infrastructure changes slowly and sits behind a physical perimeter. Cloud infrastructure changes constantly, is programmable by anyone with the right API credentials, and is reachable from anywhere by default. That is why cloud posture is its own discipline — and why the traditional network-perimeter and vulnerability-scanner model does not translate directly.</p>
+  <p>Every major cloud provider — AWS, Azure, GCP, OCI — exposes its entire infrastructure as a programmable API. Every configuration decision (who can read this bucket? which ports does this VM expose? which IAM role can assume this service account?) is readable, auditable, and diffable in real time. A CSPM platform connects to those APIs and continuously checks the answers against a policy library. The gap traditional CSPM leaves: it checks <em>configuration</em>, but configuration alone does not tell you <em>risk</em>. Bridging that gap — from raw configuration signals to prioritized, actionable risk — is what the rest of this post is about.</p>
+
+  <div class="aims-box">
+    <div class="aims-label">What this post aims to</div>
+    <p>This post is written for cloud security practitioners, SOC analysts, and security architects who want to understand how modern CSPM has evolved beyond configuration checking — and specifically how FortiCNAPP's five-layer correlation engine translates thousands of raw signals into a short, prioritized list of exploitable attack paths. It assumes basic familiarity with cloud concepts (IAM, compute instances, security groups) but no prior exposure to FortiCNAPP or CNAPP tooling. By the end, you should have a clear mental model of the five capabilities that define modern cloud posture management, why they have to work together, and what that looks like inside the actual FortiCNAPP console.</p>
+  </div>
+
+  <hr>
+
+  <h2>The CSPM problem nobody talks about</h2>
+  <p>If you have run a Cloud Security Posture Management tool for more than a few weeks, you already know the dirty secret: <strong>misconfiguration findings alone are not risk</strong>. They are <em>signals</em>. And on their own, those signals scale faster than any SOC can triage.</p>
+  <p>Open a typical multi-cloud CSPM dashboard on a Monday morning and you will see thousands of findings: an S3 bucket without encryption-at-rest, a security group with 0.0.0.0/0 on port 22, an unrotated access key, a storage account allowing public blob access, a Kubernetes namespace without network policies. Each is "true." Few are urgent. Fewer still are <em>exploitable in your environment, right now</em>.</p>
+  <p>This is the CSPM trap — drowning teams in CIS Benchmark deltas while real attack paths sit hidden in plain sight. The way out is not more rules. It is <strong>context</strong>. And context, in 2026, means combining five capabilities into a single risk-prioritized view:</p>
+  <ol>
+    <li><strong>Cloud inventory and configuration tracking</strong> — what do you have, how is it configured, and who changed it</li>
+    <li><strong>CSPM</strong> — the misconfiguration itself, with remediation and drift detection</li>
+    <li><strong>CIEM</strong> — who or what can actually use that misconfiguration</li>
+    <li><strong>Internet exposure analysis</strong> — whether an attacker can reach it</li>
+    <li><strong>Vulnerability and CVE management</strong> — whether the workload behind it is exploitable</li>
+  </ol>
+  <figure>
+    <img src="pyramid-five-layers.svg" alt="FortiCNAPP five-layer security correlation pyramid" style="width:100%;border-radius:8px;">
+    <figcaption>Figure 1 — The FortiCNAPP five-layer pyramid. Cloud Inventory forms the foundation; each layer above adds context until Attack Path Analysis at the apex collapses all signals into a single prioritized Risk Score.</figcaption>
+  </figure>
+
+  <p>This is exactly the architecture Fortinet built into Lacework FortiCNAPP. The official Fortinet documentation describes FortiCNAPP as a platform that "correlates all of this data to show what combinations of risk factors and vulnerable resources could lead to potential attack paths" — by "combining risk factors like vulnerabilities, network reachability, secrets, and identity and access management (IAM) roles". That is the story of this post.</p>
+
+  <hr>
+
+  <h2>Layer 1 — Cloud inventory and configuration tracking</h2>
+  <p>Before any policy check is meaningful, you need to answer a simpler question: <em>what do I actually have running in my cloud accounts, today?</em> In any large multi-cloud estate, the inventory problem alone is non-trivial. Resources are created and destroyed by Terraform pipelines, by developers in the console, by autoscaling groups, by GitOps controllers, and increasingly by AI agents writing infrastructure.</p>
+  <p>FortiCNAPP's <strong>Resource Inventory</strong> is built specifically for this. Per the official documentation, the Resource Inventory "grants you visibility into your multi-cloud environments and their resources and risks" with support for AWS, Azure, Google Cloud, and OCI — letting teams "view, search, sort, and filter among all resources across these environments — with no limit".</p>
+  <p>What makes this operationally useful is that every resource view rolls up its associated risk. Click a resource and you see "comprehensive details, encompassing the count of vulnerabilities, misconfigurations, alerts, and available attack paths". Inventory becomes the entry point into the rest of the platform — not a static asset list.</p>
+
+  <h3>Configuration History — the "who, when, what" of every change</h3>
+  <p>FortiCNAPP "takes regular snapshots of your resources, and you can track configuration changes (diffs) through the FortiCNAPP Console". The <strong>Configuration History</strong> page shows differences between previous and current configurations with side-by-side diff views.</p>
+  <p>The "who" and "when" attribution comes from FortiCNAPP's deep integration with cloud control plane logs — AWS CloudTrail, Azure Activity Log, Google Cloud Audit Log. When a security group is changed at 3:47 AM on a Tuesday, you can pivot from the misconfiguration finding to the activity log entry that caused it, including the IAM principal, the source IP, and the API call.</p>
+  <ul>
+    <li><strong>Daily configuration audit</strong> — FortiCNAPP "audit[s] your configuration daily and alert[s] you of any concerning changes, ensuring continuous compliance in your multicloud environments"</li>
+    <li><strong>Incident-driven inventory search</strong> — Paste an instance ID into the FortiCNAPP search field (with wildcard support: <code>*my_s3*</code>) and immediately pull the full risk profile and change history of the affected resource</li>
+    <li><strong>Configuration drift tracking</strong> — Every resource carries a unique identifier (ARN, full resource name, Azure resource ID) so drift can be tracked even as tags change or resources are recreated</li>
+  </ul>
+  <p>For a SOC, this collapses the typical "five-tool investigation" — inventory tool, CSPM tool, CMDB, CloudTrail console, and IAM console — into a single pivot.</p>
+
+  <hr>
+
+  <h2>Layer 2 — Misconfiguration detection: the floor, not the ceiling</h2>
+  <p>With inventory and change history in place, traditional CSPM becomes far more meaningful. Now a misconfiguration is not a disconnected finding; it has an owner, a creation timestamp, a change history, and a blast radius.</p>
+  <p>FortiCNAPP covers the misconfiguration baseline across AWS, Azure, GCP, and OCI from a single agentless onboarding, deploying "in minutes, with or without agents". What you get out of the box:</p>
+  <ul>
+    <li>Continuous evaluation of resource configuration against hundreds of policies per CSP</li>
+    <li>Pre-built compliance frameworks — SOC 2, ISO 27001, HIPAA, HITRUST, PCI, NIST, FISMA, and CIS Benchmarks</li>
+    <li>Drift detection — a resource that was compliant yesterday and is not today, tied back to Configuration History</li>
+    <li>Multi-cloud unified policy view — the same SOC dashboard for AWS, Azure, GCP and OCI</li>
+    <li>Per-finding remediation guidance — what to fix and how to fix it</li>
+  </ul>
+  <figure>
+    <img src="cnapp-cloud-compliance.png" alt="FortiCNAPP cloud compliance dashboard" style="width:100%;border-radius:8px;">
+    <figcaption>FortiCNAPP cloud compliance view — continuous evaluation across CIS, SOC 2, PCI, HIPAA, NIST, and more, unified across all cloud providers in a single dashboard.</figcaption>
+  </figure>
+
+  <p>The Polygraph Data Platform "automatically learns how your environment is supposed to run, and tells you when it deviates" — meaning CSPM in FortiCNAPP is not a static rule engine. It is a behavioral baseline that <em>uses</em> configuration as one input among several.</p>
+  <p>This is necessary, and it is the foundation. But if you stop here, you are running a 2018-era tool in 2026. A public S3 bucket may hold cat memes or PII; a permissive security group may front a hardened bastion or a vulnerable Jenkins controller. Configuration alone cannot tell you which. That is why the next three layers matter.</p>
+
+  <hr>
+
+  <h2>Layer 3 — CIEM: the identity dimension misconfiguration cannot see</h2>
+  <p>The single most under-appreciated truth in cloud security: <strong>identity is the new perimeter, and identity misuse is the new lateral movement.</strong> Verizon's DBIR has shown year after year that credential abuse — not zero-day exploitation — is the dominant initial access vector in cloud breaches.</p>
+  <p>CSPM tells you a role exists with <code>iam:*</code>. CIEM tells you:</p>
+  <ul>
+    <li><em>Which</em> human users and service principals can assume it</li>
+    <li>What that role has <em>actually used</em> in the last 90 days (the effective permission set)</li>
+    <li>Whether the role chains into other roles via <code>sts:AssumeRole</code> or Azure service principal federation</li>
+    <li>Whether the access keys backing a human identity are leaked, dormant, or rotated</li>
+    <li>Whether a GCP service account has the <code>iam.serviceAccountTokenCreator</code> role anywhere it should not</li>
+  </ul>
+  <p>FortiCNAPP "reduces cloud identity risk by knowing your users and their access, pinpointing which are riskiest, and right-sizing their entitlements". Per Fortinet's launch announcement, "each identity is assigned a risk score based on more than 30 factors, helping prioritize high-risk identities."</p>
+
+  <figure>
+    <img src="cnapp-entitlements-management.jpg" alt="FortiCNAPP entitlements management dashboard">
+    <figcaption>FortiCNAPP CIEM — entitlements management view. Identities are ranked by risk score across 30+ factors, with right-sizing recommendations surfaced inline.</figcaption>
+  </figure>
+
+  <p>The pivot point: an <code>s3:GetObject *</code> on a public bucket is one alert. The same bucket reachable by a Lambda whose execution role can also <code>lambda:UpdateFunctionCode</code> on production functions is a privilege-escalation path. CIEM is what turns a list of misconfigurations into a graph of <em>who can do what to whom</em>.</p>
+
+  <hr>
+
+  <h2>Layer 4 — Internet exposure: from "is it misconfigured?" to "can the internet touch it?"</h2>
+  <p>Most CSPM tools will flag an EC2 instance with a security group allowing 0.0.0.0/0 on port 22. A modern attacker does not care about your security group rule; they care about your <em>effective reachability</em> — the product of:</p>
+  <ul>
+    <li>Security group / NSG / VPC firewall rules</li>
+    <li>Network ACLs, route tables, transit gateways, VWAN hub routing</li>
+    <li>Public IP assignment and load balancer listeners</li>
+    <li>Application-layer reverse proxies (CloudFront, App Gateway, FrontDoor)</li>
+    <li>Kubernetes Service type (<code>LoadBalancer</code>, <code>NodePort</code>) and Ingress controller exposure</li>
+    <li>Serverless function URLs and API Gateway resource policies</li>
+  </ul>
+  <p>FortiCNAPP computes the <em>effective network path</em> and visualizes it in the <strong>Exposure Polygraph</strong> — generated when "critical vulnerabilities are associated with a cloud asset and they are exposed to the internet."</p>
+  <p>The PreSales value is concrete: exposure analysis cuts the actionable findings list by an order of magnitude. A customer with 4,000 "public" misconfigurations typically has fewer than 200 truly internet-reachable ones. That is a number a SOC can work.</p>
+  <p>This is also where the <strong>Fortinet Security Fabric</strong> advantage compounds. Exposure data from FortiCNAPP is enriched by, and can inform, the broader Fabric of FortiGate, FortiWeb, and FortiAnalyzer telemetry. Pure-play CNAPP tools see what the CSP API tells them; the Security Fabric sees what the network actually observed.</p>
+
+  <hr>
+
+  <h2>Layer 5 — Vulnerability management and the FortiCNAPP Risk Score</h2>
+  <p>A misconfigured, identity-reachable, internet-exposed workload is concerning. The same workload running a vulnerable Log4j version, an OpenSSL with a known RCE, or a container image with a critical kernel CVE is an active incident waiting to happen.</p>
+  <p>FortiCNAPP performs both agentless and agent-based vulnerability assessment, scanning "workloads for vulnerabilities and secrets without agents, giving instant coverage of production environments — container images, hosts, and language libraries." The code-side coverage adds SCA, SAST, and IaC security, "continuously monitoring runtime application behavior to identify active, exploitable vulnerable packages versus inactive ones with lower risk."</p>
+  <p>That phrase — <em>active, exploitable versus inactive</em> — is the heart of modern vulnerability management. A Critical CVSS 9.8 on an air-gapped idle workload with no exploitable identity is lower risk than a Medium CVSS 6.5 on an internet-facing API server with a broadly-permissioned IAM role.</p>
+  <p>The <strong>FortiCNAPP Risk Score</strong> is not raw CVSS. It is a multi-factor calculation that incorporates severity, exploit-in-the-wild signal, reachability, identity blast radius, data sensitivity, and lateral movement potential. The result: a list ordered by <em>what an attacker would target first in your environment</em>. For a CISO, this is the difference between "we have 12,000 vulnerabilities" and "here are the 17 that matter today."</p>
+
+  <figure>
+    <img src="figure-6-forticnapp-risk-insights-dashboard.png" alt="FortiCNAPP Risk Insights dashboard">
+    <figcaption>Risk Insights: Gain valuable insights on risks, powered by FortiCNAPP AI Assist. Additionally, create remediation tickets directly in the console using Jira integration.</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>The keystone: Attack Path Analysis</h2>
+  <p><strong>Attack Path Analysis</strong> is FortiCNAPP's risk-side correlation engine — the capability that takes all five layers above and surfaces the real attack chains hidden in the noise.</p>
+  <p>Per the official documentation, FortiCNAPP "leverages our platform to show possible attack paths within a cloud environment by correlating multiple risk factors — vulnerabilities, network reachability, secrets, and IAM roles — from sources including configuration data, activity data" and more. The Polygraph Data Platform combines "exposure path visualizations with data about what's actively happening in production" so security teams can "easily prioritize the most impactful attack vectors."</p>
+  <p>Critically, Attack Path Analysis is distinct from FortiCNAPP's <strong>Composite Alerts</strong> — Composite Alerts is a separate runtime CWPP capability focused on detecting active compromise. Attack Path Analysis sits on the <em>risk</em> side: it predicts where an attacker <em>could</em> go. Both feed the same prioritized SOC workflow, but answer different questions: "what is happening now?" vs. "what is exploitable next?"</p>
+  <p>The January 2026 platform update introduced <strong>Unified Risk Management</strong>, consolidating "insights from cloud posture, infrastructure entitlement, vulnerabilities, DSPM, and network security posture into a single view" — distinguishing "theoretical findings from active, exploitable risk."</p>
+  <p>A worked example. Picture a cloud asset that exhibits all of the following risk factors simultaneously:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Risk factor</th>
+          <th>Source</th>
+          <th>Standalone severity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>EC2 instance launched in non-standard region</td>
+          <td>Configuration History + CloudTrail</td>
+          <td><span class="sev sev-low">Low</span></td>
+        </tr>
+        <tr>
+          <td>Instance role with <code>s3:*</code> and <code>secretsmanager:GetSecretValue</code></td>
+          <td>CIEM</td>
+          <td><span class="sev sev-medium">Medium</span></td>
+        </tr>
+        <tr>
+          <td>Security group with port 4444 open to 0.0.0.0/0</td>
+          <td>CSPM</td>
+          <td><span class="sev sev-medium">Medium</span></td>
+        </tr>
+        <tr>
+          <td>Internet-reachable via misconfigured ALB target group</td>
+          <td>Exposure Polygraph</td>
+          <td><span class="sev sev-high">High</span></td>
+        </tr>
+        <tr>
+          <td>Container image with CVE-2024-XXXXX (RCE, high EPSS)</td>
+          <td>Agentless vulnerability scan</td>
+          <td><span class="sev sev-high">High</span></td>
+        </tr>
+        <tr>
+          <td>Workload reads from S3 bucket containing classified PII</td>
+          <td>DSPM</td>
+          <td><span class="sev sev-high">High</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>A conventional CSPM would generate six separate findings, each routing to a separate ticket, each competing for SOC analyst attention. Most would close as "informational."</p>
+  <p>FortiCNAPP's Attack Path Analysis collapses these into <strong>one prioritized attack path</strong>: <em>"Internet-reachable vulnerable workload with over-privileged role and access to sensitive PII — exploit path likelihood high, blast radius critical."</em></p>
+
+
+  <figure style="background:#f5f5f7;border-radius:12px;padding:1.5rem;text-align:center;">
+    <lottie-player
+      src="https://cdn.builder.io/o/assets%2Ff3229fa9116546a5bb8eacf7cc42baaa%2F402860ac2c2c4689abc31753ecfb0436?alt=media&token=1c0efec0-92e8-4b51-80e8-302c61ffa549&apiKey=f3229fa9116546a5bb8eacf7cc42baaa"
+      background="transparent" speed="1" style="width:100%;max-width:550px;height:391px;" loop autoplay
+      aria-label="FortiCNAPP GUI showing an attack path analysis for an exposure scenario">
+    </lottie-player>
+    <figcaption>FortiCNAPP Attack Path Analysis — visualizing complex entity relationships, exposure paths, and lateral movement risk in real time. Quickly understand which attack vectors matter most.</figcaption>
+  </figure>
+
+  <h3>From concept to console</h3>
+  <p>The FortiCNAPP console renders this correlation in three navigation layers — a ranked Attack Path list, the Exposure Polygraph graph, and per-node drill-downs.</p>
+
+  <figure>
+    <img src="single-dashboard.png" alt="FortiCNAPP unified attack path dashboard">
+    <figcaption>FortiCNAPP Attack Path Analysis — the unified dashboard consolidating posture, identity, exposure, and vulnerability signals across the entire multi-cloud estate into a single risk-ranked view.</figcaption>
+  </figure>
+
+  <p>The <strong>Attack Path list</strong> gives every posture analyst a ranked table across the entire estate: identity, cloud, account, resource type, Path severity, vulnerabilities, secrets, and compliance violations — all on a single row.</p>
+
+  <figure>
+    <img src="figure-3-forticnapp-attack-path-list-row.png" alt="FortiCNAPP Attack Path list row for fg-osp1" style="width:100%;border-radius:8px;">
+    <figcaption>Attack Path list row for <code>fg-osp1</code>: 11 Critical vulnerabilities, 0 secrets, 5 compliance violations — yet Path severity is rated <strong>Low</strong>. The risk score accounts for reachability and blast radius, not just raw CVE count.</figcaption>
+  </figure>
+
+  <p>The <strong>Exposure Polygraph</strong> renders the actual chain from Internet to the at-risk asset — a literal map of the attack surface for this single workload.</p>
+
+  <figure>
+    <img src="figure-4-forticnapp-exposure-polygraph-fg-osp1.png" alt="FortiCNAPP Exposure Polygraph for fg-osp1" style="width:100%;border-radius:8px;">
+    <figcaption>Exposure Polygraph for <code>fg-osp1</code>: Internet → Internet gateway → Security group → EC2 Instance. Red badges mark nodes carrying contributing risk findings.</figcaption>
+  </figure>
+
+  <p>Clicking any node in the Polygraph opens a drill-down showing exactly which findings are contributing risk at that node.</p>
+
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1.5rem 0;">
+    <figure style="flex:1;min-width:260px;margin:0;">
+      <img src="figure-5a-forticnapp-security-group-drilldown.png" alt="Security group node drill-down" style="width:100%;border-radius:8px;">
+      <figcaption>Security group node: 3 Compliance violations flagged by FortiCNAPP CSPM.</figcaption>
+    </figure>
+    <figure style="flex:1;min-width:260px;margin:0;">
+      <img src="figure-5b-forticnapp-ec2-drilldown.png" alt="EC2 Instance node drill-down" style="width:100%;border-radius:8px;">
+      <figcaption>EC2 Instance node: 2 Compliance violations and 11 Critical vulnerabilities — two pillars correlated as one node.</figcaption>
+    </figure>
+  </div>
+
+  <p>Across just these two nodes, FortiCNAPP identified <strong>16 raw findings</strong>. A traditional CSPM stack would have routed those as 16 tickets across at least two teams with no inherent linkage. FortiCNAPP collapses them into <strong>one Attack Path with a single Path severity rating</strong> — "patch the CVE" and "tighten the security group rule" become one coordinated action, not two separate Jira tickets in two separate backlogs.</p>
+
+  <hr>
+
+  <h2>Continuous CSPM: closing the configuration-to-behavior gap</h2>
+  <p><strong>Continuous CSPM</strong> is the final piece. Static posture answers <em>"is this resource configured correctly?"</em> Continuous CSPM answers <em>"is this resource behaving correctly — right now, and continuously?"</em></p>
+  <ul>
+    <li>An IAM role used in a way it has never been used before — even if the policy is permissive — is a behavioral anomaly</li>
+    <li>An S3 bucket suddenly accessed from a new geographic region or principal</li>
+    <li>A Kubernetes pod making API calls to the control plane it never made during baseline learning</li>
+    <li>A serverless function whose invocation pattern shifts from synchronous user traffic to background bulk reads</li>
+  </ul>
+  <p>The Polygraph Data Platform "automatically learns how your environment is supposed to run, and tells you when it deviates". Those deviations enrich the Attack Path graph and trigger Composite Alerts when the deviation looks like active compromise. This is the bridge from "CSPM as audit tool" to "CSPM as detection and response telemetry source."</p>
+
+  <figure style="background:#f5f5f7;border-radius:12px;padding:1.5rem;text-align:center;">
+    <lottie-player
+      src="https://cdn.builder.io/o/assets%2Ff3229fa9116546a5bb8eacf7cc42baaa%2Fb448380039bb470aa8d68eed99948ef1?alt=media&token=7899e2df-98a3-4b25-bd0c-a15c3189ec31&apiKey=f3229fa9116546a5bb8eacf7cc42baaa"
+      background="transparent" speed="1" style="width:100%;max-width:550px;height:391px;" loop autoplay
+      aria-label="FortiCNAPP GUI showing alert details for potentially compromised AWS keys">
+    </lottie-player>
+    <figcaption>FortiCNAPP rapidly detecting and mitigating zero-day threats — automatically surfacing compromised credential and ransomware attack patterns before they are publicly defined, powered by patented machine learning.</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>What this means for SOC operations</h2>
+  <ul>
+    <li><strong>Posture team</strong> works the Attack Path Analysis queue, not raw misconfiguration lists. Each path is pre-correlated and ranked by the FortiCNAPP Risk Score.</li>
+    <li><strong>SOC and incident response</strong> works the Composite Alerts queue — the runtime CWPP stream. Attack Path tells them what is exploitable; Composite Alerts tell them what is being exploited.</li>
+    <li><strong>Cloud governance</strong> uses Resource Inventory and Configuration History as their daily workspace — tracking drift and pivoting from any resource into its full risk profile.</li>
+    <li><strong>IAM team</strong> consumes CIEM-driven least-privilege recommendations as a continuous feed, not an annual access review.</li>
+    <li><strong>Vulnerability management</strong> prioritizes by FortiCNAPP Risk Score, not raw CVSS — patching the 50 vulnerabilities that matter rather than the 5,000 that exist.</li>
+    <li><strong>SOC integrations</strong> — high-fidelity output flows into Sentinel, Splunk, Chronicle, and QRadar via bidirectional integrations with AWS Security Hub, Azure Defender for Cloud, and GCP Security Command Center; FortiSOAR handles automated response playbooks.</li>
+    <li><strong>Compliance team</strong> keeps CIS / NIST / PCI / SOC 2 dashboards for audit — those are now the floor, not the work.</li>
+  </ul>
+  <p>This is the operating posture that turns CNAPP from a license line item into a measurable reduction in mean-time-to-detect and mean-time-to-remediate for cloud risk.</p>
+
+  <div class="presales-box">
+    <div class="presales-header">&#9670;&nbsp; Business Outcomes &amp; Conversation Items</div>
+    <div class="presales-body">
+      <div class="presales-col">
+        <h4>Business Outcomes</h4>
+        <ul>
+          <li><strong>From thousands of findings to tens of attack paths.</strong> Customers routinely report a 90%+ reduction in actionable queue depth once FortiCNAPP's five-layer correlation is running.</li>
+          <li><strong>Faster MTTD and MTTR for cloud risk.</strong> Correlating posture, identity, exposure, and vulnerability in a single view collapses a multi-tool investigation into a single pivot.</li>
+          <li><strong>Continuous least-privilege.</strong> CIEM-driven remediation guidance turns the annual access review into an automated, continuous workflow.</li>
+          <li><strong>Compliance as the floor, not the work.</strong> CIS / NIST / PCI / SOC 2 dashboards stay in place for audit while the SOC works the risk queue above them.</li>
+          <li><strong>Single pane across AWS, Azure, GCP, and OCI.</strong> One normalized risk view, one SIEM integration, one remediation workflow — no per-CSP tool sprawl.</li>
+        </ul>
+      </div>
+      <div class="presales-col">
+        <h4>Discovery Questions</h4>
+        <ul>
+          <li>How many findings does your current CSPM tool generate per week — and how many does your team actually triage to closure?</li>
+          <li>When a GuardDuty or Defender for Cloud alert fires, how many tools do you touch before you have a complete picture of the affected resource?</li>
+          <li>How do you know which of your open vulnerabilities an attacker would actually reach first?</li>
+          <li>Is your IAM access review an annual project or a continuous feed? What triggers a permission right-sizing today?</li>
+          <li>When a misconfiguration finding is closed as "informational," how confident are you it truly was?</li>
+          <li>What does your team reach for to answer: "What changed in our cloud at 3 AM last Tuesday, and who made the change?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>Closing thought: CSPM is not dead, it has grown up</h2>
+  <p>The CSPM category began as a configuration checker. It has matured into something much more useful: a cloud risk graph anchored in inventory and posture, enriched by identity reachability, network exposure, vulnerability exploitability, and runtime behavior. The vendors who deliver this — and FortiCNAPP is firmly in that group — are no longer selling misconfiguration scanners. They are selling the analyst's first hour of the morning back to them.</p>
+  <p>If your CSPM still produces a list, and your SOC still works that list, you are leaving most of the value of modern cloud security on the table. The question to ask your team this quarter is not <em>"how many findings did we close?"</em> It is <em>"how many real attack paths did we cut?"</em></p>
+  <p>That is the conversation FortiCNAPP is built for.</p>
+
+  <hr>
+
+  <div class="disclaimer">
+    <strong>About the author</strong><br>
+    I'm Sam Vuillaume, Consulting Systems Expert – Cloud and AI Security at Fortinet (CCIE #11828). I work day-to-day with cloud and security teams across AWS, Azure, GCP, and OCI, helping organizations operationalize security across modern application and AI-driven architectures.<br><br>
+    My focus is on positioning Fortinet's Security Fabric for the cloud — bringing together FortiCNAPP, FortiWeb / FortiAppSec Cloud, FortiGate VM, and FortiCASB-SSPM into a unified approach for securing cloud-native and AI-enabled workloads.<br><br>
+    In practice, this means translating fast-moving architectures — GenAI applications, API-driven microservices, and agent-based systems — into a cohesive DevSecOps security model that spans build-time, runtime, and control plane enforcement.<br><br>
+    Beyond the technical world, I'm passionate about cloud security innovation, AI system risk, and making complex architectures operationally real for customers — and when I'm not deep in cloud security design sessions, you'll likely find me out sailing on Lake Ontario.
+  </div>
+
+  <div class="article-tags">
+    <span class="tags-label">Tags:</span>
+    <a class="atag" href="#">CSPM</a>
+    <a class="atag" href="#">CIEM</a>
+    <a class="atag" href="#">Attack Path Analysis</a>
+    <a class="atag" href="#">FortiCNAPP</a>
+    <a class="atag" href="#">Cloud Security</a>
+    <a class="atag" href="#">Vulnerability Management</a>
+    <a class="atag" href="#">Risk Score</a>
+  </div>
+
+  <hr>
+
+  <div class="refs">
+    <h2>References — Fortinet sources</h2>
+    <h3>FortiCNAPP product and overview</h3>
+    <ul>
+      <li><a href="https://www.fortinet.com/products/forticnapp">FortiCNAPP product page</a></li>
+      <li><a href="https://www.fortinet.com/products/forticnapp/ciem">FortiCNAPP CIEM product page</a></li>
+      <li><a href="https://www.fortinet.com/content/dam/fortinet/assets/data-sheets/og-forticnapp.pdf">FortiCNAPP Ordering Guide (datasheet PDF)</a></li>
+      <li><a href="https://www.fortinet.com/corporate/about-us/newsroom/press-releases/2024/fortinet-expands-cloud-native-security-offerings-with-introduction-of-lacework-forticnapp">Fortinet press release — Lacework FortiCNAPP launch</a></li>
+    </ul>
+    <h3>FortiCNAPP documentation library</h3>
+    <ul>
+      <li><a href="https://docs.fortinet.com/product/forticnapp">FortiCNAPP Document Library</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/744719/resource-inventory">Resource Inventory</a></li>
+      <li><a href="https://www.fortinet.com/products/forticnapp/attack-path-analysis">Attack Path Analysis (product page)</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/853651/attack-path">Attack Path Analysis (documentation)</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/659119/attack-path-risk-calculation">Attack Path Risk Calculation</a></li>
+      <li><a href="https://docs.fortinet.com/document/lacework-forticnapp/25.2.0/administration-guide/812745/exposure-polygraph">Exposure Polygraph</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/903844/risk-score">FortiCNAPP Risk Score</a></li>
+      <li><a href="https://www.fortinet.com/products/forticnapp/cspm">FortiCNAPP CSPM product page</a></li>
+      <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/986450/composite-alerts-reference">Composite Alerts Reference</a></li>
+    </ul>
+    <h3>Industry references</h3>
+    <ul>
+      <li><a href="https://attack.mitre.org/matrices/enterprise/cloud/">MITRE ATT&amp;CK for Cloud</a></li>
+      <li><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">CISA Known Exploited Vulnerabilities Catalog</a></li>
+      <li><a href="https://www.first.org/epss/">EPSS (Exploit Prediction Scoring System)</a></li>
+      <li><a href="https://www.cisecurity.org/cis-benchmarks">CIS Benchmarks</a></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  &copy; 2026 Fortinet, Inc. All rights reserved.&nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://www.fortinet.com/corporate/about-us/legal.html">Legal</a>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://www.fortinet.com/corporate/about-us/privacy.html">Privacy</a>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var G = {
+    "Cloud Security Posture Management": "Continuous automated assessment of cloud resource configurations against security best practices and compliance frameworks (CIS, PCI, HIPAA, SOC 2). CSPM identifies misconfigurations but, alone, cannot determine whether a finding is actively exploitable in your environment.",
+    "Attack Path Analysis": "FortiCNAPP's correlation engine that combines all five risk layers — misconfigurations, identity, exposure, vulnerabilities, and data sensitivity — to surface ranked, exploitable attack chains rather than thousands of individual findings.",
+    "Exposure Polygraph": "FortiCNAPP's interactive graph showing the exact chain of cloud resources (Internet → gateway → security group → workload) that an attacker could traverse to reach a target, with risk badges on each contributing node.",
+    "Composite Alerts": "FortiCNAPP runtime detections that group multiple behavioural anomaly signals into a single prioritised alert, indicating active or imminent compromise — the runtime CWPP counterpart to posture-side Attack Path findings.",
+    "Composite Alert": "A FortiCNAPP runtime detection that correlates multiple behavioural signals into one prioritised alert indicating active or imminent compromise.",
+    "MITRE ATT&CK": "A publicly maintained knowledge base of adversary tactics, techniques, and procedures (TTPs) observed in real-world attacks. FortiCNAPP maps findings to ATT&CK techniques to contextualise risk within known attack patterns.",
+    "CIS Benchmarks": "Center for Internet Security configuration standards for cloud services, operating systems, and software. The most common baseline for CSPM policy sets across AWS, Azure, GCP, and OCI.",
+    "CIS Benchmark": "Center for Internet Security configuration standard — a widely adopted security baseline for cloud resources, used to define CSPM policy sets.",
+    "CloudTrail": "AWS audit log service that records every API call in an account — who did what, when, from where. Essential for incident attribution and configuration drift investigation in FortiCNAPP.",
+    "Kubernetes": "Open-source container orchestration platform managing deployment, scaling, and networking of containerised applications. Misconfigurations in Kubernetes RBAC or network policies are common CSPM findings.",
+    "blast radius": "The scope of damage an attacker could cause if a specific identity, credential, or resource is compromised. A high blast radius means an over-privileged role with access to many sensitive or critical resources.",
+    "lateral movement": "Technique where an attacker who has compromised one resource uses it as a stepping stone to access adjacent systems, escalate privileges, or reach sensitive data deeper in the environment.",
+    "zero-day": "A vulnerability unknown to the software vendor with no patch yet available. Attackers can exploit zero-days before signatures exist — detected by FortiCNAPP through behavioural anomaly rather than rule-based matching.",
+    "IAM roles": "AWS identities assumed by services or users to gain temporary, scoped permissions. Unlike users, roles issue short-lived tokens — but over-privileged roles represent a major blast-radius risk if compromised or misused.",
+    "IAM role": "An AWS identity assumed by services or users to gain temporary, scoped permissions. Roles have no long-term credentials but carry all the risk of their attached policies — over-privilege is a top CIEM finding.",
+    "S3 buckets": "Amazon Simple Storage Service containers for storing objects (files, logs, backups). Misconfigured buckets — public ACLs, no encryption, no versioning — are among the most common findings in cloud data breaches.",
+    "S3 bucket": "An Amazon Simple Storage Service container for storing objects. If misconfigured (public access, no encryption), S3 buckets are a frequent target in cloud breaches — and a top CSPM finding across every cloud estate.",
+    "EC2 instance": "An Amazon Elastic Compute Cloud virtual machine. EC2 instances can carry vulnerabilities, secrets, and misconfigurations — all of which appear as risk nodes in the FortiCNAPP Exposure Polygraph.",
+    "security group": "An AWS virtual firewall controlling inbound and outbound traffic for EC2 instances. A rule allowing 0.0.0.0/0 on port 22 exposes SSH to the entire internet — a critical and common CSPM finding.",
+    "CI/CD": "Continuous Integration / Continuous Deployment — an automated pipeline that builds, tests, and deploys code. Security gaps in the pipeline (exposed secrets, unscanned images) can allow attackers to inject risk into production.",
+    "CSPM": "Cloud Security Posture Management — continuous automated checking of cloud resource configurations against security policies and compliance frameworks. Finds misconfigurations but cannot alone determine whether a finding is exploitable.",
+    "CIEM": "Cloud Infrastructure Entitlement Management — analysis of who (or what service) can do what in a cloud environment, and whether those permissions are actually used or needed. Quantifies the blast radius of over-privileged identities.",
+    "CNAPP": "Cloud-Native Application Protection Platform — a unified security platform integrating CSPM, CIEM, CWPP, and vulnerability management into a single risk-correlated view. FortiCNAPP is Fortinet's CNAPP offering.",
+    "CWPP": "Cloud Workload Protection Platform — runtime security for containers, VMs, and serverless functions. Detects threats as they execute in production rather than as static configuration findings.",
+    "DSPM": "Data Security Posture Management — discovery and classification of sensitive data (PII, PCI, PHI) stored across cloud services, with continuous assessment of how that data is protected and who can access it.",
+    "CVSS": "Common Vulnerability Scoring System — a 0–10 numeric score representing a vulnerability's theoretical severity. CVSS does not account for whether the vulnerable workload is internet-reachable or whether active exploit code exists.",
+    "CVE": "Common Vulnerabilities and Exposures — a publicly catalogued software vulnerability with a unique identifier (e.g., CVE-2021-44228). Each CVE has a CVSS score but carries no context about your specific environment.",
+    "SIEM": "Security Information and Event Management — aggregates and correlates security logs across an environment. Traditional SIEMs produce high alert volumes without cloud-native context, contributing to analyst fatigue and alert blindness.",
+    "IaC": "Infrastructure as Code — defining cloud infrastructure (networks, compute, IAM) in version-controlled configuration files (Terraform, CloudFormation, Bicep) and deploying them automatically through pipelines.",
+    "SAST": "Static Application Security Testing — automated analysis of source code for security vulnerabilities before the code is compiled or deployed. Catches issues at development time, before they reach production.",
+    "RBAC": "Role-Based Access Control — a permission model where access rights are granted to roles rather than individuals directly. In cloud environments, misconfigured RBAC is a leading cause of excessive entitlements and lateral movement risk.",
+    "VPC": "Virtual Private Cloud — an isolated, logically separated network environment within a public cloud provider (AWS VPC, Azure VNet, GCP VPC). Network security controls such as security groups and firewall rules operate at the VPC layer.",
+    "ARN": "Amazon Resource Name — a globally unique identifier for every AWS resource (e.g., arn:aws:iam::123456789:role/my-role). Used for precise IAM policy scoping and reliable audit trail attribution in CloudTrail logs."
+  };
+
+  /* Sort longest-first to avoid partial matches */
+  var terms = Object.keys(G).sort(function (a, b) { return b.length - a.length; });
+
+  /* Tags whose text nodes we leave untouched */
+  var SKIP = { SCRIPT:1, STYLE:1, CODE:1, PRE:1, A:1, H1:1, H2:1, H3:1, H4:1, FIGCAPTION:1, BUTTON:1, FOOTER:1 };
+
+  function ancestorSkipped(node) {
+    var n = node.parentElement;
+    while (n) {
+      if (SKIP[n.tagName]) return true;
+      if (n.classList && n.classList.contains('term')) return true;
+      n = n.parentElement;
+    }
+    return false;
+  }
+
+  var article = document.querySelector('.article-body') || document.body;
+  var walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, null, false);
+
+  var nodes = [];
+  var n;
+  while ((n = walker.nextNode())) {
+    if (!ancestorSkipped(n) && n.nodeValue.trim()) nodes.push(n);
+  }
+
+  nodes.forEach(function (textNode) {
+    var text = textNode.nodeValue;
+    var remaining = text;
+    var parts = [];
+    var changed = false;
+
+    while (remaining.length > 0) {
+      var best = null;
+
+      for (var i = 0; i < terms.length; i++) {
+        var term = terms[i];
+        var escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var re = new RegExp(escaped, 'i');
+        var m = re.exec(remaining);
+        if (m && (!best || m.index < best.index)) {
+          /* Verify word boundary manually */
+          var before = remaining[m.index - 1];
+          var after  = remaining[m.index + m[0].length];
+          var bOk = !before || /[^a-zA-Z0-9_]/.test(before);
+          var aOk = !after  || /[^a-zA-Z0-9_]/.test(after);
+          if (bOk && aOk) best = { index: m.index, match: m[0], term: term };
+        }
+      }
+
+      if (!best) { parts.push(document.createTextNode(remaining)); break; }
+
+      if (best.index > 0) parts.push(document.createTextNode(remaining.slice(0, best.index)));
+
+      var span = document.createElement('span');
+      span.className = 'term';
+      span.textContent = best.match;
+      span.dataset.def = G[best.term];
+      span.dataset.term = best.term;
+      parts.push(span);
+      changed = true;
+
+      remaining = remaining.slice(best.index + best.match.length);
+    }
+
+    if (changed && textNode.parentNode) {
+      var frag = document.createDocumentFragment();
+      parts.forEach(function (p) { frag.appendChild(p); });
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
+  });
+
+  /* ── Tooltip ── */
+  var tip = document.createElement('div');
+  tip.id = 'gl-tip';
+  document.body.appendChild(tip);
+
+  document.addEventListener('mouseover', function (e) {
+    var t = e.target.closest ? e.target.closest('.term') : (e.target.classList.contains('term') ? e.target : null);
+    if (t) {
+      tip.innerHTML = '<strong>' + t.dataset.term + '</strong>' + t.dataset.def;
+      tip.classList.add('visible');
+    }
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!tip.classList.contains('visible')) return;
+    var x = e.clientX + 16, y = e.clientY + 16;
+    if (x + tip.offsetWidth  > window.innerWidth  - 8) x = e.clientX - tip.offsetWidth  - 8;
+    if (y + tip.offsetHeight > window.innerHeight - 8) y = e.clientY - tip.offsetHeight - 8;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  });
+
+  document.addEventListener('mouseout', function (e) {
+    var t = e.target.closest ? e.target.closest('.term') : null;
+    if (t) tip.classList.remove('visible');
+  });
+
+  /* Touch: tap to toggle */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('.term') : null;
+    if (t) {
+      if (tip.classList.contains('visible') && tip._src === t) {
+        tip.classList.remove('visible');
+        tip._src = null;
+      } else {
+        tip.innerHTML = '<strong>' + t.dataset.term + '</strong>' + t.dataset.def;
+        var r = t.getBoundingClientRect();
+        var x = r.left, y = r.bottom + 6;
+        tip.classList.add('visible');
+        if (x + tip.offsetWidth  > window.innerWidth  - 8) x = window.innerWidth  - tip.offsetWidth  - 8;
+        if (y + tip.offsetHeight > window.innerHeight - 8) y = r.top - tip.offsetHeight - 6;
+        tip.style.left = x + 'px';
+        tip.style.top  = y + 'px';
+        tip._src = t;
+      }
+      e.stopPropagation();
+    } else {
+      tip.classList.remove('visible');
+      tip._src = null;
+    }
+  });
+}());
+</script>
+
+  <!-- ═══ References popup ═══════════════════════════════════════════ -->
+  <div id="ref-overlay" onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';this.style.display='none';" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:490;backdrop-filter:blur(2px);"></div>
+  <aside id="ref-panel" style="position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;background:#fff;border-left:1px solid #e5e7eb;box-shadow:-4px 0 24px rgba(0,0,0,0.12);z-index:500;transform:translateX(100%);transition:transform 0.25s ease;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e5e7eb;flex-shrink:0;">
+      <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#1f2328;">References</span>
+      <button onclick="document.getElementById('ref-panel').style.transform='translateX(100%)';document.getElementById('ref-overlay').style.display='none';" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;line-height:1;padding:2px 6px;">&times;</button>
+    </div>
+    <ol style="overflow-y:auto;padding:16px 22px 40px;margin:0;list-style:none;counter-reset:refs;flex:1;">
+      <li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[1]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Product Page</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet · 2026 · <a href="https://www.fortinet.com/products/forticnapp" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP is described as a platform that correlates all risk data — vulnerabilities, network reachability, secrets, and IAM roles — to show possible attack paths within a cloud environment</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[2]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Attack Path Analysis — Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/853651/attack-path" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP leverages its platform to show possible attack paths by correlating multiple risk factors — vulnerabilities, network reachability, secrets, and IAM roles — from configuration data and activity data</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[3]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Attack Path Risk Calculation</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/659119/attack-path-risk-calculation" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Risk Score is a multi-factor calculation incorporating severity, exploit-in-the-wild signal, reachability, identity blast radius, data sensitivity, and lateral movement potential — not raw CVSS</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[4]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Resource Inventory — Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/744719/resource-inventory" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The Resource Inventory grants visibility into multi-cloud environments across AWS, Azure, Google Cloud, and OCI, letting teams view, search, sort, and filter among all resources with no limit</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[5]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP CIEM Product Page</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet · 2026 · <a href="https://www.fortinet.com/products/forticnapp/ciem" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP reduces cloud identity risk by knowing users and their access, pinpointing which are riskiest, and right-sizing entitlements — each identity assigned a risk score based on more than 30 factors</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[6]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP Exposure Polygraph — Administration Guide</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet Docs · 2026 · <a href="https://docs.fortinet.com/document/lacework-forticnapp/25.2.0/administration-guide/812745/exposure-polygraph" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">docs.fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP computes the effective network path and visualizes it in the Exposure Polygraph, generated when critical vulnerabilities are associated with a cloud asset and they are exposed to the internet</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[7]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">MITRE ATT&amp;CK for Cloud Matrix</span>
+    <span style="color:#6b7280;font-size:12px;">MITRE ATT&amp;CK · 2026 · <a href="https://attack.mitre.org/matrices/enterprise/cloud/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">attack.mitre.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP maps findings to ATT&amp;CK techniques to contextualise risk within known attack patterns, and the article describes identity misuse as the dominant initial access vector matching documented cloud TTPs</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[8]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CIS Benchmarks</span>
+    <span style="color:#6b7280;font-size:12px;">Center for Internet Security · 2026 · <a href="https://www.cisecurity.org/cis-benchmarks" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisecurity.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP provides pre-built compliance frameworks including CIS Benchmarks — described in the article as the most common baseline for CSPM policy sets across AWS, Azure, GCP, and OCI</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[9]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">CISA Known Exploited Vulnerabilities Catalog</span>
+    <span style="color:#6b7280;font-size:12px;">CISA · 2026 · <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">cisa.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">The FortiCNAPP Risk Score incorporates exploit-in-the-wild signal, which draws on authoritative sources such as the CISA KEV catalog to distinguish actively exploited CVEs from theoretical risk</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[10]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">EPSS — Exploit Prediction Scoring System</span>
+    <span style="color:#6b7280;font-size:12px;">FIRST.org · 2026 · <a href="https://www.first.org/epss/" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">first.org/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP's risk prioritisation uses exploit-in-the-wild signals; the article references EPSS as an industry source for predicting which vulnerabilities are most likely to be exploited</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[11]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">NIST Cybersecurity Framework</span>
+    <span style="color:#6b7280;font-size:12px;">NIST · 2024 · <a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">nist.gov/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP provides pre-built compliance frameworks including NIST — listed alongside SOC 2, ISO 27001, HIPAA, PCI, and CIS Benchmarks as out-of-the-box posture evaluation baselines</span>
+  </div>
+</li>
+<li style="counter-increment:refs;display:grid;grid-template-columns:18px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;line-height:1.5;">
+  <span style="font-size:10px;font-weight:700;font-family:monospace;color:#9ca3af;padding-top:2px;">[12]</span>
+  <div>
+    <span style="font-weight:600;color:#1f2328;display:block;margin-bottom:2px;">FortiCNAPP CSPM Product Page</span>
+    <span style="color:#6b7280;font-size:12px;">Fortinet · 2026 · <a href="https://www.fortinet.com/products/forticnapp/cspm" target="_blank" rel="noopener" style="color:#1d4ed8;text-decoration:none;">fortinet.com/… ↗</a></span>
+    <span style="display:block;font-size:11px;color:#9ca3af;margin-top:3px;font-style:italic;">FortiCNAPP deploys in minutes with or without agents, covering misconfiguration detection across AWS, Azure, GCP, and OCI with drift detection and per-finding remediation guidance</span>
+  </div>
+</li>
+    </ol>
+  </aside>
+  <button onclick="document.getElementById('ref-panel').style.transform='translateX(0)';document.getElementById('ref-overlay').style.display='block';" style="position:fixed;bottom:28px;left:28px;display:flex;align-items:center;gap:7px;background:#fff;color:#1f2328;border:1px solid #d0d7de;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:box-shadow 0.15s;z-index:100;" onmouseover="this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14"/><line x1="8" y1="7" x2="12" y2="7"/><line x1="8" y1="11" x2="12" y2="11"/></svg>
+    References
+  </button>
+</body>
+</html>

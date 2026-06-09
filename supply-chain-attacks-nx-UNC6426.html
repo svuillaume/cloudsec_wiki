@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rapid cloud infiltration via software supply chain attacks — FortiCNAPP Blog</title>
+<style>
+  :root {
+    --fg-red: #DA291C;
+    --fg-red-dark: #B0210F;
+    --bg: #0F1115;
+    --bg-soft: #161A22;
+    --bg-card: #1B2029;
+    --line: #2A313D;
+    --text: #E6EAF2;
+    --muted: #9AA3B2;
+    --code-bg: #0B0E13;
+    --code-text: #E1E6F0;
+    --green: #3FB950;
+    --amber: #E3B341;
+    --blue: #58A6FF;
+    --purple: #B392F0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  header.site {
+    background: linear-gradient(180deg, #161A22 0%, #0F1115 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+  }
+  header.site .logo {
+    width: 28px; height: 28px;
+    background: var(--fg-red);
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  }
+  header.site .brand {
+    font-weight: 700; letter-spacing: 0.3px;
+  }
+  header.site .brand span { color: var(--muted); font-weight: 400; margin-left: 8px; }
+
+  /* Hero */
+  .hero {
+    padding: 56px 28px 32px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .hero .eyebrow {
+    display: inline-block;
+    background: rgba(218, 41, 28, 0.15);
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(218,41,28,0.35);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero .lede {
+    color: var(--muted);
+    font-size: 19px;
+    margin: 0 0 22px;
+  }
+  .hero .meta {
+    color: var(--muted);
+    font-size: 14px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .hero .meta b { color: var(--text); font-weight: 600; }
+
+  /* Article shell */
+  article {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 16px 28px 80px;
+  }
+  article h2 {
+    font-size: 26px;
+    margin: 48px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--fg-red);
+    display: inline-block;
+  }
+  article h3 {
+    font-size: 19px;
+    margin: 28px 0 8px;
+    color: var(--text);
+  }
+  article p { margin: 12px 0; }
+
+  /* Tooltips for technical terms */
+  .term {
+    color: var(--blue);
+    border-bottom: 1px dashed var(--blue);
+    cursor: help;
+    position: relative;
+  }
+  .term:hover .tip,
+  .term:focus .tip {
+    opacity: 1;
+    transform: translate(-50%, -8px);
+    pointer-events: auto;
+  }
+  .tip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 320px;
+    background: #0B0E13;
+    color: var(--text);
+    border: 1px solid var(--fg-red);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 100;
+    text-align: left;
+    font-weight: 400;
+  }
+  .tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: var(--fg-red);
+  }
+  .tip b { color: var(--fg-red); }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--fg-red);
+    padding: 14px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+  p code, li code, td code {
+    background: #161A22;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #FFB0A4;
+    border: 1px solid var(--line);
+  }
+  .lang-tag {
+    display: inline-block;
+    background: var(--bg-card);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--line);
+    border-bottom: none;
+    margin-bottom: -1px;
+    font-family: monospace;
+    letter-spacing: 1px;
+  }
+
+  /* Callout cards */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    border-left: 4px solid var(--fg-red);
+  }
+  .callout.info { border-left-color: var(--blue); }
+  .callout.warn { border-left-color: var(--amber); }
+  .callout.ok { border-left-color: var(--green); }
+  .callout h4 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--fg-red);
+  }
+  .callout.info h4 { color: var(--blue); }
+  .callout.warn h4 { color: var(--amber); }
+  .callout.ok h4 { color: var(--green); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  th {
+    background: #20262F;
+    color: var(--fg-red);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(218,41,28,0.04); }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; }
+  li { margin: 6px 0; }
+
+  /* Attack chain diagram */
+  .chain {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .chain h4 {
+    margin: 0 0 18px;
+    color: var(--fg-red);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+
+  /* Numbered phase headers */
+  .phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .phase .num {
+    background: var(--fg-red);
+    color: white;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .phase h3 { margin: 0; display: inline; }
+
+  /* Impact layers */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--fg-red);
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    align-items: start;
+  }
+  .layer .name { font-weight: 700; color: var(--fg-red); }
+  .layer.l2 { border-left-color: var(--amber); } .layer.l2 .name { color: var(--amber); }
+  .layer.l3 { border-left-color: var(--blue); } .layer.l3 .name { color: var(--blue); }
+  .layer.l4 { border-left-color: var(--purple); } .layer.l4 .name { color: var(--purple); }
+  .layer.l5 { border-left-color: var(--green); } .layer.l5 .name { color: var(--green); }
+
+  /* Footer */
+  footer.site {
+    border-top: 1px solid var(--line);
+    padding: 30px 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    background: var(--bg-soft);
+  }
+
+  /* Sources */
+  .sources {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 13.5px;
+    margin-top: 30px;
+  }
+  .sources h2 {
+    margin-top: 0;
+    font-size: 18px;
+  }
+  .sources ol { columns: 1; }
+
+  /* Stats grid */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .stat .big {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fg-red);
+    display: block;
+    line-height: 1.1;
+  }
+  .stat .label {
+    color: var(--muted);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 6px;
+    display: block;
+  }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 30px; }
+    .layer { grid-template-columns: 1fr; }
+    .tip { width: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <span class="logo" aria-hidden="true"></span>
+  <span class="brand">FORTINET <span>| FortiCNAPP Security Insights</span></span>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Threat Research · Supply Chain</span>
+  <h1>Rapid cloud infiltration via software supply chain attacks</h1>
+  <p class="lede">A case study built on the <code style="font-size:18px;background:transparent;padding:0;color:#FFB0A4;border:none;">nx</code> npm compromise and UNC6426 activity: how a poisoned developer package can become cloud-administrator access in days, crossing the developer laptop, the package registry, source control, CI/CD, and the cloud control plane — silos that defenders still monitor independently.</p>
+  <div class="meta">
+    <span><b>Author:</b> Sam V · Fortinet PreSales Cloud</span>
+    <span><b>Published:</b> May 26, 2026</span>
+    <span><b>Reading time:</b> ~12 min</span>
+    <span><b>Products:</b> FortiCNAPP, FortiGuard Labs</span>
+  </div>
+</section>
+
+<article>
+
+<h2>Overview</h2>
+
+<p>UNC6426's abuse of a trojanized <code>nx</code> <span class="term">npm<span class="tip"><b>npm (Node Package Manager)</b> — the default <i>package manager</i> for JavaScript and the world's largest software registry, with over 3 million packages. Every <code>npm install</code> downloads code from this registry and runs it on a developer's machine, a build server, or inside a container.</span></span> package shows how a modern <span class="term">supply-chain attack<span class="tip"><b>Supply-chain attack</b> — an attack that compromises a trusted upstream component (a library, build tool, or update channel) so that all downstream users of that component automatically inherit the malicious code. It scales: one poisoned package can reach thousands of organizations at once.</span></span> can start inside a developer workflow and end in cloud privilege escalation. The main lesson is not just that a package was poisoned, but that <b>package installation, developer tools, CI/CD trust, GitHub identity, and cloud role assumptions form a single attack path</b> that defenders often monitor in separate silos.<sup>[1][2]</sup></p>
+
+<p>This attack pattern is worth dissecting because it is concrete, technical, and easy to map to real-world controls. It also illustrates a broader trend tracked by FortiGuard Labs in npm campaigns such as <b>Shai-Hulud</b>: attackers increasingly aim to steal <b>developer and pipeline credentials first</b>, then pivot into higher-value cloud and source-code targets.<sup>[2][3]</sup></p>
+
+<div class="stats">
+  <div class="stat"><span class="big">5</span><span class="label">Attack-chain stages crossed</span></div>
+  <div class="stat"><span class="big">HIGH</span><span class="label">FortiGuard severity rating</span></div>
+  <div class="stat"><span class="big">Dev → Cloud</span><span class="label">Cross-domain blast radius</span></div>
+  <div class="stat"><span class="big">SCA · SAST · Runtime</span><span class="label">FortiCNAPP coverage layers</span></div>
+</div>
+
+<h2>Background: what is a package manager — and why is it a target?</h2>
+
+<p>A <span class="term">package manager<span class="tip"><b>Package manager</b> — a tool that automatically downloads, installs, and updates code libraries (called <i>packages</i> or <i>dependencies</i>) from a central registry. Examples: <code>npm</code> / <code>pnpm</code> / <code>yarn</code> for JavaScript, <code>pip</code> for Python, <code>maven</code> for Java, <code>cargo</code> for Rust.</span></span> exists because modern software is rarely written from scratch. A typical Node.js application directly depends on a few dozen packages — but those packages have their own dependencies, which have their own dependencies, building a deep <span class="term">dependency tree<span class="tip"><b>Dependency tree</b> — the recursive graph of every package your app uses, including the packages those packages use. A real-world Node.js project commonly pulls in <b>500 to 2,000 unique packages</b> from this transitive chain, most of which the developer has never heard of.</span></span> of <i>transitive</i> packages the developer never explicitly chose.</p>
+
+<p>That model is enormously productive and equally dangerous. Every package in the tree runs with the same privileges as the developer or the build agent. A compromise of any one of them — direct or transitive — is a compromise of the whole project. Attackers know this, which is why npm and similar registries have become primary targets, as FortiGuard Labs has documented across multiple campaigns.<sup>[2][3][4]</sup></p>
+
+<div class="callout info">
+  <h4>Why JavaScript first?</h4>
+  <p>The npm ecosystem is uniquely exposed because (a) packages can declare <span class="term">lifecycle scripts<span class="tip"><b>Lifecycle scripts</b> — shell or Node commands declared in <code>package.json</code> that npm runs automatically at specific moments: before/after install, before/after publish, etc. The <code>postinstall</code> hook runs immediately after a package is downloaded — silently, with the developer's permissions.</span></span> that execute automatically at install time, (b) the average project pulls in hundreds of transitive dependencies, and (c) maintainer accounts have historically used weak authentication. Combine those three and you get the highest blast radius per compromise of any major registry.<sup>[4]</sup></p>
+</div>
+
+<h2>What happened</h2>
+
+<p>The reported <code>nx</code> incident involved malicious npm package versions that executed a <span class="term">post-installation payload<span class="tip"><b>Post-installation payload</b> — code that runs automatically after a package is installed, before the developer ever uses it. Because <code>npm install</code> is treated as routine, attackers use this moment for silent execution on a trusted machine.</span></span> after a developer installed or updated the package. The malware focused on harvesting environment variables, GitHub tokens, cloud credentials, and system details from the developer context, then using those secrets to move deeper into the victim environment — the same pattern FortiGuard tracks in the broader Shai-Hulud-class npm campaigns.<sup>[2][3]</sup></p>
+
+<p>The significance lies in the <b>speed and direction</b> of the compromise. The actor progressed from a stolen GitHub token to cloud administrative access by abusing CI/CD trust relationships and an overly permissive cloud role.<sup>[1][3]</sup></p>
+
+<h2>The attack chain at a glance</h2>
+
+<div class="chain">
+  <h4>npm Supply-Chain Compromise — End-to-end Path</h4>
+  <svg viewBox="0 0 920 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-width:920px;">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#DA291C"/>
+      </marker>
+      <linearGradient id="boxg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1B2029"/>
+        <stop offset="100%" stop-color="#10141C"/>
+      </linearGradient>
+    </defs>
+
+    <g font-family="-apple-system, Segoe UI, sans-serif" font-size="12" fill="#E6EAF2" text-anchor="middle">
+      <rect x="10" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#DA291C" stroke-width="1.5"/>
+      <text x="85" y="85" font-weight="700" fill="#DA291C">1 · Poisoned Package</text>
+      <text x="85" y="108">Trojanized nx</text>
+      <text x="85" y="124">published to npm</text>
+      <text x="85" y="144" fill="#9AA3B2" font-size="11">postinstall hook</text>
+
+      <rect x="190" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#E3B341" stroke-width="1.5"/>
+      <text x="265" y="85" font-weight="700" fill="#E3B341">2 · Silent Execution</text>
+      <text x="265" y="108">npm install runs</text>
+      <text x="265" y="124">payload fires</text>
+      <text x="265" y="144" fill="#9AA3B2" font-size="11">dev laptop or CI runner</text>
+
+      <rect x="370" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#58A6FF" stroke-width="1.5"/>
+      <text x="445" y="85" font-weight="700" fill="#58A6FF">3 · Credential Theft</text>
+      <text x="445" y="108">GitHub PAT, env vars</text>
+      <text x="445" y="124">cloud keys, .npmrc</text>
+      <text x="445" y="144" fill="#9AA3B2" font-size="11">harvested &amp; exfiltrated</text>
+
+      <rect x="550" y="60" width="150" height="100" rx="10" fill="url(#boxg)" stroke="#B392F0" stroke-width="1.5"/>
+      <text x="625" y="85" font-weight="700" fill="#B392F0">4 · CI/CD Pivot</text>
+      <text x="625" y="108">GitHub identity</text>
+      <text x="625" y="124">→ cloud via OIDC</text>
+      <text x="625" y="144" fill="#9AA3B2" font-size="11">over-trusted role</text>
+
+      <rect x="730" y="60" width="180" height="100" rx="10" fill="url(#boxg)" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="820" y="85" font-weight="700" fill="#3FB950">5 · Cloud Takeover</text>
+      <text x="820" y="108">IAM escalation</text>
+      <text x="820" y="124">data exfil, deletion</text>
+      <text x="820" y="144" fill="#9AA3B2" font-size="11">control-plane breach</text>
+
+      <line x1="162" y1="110" x2="186" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="342" y1="110" x2="366" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="522" y1="110" x2="546" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="702" y1="110" x2="726" y2="110" stroke="#DA291C" stroke-width="2" marker-end="url(#arr)"/>
+
+      <text x="460" y="200" fill="#9AA3B2" font-size="11" font-style="italic">Each transition crosses a security boundary — and a different defender team.</text>
+    </g>
+  </svg>
+</div>
+
+<h2>How the attack worked</h2>
+
+<div class="phase"><span class="num">1</span><h3>Initial execution through npm lifecycle hooks</h3></div>
+
+<p>npm lifecycle hooks are powerful because they run automatically as part of normal package operations. If a package defines a <span class="term"><code>postinstall</code><span class="tip"><b><code>postinstall</code> hook</b> — a script declared in a package's <code>package.json</code> that npm runs automatically immediately after installation. Originally designed for legitimate setup (compiling native code, fetching binaries), it has become one of the most abused execution primitives in software supply-chain attacks.</span></span> script, that code can execute as soon as the package is installed, often without any separate prompt or visible warning to the developer.<sup>[4]</sup></p>
+
+<span class="lang-tag">package.json</span>
+<pre><code>{
+  "name": "nx",
+  "version": "&lt;compromised-version&gt;",
+  "scripts": {
+    "postinstall": "node scripts/payload.js"
+  }
+}</code></pre>
+
+<p>Teams treat package installation as low risk. In practice, <code>npm install</code> is <b>arbitrary code execution</b> inside a trusted workstation, build runner, or container if any dependency in the tree has been compromised. FortiGuard has documented this pattern repeatedly across npm hijack cases.<sup>[4]</sup></p>
+
+<div class="phase"><span class="num">2</span><h3>Credential theft from the developer environment</h3></div>
+
+<p>Once a malicious install script runs, the next goal is credential collection. In this class of campaign, FortiGuard reporting describes theft of <span class="term">GitHub personal access tokens (PATs)<span class="tip"><b>Personal Access Token (PAT)</b> — a long-lived secret string used to authenticate to GitHub from scripts, CLIs, or CI tools. PATs frequently carry the user's full repo, org, and packages permissions and are often stored in plain environment variables — making them a prime target for any malicious code running on the developer's machine.</span></span>, environment variables, and cloud-related secrets from the local or CI context.<sup>[2][3]</sup></p>
+
+<span class="lang-tag">javascript · representative payload pattern</span>
+<pre><code>const stolen = {
+  github:    process.env.GITHUB_TOKEN,
+  awsKey:    process.env.AWS_ACCESS_KEY_ID,
+  awsSecret: process.env.AWS_SECRET_ACCESS_KEY,
+  home:      process.env.HOME
+};
+// exfiltration to attacker-controlled endpoint follows…</code></pre>
+
+<p>The pattern is the real lesson: <b>secrets placed in environment variables are easy for a malicious package to read</b> the moment code execution is obtained. There is no privilege boundary between the application and a transitive dependency.<sup>[2][3]</sup></p>
+
+<div class="phase"><span class="num">3</span><h3>Pivot from GitHub to the cloud control plane</h3></div>
+
+<p>The most important <i>why-it-worked</i> point is that the package compromise alone was not catastrophic. The damage escalated because a stolen GitHub identity could be exchanged — directly or indirectly — for cloud access through a <span class="term">trust relationship<span class="tip"><b>Trust relationship</b> — in cloud IAM (AWS, Azure, GCP), the policy attached to a role that decides <i>which identities are allowed to assume it</i>. Federated trust to GitHub Actions OIDC means: "any workflow in any of these repos can become this role." If the trust is too broad, anyone who controls a workflow controls the role.</span></span> that was too broad. FortiGuard tracked exactly this pattern in the GitHub Actions supply-chain incident.<sup>[1]</sup></p>
+
+<p>A representative anti-pattern is a cloud role trusted by GitHub Actions <span class="term">OIDC<span class="tip"><b>OIDC (OpenID Connect)</b> — a standard that lets one system (GitHub Actions) prove its identity to another (AWS / Azure / GCP) without sharing a long-lived password. It replaces stored cloud keys with short-lived tokens — a major security upgrade <b>only if</b> the trust policy restricts which repo, branch, and workflow can request the token.</span></span> without restrictions on repository, branch, or workflow identity:</p>
+
+<span class="lang-tag">aws iam · trust policy (over-permissive)</span>
+<pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": {
+      "Federated": "arn:aws:iam::&lt;account&gt;:oidc-provider/token.actions.githubusercontent.com"
+    },
+    "Action": "sts:AssumeRoleWithWebIdentity",
+    "Condition": {
+      "StringEquals": {
+        "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+      }
+    }
+  }]
+}</code></pre>
+
+<div class="callout warn">
+  <h4>The architectural point</h4>
+  <p>The package was the <b>entry point</b>, but cloud misconfiguration created the <b>blast radius</b>. A poisoned dependency is bad. A poisoned dependency that can mint short-lived cloud-administrator credentials is a breach.<sup>[1]</sup></p>
+</div>
+
+<div class="phase"><span class="num">4</span><h3>Privilege escalation and destructive actions</h3></div>
+
+<p>The actor abused a role tied to deployment automation, then attached highly privileged IAM permissions, eventually gaining administrator-level access. Once that happened, the attacker could exfiltrate data, alter repositories, and destroy infrastructure such as compute and database resources.<sup>[1]</sup></p>
+
+<p>This is why the incident should not be described as "just an npm malware case." It was a full attack chain from <span class="term">software supply chain<span class="tip"><b>Software supply chain</b> — every system, tool, and human that contributes code or configuration to your application before it reaches production: source repos, package registries, build pipelines, signing infrastructure, container registries, deployment tools. A single weak link compromises everything downstream.</span></span> compromise to cloud control-plane takeover.<sup>[1][2]</sup></p>
+
+<h2>Why this attack matters</h2>
+
+<ul>
+  <li>A developer dependency becomes an <b>identity-theft mechanism</b>, not just a host-infection vector.<sup>[2][3]</sup></li>
+  <li>CI/CD and cloud federation are now prime post-compromise paths, not just convenience features.<sup>[1]</sup></li>
+  <li>Open-source package trust can fail silently during routine updates, especially in ecosystems with widespread automated installation patterns.<sup>[4]</sup></li>
+  <li>FortiGuard reporting shows npm campaigns increasingly target high-value flows: payments, cryptocurrency, wallets, and API-rich services.<sup>[2][3]</sup></li>
+</ul>
+
+<h2>Impact — layered view</h2>
+
+<p>The technical impact is straightforward: credential theft, source-code exposure, cloud privilege escalation, infrastructure destruction, possible customer-data compromise. The <b>operational</b> impact is larger: responders must treat developer laptops, package registries, CI runners, GitHub organizations, cloud IAM, and production workloads as <b>part of the same incident scope</b>.</p>
+
+<div class="layers">
+  <div class="layer">
+    <div class="name">Developer endpoint</div>
+    <div>Secret theft from env vars / local config<sup>[2][3]</sup></div>
+    <div>Opens the first trusted identity path.</div>
+  </div>
+  <div class="layer l2">
+    <div class="name">Source control</div>
+    <div>Theft of PATs and repository access<sup>[2][3]</sup></div>
+    <div>Enables code tampering, secret discovery, pipeline abuse.</div>
+  </div>
+  <div class="layer l3">
+    <div class="name">CI/CD</div>
+    <div>Misuse of GitHub Actions context or tokens<sup>[1]</sup></div>
+    <div>Bridges development and cloud access.</div>
+  </div>
+  <div class="layer l4">
+    <div class="name">Cloud IAM</div>
+    <div>Assumption of an overly broad cloud role<sup>[1]</sup></div>
+    <div>Converts code compromise into infrastructure compromise.</div>
+  </div>
+  <div class="layer l5">
+    <div class="name">Production</div>
+    <div>Service termination, data theft, repo exposure<sup>[1][2]</sup></div>
+    <div>Customer-facing outage and breach conditions.</div>
+  </div>
+</div>
+
+<h2>Technical examples for defenders</h2>
+
+<h3>Detect suspicious npm lifecycle behavior</h3>
+<p>A practical first triage step — look for unexpected lifecycle hooks across your dependency tree:</p>
+<span class="lang-tag">bash</span>
+<pre><code>grep -R '"postinstall"' package.json package-lock.json node_modules 2>/dev/null</code></pre>
+<p>It does not prove compromise (many legitimate packages use install hooks), but it surfaces candidates worth review. Attackers repeatedly abuse lifecycle scripts for silent execution, as observed by FortiGuard across npm hijacks.<sup>[4]</sup></p>
+
+<h3>Hunt for credential-access patterns</h3>
+<span class="lang-tag">bash</span>
+<pre><code>grep -R "GITHUB_TOKEN\|AWS_ACCESS_KEY_ID\|AWS_SECRET_ACCESS_KEY\|npmrc" node_modules 2>/dev/null</code></pre>
+<p>Use this to spot packages reading sensitive environment variables or package-manager credentials. Especially relevant when token harvesting is the goal of the campaign.<sup>[2][3]</sup></p>
+
+<h3>Tighten GitHub-to-Cloud trust boundaries</h3>
+<p>Require strict OIDC conditions on repo, branch, and workflow:</p>
+<span class="lang-tag">aws iam · trust policy (hardened)</span>
+<pre><code>{
+  "Condition": {
+    "StringEquals": {
+      "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+      "token.actions.githubusercontent.com:sub": "repo:org/repo:ref:refs/heads/main"
+    }
+  }
+}</code></pre>
+<p>This turns an abstract lesson into a concrete fix: a stolen build identity from a fork or arbitrary workflow can no longer mint cloud credentials.<sup>[1]</sup></p>
+
+<h2>FortiGuard and FortiCNAPP insights</h2>
+
+<p>FortiGuard Labs reporting on the npm supply-chain attacks linked to <b>Shai-Hulud</b> adds important context: these were <b>not isolated package incidents</b> but broad credential-harvesting operations affecting widely used JavaScript packages and large numbers of downstream repositories. Risk was especially elevated for frontend-heavy applications tied to payments, cryptocurrency, and wallet flows.<sup>[2][3]</sup></p>
+
+<p>That context strengthens the case for treating <span class="term">FortiCNAPP<span class="tip"><b>FortiCNAPP (formerly Lacework)</b> — Fortinet's Cloud-Native Application Protection Platform. Unifies CSPM, CWPP, CIEM, vulnerability management, SCA, SAST, IaC scanning, and runtime threat detection across AWS, Azure, GCP, OCI and Kubernetes — designed to remove silos between code, build, and runtime defenses.</span></span> as a <b>layered defense</b> across the same boundaries the attack crossed, rather than a single silver bullet.<sup>[5][6][7]</sup></p>
+
+<table>
+  <thead>
+    <tr><th>Control area</th><th>What it contributes against this attack pattern</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>SCA</b> — Software Composition Analysis</td><td>Identifies compromised or risky third-party packages in supported ecosystems, including Node.js package managers.<sup>[6][7]</sup></td></tr>
+    <tr><td><b>SAST</b> — Static Application Security Testing</td><td>Helps spot malicious or suspicious code patterns in retrieved packages or source trees.<sup>[5]</sup></td></tr>
+    <tr><td><b>Runtime threat detection</b></td><td>Surfaces suspicious execution, credential-access behavior, and downstream activity after installation.<sup>[5]</sup></td></tr>
+    <tr><td><b>FortiGuard threat intelligence</b></td><td>Blocks known indicators and updates monitoring as campaigns evolve.<sup>[2][3][4]</sup></td></tr>
+  </tbody>
+</table>
+
+<h2>Response and observed impact</h2>
+
+<p>FortiGuard Labs classifies the npm Shai-Hulud-class campaigns as widespread, with significant downstream reach across the JavaScript ecosystem. Foundational utility packages are particularly dangerous targets because they are embedded deeply in modern dependency graphs — even a brief compromise propagates into large numbers of applications, CI jobs, frontend bundles, and cloud-hosted services.<sup>[2][3]</sup></p>
+
+<div class="callout">
+  <h4>Loss vs. blast radius</h4>
+  <p><b>Observed loss</b> in any individual incident may be limited if maintainers respond quickly. <b>Architectural exposure</b> remains enormous because malicious code lands inside packages that thousands of applications already trust. Defenders should plan budgets and response capacity against the second number, not the first.<sup>[2][3]</sup></p>
+</div>
+
+<h2>Remediation guidance</h2>
+
+<p>After incidents like this, start with dependency and cache hygiene. Pin dependencies with <span class="term">lockfiles<span class="tip"><b>Lockfile</b> — a file (<code>package-lock.json</code>, <code>yarn.lock</code>, <code>pnpm-lock.yaml</code>) that records the exact version <i>and integrity hash</i> of every package in the dependency tree. Without one, <code>npm install</code> may silently pull a newer, possibly compromised version.</span></span>, clear package-manager caches, reinstall from known-good versions, and verify that compromised versions are not still present in build artifacts, container layers, or cached CI workspaces.<sup>[5]</sup></p>
+
+<div class="callout ok">
+  <h4>Response checklist</h4>
+  <ul>
+    <li>Audit <code>package-lock.json</code>, <code>yarn.lock</code>, or <code>pnpm-lock.yaml</code> for the package versions FortiGuard has flagged in the active campaign advisories.<sup>[2][3]</sup></li>
+    <li>Clear npm and build caches, then reinstall dependencies from trusted versions.<sup>[5]</sup></li>
+    <li>Run FortiCNAPP SCA across all repositories and container images to surface compromised dependency versions.<sup>[6][7]</sup></li>
+    <li>Run FortiCNAPP SAST against retrieved package source to detect obfuscated or suspicious patterns.<sup>[5]</sup></li>
+    <li>Enable FortiCNAPP runtime threat detection to catch credential-access behavior and unexpected outbound exfiltration after a build.<sup>[5]</sup></li>
+    <li>Review browser-facing applications for malicious hooks on wallet APIs, <code>fetch</code>, <code>XMLHttpRequest</code>, or provider objects — the npm Shai-Hulud-class campaigns target transaction interception and address rewriting in frontend contexts.<sup>[2][3]</sup></li>
+    <li>Rotate sensitive credentials (GitHub PATs, npm publish tokens, cloud keys, wallet keys) if a build environment, wallet-integrated application, or publishing account may have been exposed.<sup>[2][3]</sup></li>
+    <li>Restrict CI/CD-to-cloud trust: scope OIDC conditions to <code>repo</code>, <code>ref</code>, and ideally <code>workflow</code>.<sup>[1]</sup></li>
+  </ul>
+</div>
+
+<h2>Closing position</h2>
+
+<div class="callout">
+  <p>Defenders should stop thinking of npm compromise as a narrow dependency-hygiene problem. The <code>nx</code> / UNC6426 case and FortiGuard Labs' broader npm threat reporting show that the real issue is <b>identity-centric supply-chain risk</b>: a malicious package is the first step in a chain that reaches source control, CI/CD, cloud IAM, and production systems. Defenses should be designed across that whole chain — and FortiCNAPP plus FortiGuard threat intelligence are positioned to do exactly that.<sup>[1][2][3]</sup></p>
+</div>
+
+<div class="sources">
+<h2>Sources — Fortinet &amp; FortiGuard Labs</h2>
+<ol>
+  <li><a href="https://fortiguard.fortinet.com/threat-signal-report/6052/github-actions-supply-chain-attack">FortiGuard Labs — GitHub Actions Supply Chain Attack (Threat Signal 6052)</a></li>
+  <li><a href="https://www.fortiguard.com/threat-signal-report/6201/npm-supply-chain-attack">FortiGuard Labs — npm Supply Chain Attack (Threat Signal 6201)</a></li>
+  <li><a href="https://fortiguard.fortinet.com/threat-signal-report/6201/npm-shai-hulud-supply-chain-attack">FortiGuard Labs — npm (Shai-Hulud) Supply Chain Attack</a></li>
+  <li><a href="https://fortiguard.fortinet.com/threat-signal-report/4241/another-npm-library-hijacked-again-coa">FortiGuard Labs — Another npm Library Hijacked: COA (Threat Signal 4241)</a></li>
+  <li><a href="https://community.fortinet.com/forticnapp-63/technical-tip-how-does-lacework-forticnapp-protect-from-supply-chain-attacks-in-npm-including-shai-hulud-215977">Fortinet Community — How FortiCNAPP protects from npm supply-chain attacks (incl. Shai-Hulud)</a></li>
+  <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/433465/software-composition-analysis-sca">FortiCNAPP Docs — Software Composition Analysis (SCA)</a></li>
+  <li><a href="https://docs.fortinet.com/document/forticnapp/latest/administration-guide/810838/languages-supported-by-sca">FortiCNAPP Docs — Languages supported by SCA</a></li>
+</ol>
+</div>
+
+</article>
+
+<footer class="site">
+  © 2026 Fortinet, Inc. · FortiCNAPP Security Insights · Authored by Sam Vuillaume · Hover blue underlined terms for definitions.
+</footer>
+
+</body>
+</html>
